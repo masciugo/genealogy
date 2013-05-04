@@ -15,3 +15,4 @@ end
 
 # example model classes
 Dir[File.dirname(__FILE__) + "/test_models/*.rb"].sort.each { |f| require File.expand_path(f) }
+

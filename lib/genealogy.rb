@@ -1,7 +1,7 @@
-require File.join(File.expand_path(File.dirname(__FILE__)), 'genealogy/class_methods')
-require File.join(File.expand_path(File.dirname(__FILE__)), 'genealogy/instance_methods')
+require File.join(File.expand_path(File.dirname(__FILE__)), 'genealogy/methods')
 # require File.join(File.expand_path(File.dirname(__FILE__)), 'genealogy/exceptions')
-require File.join(File.expand_path(File.dirname(__FILE__)), 'genealogy/has_parents')
+require File.join(File.expand_path(File.dirname(__FILE__)), 'genealogy/genealogy')
 
-module Genealogy
-end
+ActiveRecord::Base.send :extend, Genealogy
+
+
