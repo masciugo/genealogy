@@ -1,0 +1,188 @@
+# Logfile created on 2013-05-04 12:10:57 +0200 by logger.rb/31641
+D, [2013-05-04T12:10:57.524985 #3496] DEBUG -- :   [1m[36m (4.0ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T12:10:57.558899 #3496] DEBUG -- :   [1m[35m (32.9ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T12:10:57.564002 #3496] DEBUG -- :   [1m[36m (4.5ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T12:10:57.565900 #3496] DEBUG -- :   [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T12:10:58.063975 #3496] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:10:58.116931 #3496] DEBUG -- :   [1m[35mSQL (50.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Ryan"]]
+D, [2013-05-04T12:10:58.120034 #3496] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:10:58.150810 #3496] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:10:58.152457 #3496] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Peter"]]
+D, [2013-05-04T12:10:58.153429 #3496] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Ryan"]]
+D, [2013-05-04T12:10:58.156241 #3496] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:10:58.160208 #3496] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:10:58.161865 #3496] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Maggie"]]
+D, [2013-05-04T12:10:58.163262 #3496] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Ryan"]]
+D, [2013-05-04T12:10:58.166253 #3496] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:42:59.282309 #3570] DEBUG -- :   [1m[36m (3.0ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T12:42:59.301283 #3570] DEBUG -- :   [1m[35m (4.4ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T12:42:59.304548 #3570] DEBUG -- :   [1m[36m (2.7ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T12:42:59.305842 #3570] DEBUG -- :   [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T12:42:59.656827 #3570] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:42:59.731048 #3570] DEBUG -- :   [1m[35mSQL (71.5ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:42:59.733914 #3570] DEBUG -- :   [1m[36m (2.3ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:42:59.769208 #3570] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:42:59.770944 #3570] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T12:42:59.771961 #3570] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:42:59.775671 #3570] DEBUG -- :   [1m[36m (3.4ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:42:59.779632 #3570] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:42:59.781448 #3570] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:42:59.782550 #3570] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Corrado"]]
+D, [2013-05-04T12:42:59.785259 #3570] DEBUG -- :   [1m[36m (2.4ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:42:59.786814 #3570] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:42:59.788330 #3570] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:42:59.791572 #3570] DEBUG -- :   [1m[35m (2.8ms)[0m  commit transaction
+D, [2013-05-04T12:42:59.792507 #3570] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:42:59.793920 #3570] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:42:59.796891 #3570] DEBUG -- :   [1m[36m (2.6ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:43:50.842190 #3573] DEBUG -- :   [1m[36m (1.6ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T12:43:50.846147 #3573] DEBUG -- :   [1m[35m (3.0ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T12:43:50.849132 #3573] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T12:43:50.850608 #3573] DEBUG -- :   [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T12:43:51.040962 #3573] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:43:51.050256 #3573] DEBUG -- :   [1m[35mSQL (6.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:43:51.053300 #3573] DEBUG -- :   [1m[36m (2.4ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:43:51.073318 #3573] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:43:51.075078 #3573] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T12:43:51.076189 #3573] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:43:51.078886 #3573] DEBUG -- :   [1m[36m (2.4ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:43:51.083207 #3573] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:43:51.085550 #3573] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:43:51.086756 #3573] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Corrado"]]
+D, [2013-05-04T12:43:51.090113 #3573] DEBUG -- :   [1m[36m (3.0ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:43:51.091964 #3573] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:43:51.093751 #3573] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:43:51.096381 #3573] DEBUG -- :   [1m[35m (2.1ms)[0m  commit transaction
+D, [2013-05-04T12:43:51.097439 #3573] DEBUG -- :   [1m[36m (0.3ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:43:51.098709 #3573] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:43:51.102290 #3573] DEBUG -- :   [1m[36m (3.2ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:32.464331 #3577] DEBUG -- :   [1m[36m (1.6ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T12:44:32.506045 #3577] DEBUG -- :   [1m[35m (40.7ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T12:44:32.509035 #3577] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T12:44:32.510165 #3577] DEBUG -- :   [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T12:44:32.686997 #3577] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:44:32.695783 #3577] DEBUG -- :   [1m[35mSQL (6.3ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:32.698587 #3577] DEBUG -- :   [1m[36m (2.3ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:32.716785 #3577] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:32.718346 #3577] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T12:44:32.719294 #3577] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:32.721983 #3577] DEBUG -- :   [1m[36m (2.4ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:32.725885 #3577] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:32.727490 #3577] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:44:32.728584 #3577] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Corrado"]]
+D, [2013-05-04T12:44:32.732500 #3577] DEBUG -- :   [1m[36m (3.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:32.734257 #3577] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:32.735794 #3577] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:32.738355 #3577] DEBUG -- :   [1m[35m (2.2ms)[0m  commit transaction
+D, [2013-05-04T12:44:32.738940 #3577] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:44:32.740245 #3577] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:44:32.743007 #3577] DEBUG -- :   [1m[36m (2.3ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:32.745023 #3577] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:32.746560 #3577] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:32.749777 #3577] DEBUG -- :   [1m[35m (2.8ms)[0m  commit transaction
+D, [2013-05-04T12:44:32.750442 #3577] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:44:32.751742 #3577] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T12:44:32.755738 #3577] DEBUG -- :   [1m[36m (3.6ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:58.047028 #3580] DEBUG -- :   [1m[36m (1.7ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T12:44:58.050741 #3580] DEBUG -- :   [1m[35m (2.8ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T12:44:58.053534 #3580] DEBUG -- :   [1m[36m (2.3ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T12:44:58.056258 #3580] DEBUG -- :   [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T12:44:58.256678 #3580] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:44:58.265900 #3580] DEBUG -- :   [1m[35mSQL (6.6ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:58.268620 #3580] DEBUG -- :   [1m[36m (2.2ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:58.291207 #3580] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:58.293213 #3580] DEBUG -- :   [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T12:44:58.294258 #3580] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:58.296967 #3580] DEBUG -- :   [1m[36m (2.2ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:58.301193 #3580] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:58.302864 #3580] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:44:58.305285 #3580] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Corrado"]]
+D, [2013-05-04T12:44:58.307833 #3580] DEBUG -- :   [1m[36m (2.3ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:58.309851 #3580] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:58.311588 #3580] DEBUG -- :   [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:58.315894 #3580] DEBUG -- :   [1m[35m (3.9ms)[0m  commit transaction
+D, [2013-05-04T12:44:58.316525 #3580] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:44:58.318631 #3580] DEBUG -- :   [1m[35mSQL (1.2ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T12:44:58.322007 #3580] DEBUG -- :   [1m[36m (2.9ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:44:58.324443 #3580] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T12:44:58.326467 #3580] DEBUG -- :   [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T12:44:58.329332 #3580] DEBUG -- :   [1m[35m (2.5ms)[0m  commit transaction
+D, [2013-05-04T12:44:58.329897 #3580] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T12:44:58.331077 #3580] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T12:44:58.335639 #3580] DEBUG -- :   [1m[36m (4.2ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T12:56:30.588516 #3580] DEBUG -- :   [1m[35mSimplestIndividual Load (0.4ms)[0m  SELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = ? LIMIT 1  [["id", 8]]
+D, [2013-05-04T14:16:07.116939 #3621] DEBUG -- :   [1m[36m (2.0ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T14:16:07.139258 #3621] DEBUG -- :   [1m[35m (5.2ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T14:16:07.143083 #3621] DEBUG -- :   [1m[36m (3.0ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T14:16:07.158341 #3621] DEBUG -- :   [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T14:16:07.389077 #3621] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:07.398915 #3621] DEBUG -- :   [1m[35mSQL (7.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:07.401963 #3621] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:07.422177 #3621] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:07.423844 #3621] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T14:16:07.425072 #3621] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:07.427851 #3621] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:07.432302 #3621] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:07.434139 #3621] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T14:16:07.435345 #3621] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Corrado"]]
+D, [2013-05-04T14:16:07.438330 #3621] DEBUG -- :   [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:07.439962 #3621] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:07.441420 #3621] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:07.444513 #3621] DEBUG -- :   [1m[35m (2.6ms)[0m  commit transaction
+D, [2013-05-04T14:16:07.445538 #3621] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:07.447060 #3621] DEBUG -- :   [1m[35mSQL (0.5ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T14:16:07.449705 #3621] DEBUG -- :   [1m[36m (2.2ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:07.450214 #3621] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:07.452635 #3621] DEBUG -- :   [1m[36m (0.4ms)[0m  [1mUPDATE "simplest_individuals" SET "mother_id" = 7 WHERE "simplest_individuals"."id" = 6[0m
+D, [2013-05-04T14:16:07.455294 #3621] DEBUG -- :   [1m[35m (2.2ms)[0m  commit transaction
+D, [2013-05-04T14:16:07.457574 #3621] DEBUG -- :   [1m[36mSimplestIndividual Load (0.3ms)[0m  [1mSELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = ? LIMIT 1[0m  [["id", 6]]
+D, [2013-05-04T14:16:07.459644 #3621] DEBUG -- :   [1m[35mSimplestIndividual Load (0.2ms)[0m  SELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = 7 LIMIT 1
+D, [2013-05-04T14:16:07.461150 #3621] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:07.462569 #3621] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:07.465694 #3621] DEBUG -- :   [1m[36m (2.6ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:07.466430 #3621] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:07.467743 #3621] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T14:16:07.470094 #3621] DEBUG -- :   [1m[35m (2.0ms)[0m  commit transaction
+D, [2013-05-04T14:16:07.470668 #3621] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:07.472315 #3621] DEBUG -- :   [1m[35m (0.5ms)[0m  UPDATE "simplest_individuals" SET "father_id" = 9 WHERE "simplest_individuals"."id" = 8
+D, [2013-05-04T14:16:07.476355 #3621] DEBUG -- :   [1m[36m (3.8ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:07.477491 #3621] DEBUG -- :   [1m[35mSimplestIndividual Load (0.2ms)[0m  SELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = ? LIMIT 1  [["id", 8]]
+D, [2013-05-04T14:16:07.478793 #3621] DEBUG -- :   [1m[36mSimplestIndividual Load (0.2ms)[0m  [1mSELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = 9 LIMIT 1[0m
+D, [2013-05-04T14:16:22.680726 #3623] DEBUG -- :   [1m[36m (1.7ms)[0m  [1mselect sqlite_version(*)[0m
+D, [2013-05-04T14:16:22.731246 #3623] DEBUG -- :   [1m[35m (49.5ms)[0m  DROP TABLE "simplest_individuals"
+D, [2013-05-04T14:16:22.734359 #3623] DEBUG -- :   [1m[36m (2.6ms)[0m  [1mCREATE TABLE "simplest_individuals" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "father_id" integer, "mother_id" integer) [0m
+D, [2013-05-04T14:16:22.735450 #3623] DEBUG -- :   [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+D, [2013-05-04T14:16:22.916335 #3623] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:22.925167 #3623] DEBUG -- :   [1m[35mSQL (6.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:22.928224 #3623] DEBUG -- :   [1m[36m (2.4ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:22.947139 #3623] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:22.949002 #3623] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T14:16:22.951172 #3623] DEBUG -- :   [1m[35mSQL (0.2ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", 2], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:22.954000 #3623] DEBUG -- :   [1m[36m (2.2ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:22.960994 #3623] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:22.962905 #3623] DEBUG -- :   [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T14:16:22.963995 #3623] DEBUG -- :   [1m[35mSQL (0.1ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", 4], ["name", "Corrado"]]
+D, [2013-05-04T14:16:22.968183 #3623] DEBUG -- :   [1m[36m (3.9ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:22.970013 #3623] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:22.972181 #3623] DEBUG -- :   [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:22.975848 #3623] DEBUG -- :   [1m[35m (3.0ms)[0m  commit transaction
+D, [2013-05-04T14:16:22.976616 #3623] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:22.977899 #3623] DEBUG -- :   [1m[35mSQL (0.4ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Tetta"]]
+D, [2013-05-04T14:16:22.980309 #3623] DEBUG -- :   [1m[36m (2.1ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:22.980880 #3623] DEBUG -- :   [1m[35m (0.1ms)[0m  begin transaction
+D, [2013-05-04T14:16:22.983417 #3623] DEBUG -- :   [1m[36m (0.5ms)[0m  [1mUPDATE "simplest_individuals" SET "mother_id" = 7 WHERE "simplest_individuals"."id" = 6[0m
+D, [2013-05-04T14:16:22.986890 #3623] DEBUG -- :   [1m[35m (3.1ms)[0m  commit transaction
+D, [2013-05-04T14:16:22.989236 #3623] DEBUG -- :   [1m[36mSimplestIndividual Load (0.3ms)[0m  [1mSELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = ? LIMIT 1[0m  [["id", 6]]
+D, [2013-05-04T14:16:22.991335 #3623] DEBUG -- :   [1m[35mSimplestIndividual Load (0.3ms)[0m  SELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = 7 LIMIT 1
+D, [2013-05-04T14:16:22.992901 #3623] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:22.995209 #3623] DEBUG -- :   [1m[35mSQL (0.6ms)[0m  INSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)  [["father_id", nil], ["mother_id", nil], ["name", "Corrado"]]
+D, [2013-05-04T14:16:22.999495 #3623] DEBUG -- :   [1m[36m (3.7ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:23.000240 #3623] DEBUG -- :   [1m[35m (0.2ms)[0m  begin transaction
+D, [2013-05-04T14:16:23.001621 #3623] DEBUG -- :   [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "simplest_individuals" ("father_id", "mother_id", "name") VALUES (?, ?, ?)[0m  [["father_id", nil], ["mother_id", nil], ["name", "Uccio"]]
+D, [2013-05-04T14:16:23.004127 #3623] DEBUG -- :   [1m[35m (2.1ms)[0m  commit transaction
+D, [2013-05-04T14:16:23.004672 #3623] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+D, [2013-05-04T14:16:23.006065 #3623] DEBUG -- :   [1m[35m (0.4ms)[0m  UPDATE "simplest_individuals" SET "father_id" = 9 WHERE "simplest_individuals"."id" = 8
+D, [2013-05-04T14:16:23.008519 #3623] DEBUG -- :   [1m[36m (2.1ms)[0m  [1mcommit transaction[0m
+D, [2013-05-04T14:16:50.105766 #3623] DEBUG -- :   [1m[35mSimplestIndividual Load (0.3ms)[0m  SELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = ? LIMIT 1  [["id", 8]]
+D, [2013-05-04T14:16:52.341158 #3623] DEBUG -- :   [1m[36mSimplestIndividual Load (0.2ms)[0m  [1mSELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = ? LIMIT 1[0m  [["id", 8]]
+D, [2013-05-04T14:16:52.343734 #3623] DEBUG -- :   [1m[35mSimplestIndividual Load (0.3ms)[0m  SELECT "simplest_individuals".* FROM "simplest_individuals" WHERE "simplest_individuals"."id" = 9 LIMIT 1

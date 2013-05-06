@@ -11,9 +11,16 @@ module Genealogy
         if arg.is_a? Hash
           send("build_#{parent}",arg)
         elsif arg.is_a? self.class
-          send("parent=",arg)
+          send("#{parent}=",arg)
         end
       end
+
+      define_method "add_#{parent}!" do |arg|
+        send("add_#{parent}",arg)
+        save!
+      end
+
+
     end
 
     module ClassMethods
