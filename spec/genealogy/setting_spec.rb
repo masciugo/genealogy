@@ -3,14 +3,14 @@ require 'spec_helper'
 load_schema
 
 module Genealogy
-  describe Individual, "genealogy settings" do
+  describe "Individual genealogy extension" do
 
     # reset Individul genealogy extension
     before(:each) do
       reset_individual_class
     end
 
-    context "without options" do
+    context "without options (defaults)" do
 
       before(:each) do
         Individual.has_parents

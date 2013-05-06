@@ -152,8 +152,7 @@ module Genealogy
       let(:antonio) {Individual.create!(:name => "Antonio")}
       let(:assunta) {Individual.create!(:name => "Assunta")}
 
-
-      describe "paternal" do
+      describe "paternal lineage" do
         context "when all individuals are existing" do
           before(:each) do
             corrado.add_father!(uccio)
@@ -172,7 +171,7 @@ module Genealogy
         end
       end
 
-      describe "maternal" do
+      describe "maternal lineage" do
         context "when all individuals are existing" do
 
           before(:each) do
@@ -192,6 +191,12 @@ module Genealogy
         end
       end
 
+    end
+
+    describe "children linking" do
+      it "should description" do
+        
+      end
     end
   end
 end
