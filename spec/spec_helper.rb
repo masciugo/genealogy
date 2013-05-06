@@ -13,6 +13,15 @@ def load_schema
   load(File.dirname(__FILE__) + "/schema.rb")
 end
 
+def reset_individual_class
+  Object.send(:remove_const, 'Individual')
+  load File.join('test_models','individual.rb')
+end
+
+def ppp(str)
+  puts ">>>>>>>>>>>>>>>>> #{str} "
+end
+
 # example model classes
 Dir[File.dirname(__FILE__) + "/test_models/*.rb"].sort.each { |f| require File.expand_path(f) }
 
