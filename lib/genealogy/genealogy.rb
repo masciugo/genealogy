@@ -17,7 +17,6 @@ module Genealogy
     tracked_parents << :spouse if spouse_enabled
 
     tracked_parents.each do |key|
-
       # class attribute where is stored the correspondig foreign_key column name
       class_attribute_name = "#{key}_column"
       foreign_key = "#{key}_id"
@@ -33,8 +32,6 @@ module Genealogy
     # Include instance methods and class methods
     include Genealogy::Methods
     include Genealogy::SpouseMethods if spouse_enabled
-
-    # puts "Genealogy loaded with options: #{options.inspect}"
 
   end
   

@@ -1,3 +1,13 @@
 sqlite3:
   adapter: sqlite3
-  database: spec/test.sqlite3.db
+  database: spec/test2.sqlite3.db
+
+mysql:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: genealogy_test
+  pool: 5
+  username: root
+  password:
+  socket: /tmp/mysql.sock
