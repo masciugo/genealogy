@@ -1,4 +1,5 @@
 module Genealogy
-  class GenericException < RuntimeError;  end
-  class TooLongJumpException < RuntimeError;  end
+  class GenealogyOptionException < RuntimeError;  end
+  class LineageGapException < RuntimeError;  end
+  class IncompatibleObjectException < RuntimeError;  end
 end

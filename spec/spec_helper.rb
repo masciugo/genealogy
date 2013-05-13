@@ -9,7 +9,7 @@ require "debugger"
 require File.expand_path('../../lib/genealogy', __FILE__)
 
 # example model classes
-Dir[File.dirname(__FILE__) + "/test_models/*.rb"].sort.each { |f| require File.expand_path(f) }
+require File.expand_path('../test_models', __FILE__)
 
 module Genealogy
 
@@ -19,19 +19,19 @@ module Genealogy
     ActiveRecord::Base.establish_connection(config['sqlite3'])
   end
 
-  def self.set_test_model(model, has_parents_opts = {})
+  def self.set_model_table(model)
     cn = ActiveRecord::Base.connection
     cn.drop_table 'test_records' if cn.table_exists?('test_records')
 
     cn.create_table 'test_records' do |table|
       table.string :name
-      table.integer has_parents_opts[:father_column] || :father_id
-      table.integer has_parents_opts[:mother_column] || :mother_id
-      table.integer(has_parents_opts[:spouse_column] || :spouse_id) if has_parents_opts[:spouse] == true
+      table.string model.sex_column, :size=>1
+      table.integer model.father_column
+      table.integer model.mother_column
+      table.integer model.spouse_column if model.spouse_enabled?
     end
 
     model.reset_column_information
-    model.has_parents has_parents_opts
     model
   end
 

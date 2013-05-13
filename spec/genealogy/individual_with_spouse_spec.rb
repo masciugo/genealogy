@@ -1,79 +1,106 @@
 require 'spec_helper'
   
 module Genealogy
-  describe "model with spouse" do
+  describe TestModelWithSpouse, "with corrado as subject" do
 
-    let!(:model){Genealogy.set_test_model(TestModel3,:spouse => true)}
+    let!(:model){Genealogy.set_model_table(TestModelWithSpouse)}
 
-    describe "creation" do
+    describe ".new" do
 
-      let(:corrado) {model.new(:name => "Corrado")}
+      subject {model.new(:name => "Corrado")}
 
-      it "should have blank spouse" do
-        corrado.save!
-        corrado.spouse.should be(nil)
+      it "should have no spouse" do
+        subject.save!
+        subject.spouse.should be(nil)
       end
 
     end
 
-    describe "spouse linking" do
+    describe "add_spouse methods" do
 
-      context "when all individuals are new_record" do
+      subject {model.create!(:name => "Corrado")}
+      let(:nicole) {model.create!(:name => "Nicole")}
 
-        let(:corrado) {model.new(:name => "Corrado")}
-        let(:nicole) {model.new(:name => "Nicole")}
+      describe "#add_spouse! (bang method)" do
 
-        describe "using bang method" do
-
-          it "should have spouse named Nicole" do
-            corrado.add_spouse!(:name => "Nicole")
-            corrado.reload.spouse.name.should == 'Nicole'
-          end
-
+        it "has nicole as spouse" do
+          subject.add_spouse!(nicole)
+          subject.reload.spouse.should == nicole
         end
 
-        describe "using no-bang method " do
+        it "nicole has subject as spouse" do
+          subject.add_spouse!(nicole)
+          nicole.reload.spouse.should == subject
+        end
 
-          it "should have spouse named Nicole" do
-            corrado.add_spouse(:name => "Nicole")
-            corrado.save!
-            corrado.reload.spouse.name.should == 'Nicole'
+        context "when something goes wrong during adding" do
+          it "has no spouse" do
+            subject.always_fail_validation = true
+            expect { subject.add_spouse!(nicole) }.to raise_error and 
+            subject.reload.spouse.should be(nil) and 
+            nicole.reload.spouse.should be(nil)
           end
-
         end
 
       end
 
-      context "when all individuals are existing" do
+      describe "#add_spouse (no bang method)" do
 
-        let(:corrado) {model.create!(:name => "Corrado")}
-        let(:nicole) {model.create!(:name => "Nicole")}
-
-        describe "using bang method" do
-
-          it "corrado should have nicole as spouse" do
-            corrado.add_spouse!(nicole)
-            corrado.reload.spouse.should == nicole
+        context "without saving" do
+          it "has no spouse" do
+            subject.add_spouse(nicole)
+            subject.reload.spouse.should be(nil)
           end
-
         end
 
-        describe "using no-bang method" do
-
-          it "corrado should have nicole as spouse" do
-            corrado.add_spouse(nicole)
-            corrado.save!
-            corrado.reload.spouse.should == nicole
+        context "with saving" do
+          it "has nicole as spouse" do
+            subject.add_spouse(nicole)
+            subject.save!
+            subject.reload.spouse.should == nicole
           end
-
-          it "corrado should not have nicole as spouse if it's not saved" do
-            corrado.add_spouse(nicole)
-            corrado.reload.spouse.should_not == nicole
-          end
-
-
         end
 
+      end
+    end
+      
+    describe "remove_spouse methods" do
+
+      subject {model.create!(:name => "Corrado")}
+      let(:nicole) {model.create!(:name => "Nicole")}
+
+      before(:each) do
+        subject.add_spouse!(nicole)
+      end
+
+      describe "#remove_spouse" do
+        context "without saving" do
+          it "has still nicole as spouse" do
+            subject.remove_spouse
+            subject.reload.spouse.should == nicole
+          end
+        end
+        context "with saving" do
+          it "has no spouse" do
+            subject.remove_spouse
+            subject.save!
+            subject.reload.spouse.should be(nil)
+          end
+        end
+      end
+      describe "#remove_spouse!" do
+        it "has no spouse" do
+          subject.remove_spouse!
+          subject.reload.spouse.should be(nil)
+        end
+        context "when something goes wrong during removeing" do
+          it "has still nicole as spouse" do
+            subject.always_fail_validation = true
+            expect { subject.remove_spouse! }.to raise_error and 
+            subject.reload.spouse.should == nicole and 
+            nicole.reload.spouse.should == subject
+          end
+        end
       end
 
     end

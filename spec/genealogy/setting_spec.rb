@@ -1,11 +1,11 @@
 require 'spec_helper'
   
 module Genealogy
-  describe "model genealogy settings" do
+  describe "model and table settings" do
 
-    context "without options (defaults)" do
+    describe TestModelWithoutSpouse do
 
-      let!(:model){Genealogy.set_test_model(TestModel1)}
+      let!(:model){Genealogy.set_model_table(TestModelWithoutSpouse)}
       
       [:father, :mother].each do |parent|
         it "should have #{parent}_id as #{parent} column" do
@@ -27,9 +27,9 @@ module Genealogy
 
     end
 
-    context "with spouse option" do
+    describe TestModelWithSpouse do
 
-      let!(:model){Genealogy.set_test_model(TestModel1, :spouse => true)}
+      let!(:model){Genealogy.set_model_table(TestModelWithSpouse)}
       
       it "should have spouse_column class attribute" do
         model.spouse_column.should == 'spouse_id'
@@ -41,21 +41,37 @@ module Genealogy
 
     end
 
-    context "with custom column names" do
+    describe TestModelWithCustomColumns do
 
-      let!(:model){Genealogy.set_test_model(TestModel1, {:father_column => "padre", :mother_column => "madre", :spouse_column => "partner"}.merge(:spouse => true))}
+      subject {Genealogy.set_model_table(TestModelWithCustomColumns)}
 
-      {:father_column => "padre", :mother_column => "madre", :spouse_column => "partner"}.each do |attr,col_name|
+      {:father_column => "padre", :mother_column => "madre", :spouse_column => "partner", :sex_column => "gender"}.each do |attr,col_name|
         it "should have #{col_name} as #{attr} attribute" do
-          model.send(attr).should == col_name
+          subject.send(attr).should == col_name
         end
 
         it "should have db column named #{col_name}" do
-          model.column_names.should include(col_name)
+          subject.column_names.should include(col_name)
         end
 
       end
 
+      it "should have 'M' as sex_male_value" do
+        subject.sex_male_value.should == 'M'
+      end
+
+      it "should have 'F' as sex_female_value" do
+        subject.sex_female_value.should == 'F'
+      end
+
+    end
+
+    describe TestModelWithCustomSexValues do
+      subject {Genealogy.set_model_table(TestModelWithCustomSexValues)}
+      specify { subject.sex_column.should == 'gender' }
+      specify { subject.sex_values.should be_a_kind_of(Array) }
+      specify { subject.sex_values.should include '1' }
+      specify { subject.sex_values.should include '2' }
     end
 
   end
