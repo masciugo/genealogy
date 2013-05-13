@@ -3,20 +3,18 @@ module Genealogy
   def has_parents options = {}
 
     # Check options
-    raise GenealogyOptionException.new("Options for has_parents must be in a hash.") unless options.is_a? Hash
+    raise OptionException.new("Options for has_parents must be in a hash.") unless options.is_a? Hash
     options.each do |key, value|
       unless [:sex_column, :sex_values, :father_column, :mother_column, :spouse_column, :spouse].include? key
-        raise GenealogyOptionException.new("Unknown option for has_parents: #{key.inspect} => #{value.inspect}.")
+        raise OptionException.new("Unknown option for has_parents: #{key.inspect} => #{value.inspect}.")
       end
       if key == :sex_values
-        raise GenealogyOptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
+        raise OptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
       end
     end
 
-    
     class_attribute :spouse_enabled
     self.spouse_enabled = options[:spouse].try(:==,true) || false
-
     tracked_parents = [:father, :mother]
     tracked_parents << :spouse if spouse_enabled
 

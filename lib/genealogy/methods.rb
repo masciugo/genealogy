@@ -2,29 +2,31 @@ module Genealogy
   module Methods
     extend ActiveSupport::Concern
 
-    def foo
-      'InstanceMethods#foo'
-    end
+    ##################################################################
+    ## linking methods
+    ##################################################################
     
-    # add parents methods
+    # parents 
     [:father, :mother].each do |parent|
 
       ## no-bang version
       # add method
-      define_method "add_#{parent}" do |obj|
-        raise IncompatibleObjectException, "Linked objects must be instances of the same class: got #{obj.class} for #{self.class}" unless obj.is_a? self.class
-        send("#{parent}=",obj)
+      define_method "add_#{parent}" do |relative|
+        raise IncompatibleObjectException, "Linked objects must be instances of the same class: got #{relative.class} for #{self.class}" unless relative.is_a? self.class
+        raise InfiniteLoopException, "#{self} can't be #{parent} of itself" if relative == self
+        raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
+        send("#{parent}=",relative) == relative
       end
       
       # remove method
       define_method "remove_#{parent}" do
-        send("#{parent}=",nil)
+        send("#{parent}=",nil).nil?
       end
 
       # bang version
       # add method
-      define_method "add_#{parent}!" do |obj|
-        send("add_#{parent}",obj)
+      define_method "add_#{parent}!" do |relative|
+        send("add_#{parent}",relative)
         save!
       end
 
@@ -42,32 +44,70 @@ module Genealogy
       [:father, :mother].each do |grandparent|
 
         # query methods
-
         define_method "#{translation[parent]}_grand#{grandparent}" do
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           send(parent).send(grandparent)
         end
-
-        # add methods
         
+        # add methods
         # no-bang version
-        define_method "add_#{translation[parent]}_grand#{grandparent}" do |obj|
+        define_method "add_#{translation[parent]}_grand#{grandparent}" do |relative|
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
-          if obj.is_a? Hash
-            send(parent).send("build_#{grandparent}",obj)
-          elsif obj.is_a? self.class
-            send(parent).send("#{grandparent}=",obj)
-          end
+          raise InfiniteLoopException, "#{self} can't be grand#{grandparent} of itself" if relative == self
+          send(parent).send("add_#{grandparent}",relative)
         end
 
         # bang version
-        define_method "add_#{translation[parent]}_grand#{grandparent}!" do |obj|
-          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
-          send(parent).send("add_#{grandparent}",obj)
+        define_method "add_#{translation[parent]}_grand#{grandparent}!" do |relative|
+          send("add_#{translation[parent]}_grand#{grandparent}",relative)
           send(parent).save!
         end
 
       end
+    end
+
+    ## add siblings
+    # no bang version
+    def add_siblings(sibs)
+      raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
+      raise InfiniteLoopException, "Can't add an ancestor as sibling" unless (ancestors.to_a & [sibs].flatten).empty?
+      results = []
+      [sibs].flatten.each do |sib|
+        results << sib.add_father(self.father)
+        results << sib.add_mother(self.mother)
+      end
+      results.inject(true){|memo,r| memo &= r}
+    end
+
+    # bang version
+    def add_siblings!(sibs)
+      transaction do
+        add_siblings(sibs)
+        [sibs].flatten.each { |s| s.save! }
+        save!
+      end
+    end
+
+    ##################################################################
+    ## remaining query methods
+    ##################################################################
+    
+    def parents
+      if father or mother
+        [father,mother]
+      else
+        nil
+      end
+    end
+
+    def ancestors
+      result = []
+      remaining = parents.to_a.compact
+      until remaining.empty?
+        result << remaining.shift
+        remaining += result.last.parents.to_a.compact
+      end
+      result
     end
 
     def offspring
@@ -91,22 +131,13 @@ module Genealogy
       end
     end
 
-    def add_siblings(sibs)
-      raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
-      [sibs].flatten.each do |sib|
-        sib.add_father(self.father)
-        sib.add_mother(self.mother)
-      end
+    def is_female?
+      sex == sex_female_value
     end
 
-    def add_siblings!(sibs)
-      transaction do
-        add_siblings(sibs)
-        [sibs].flatten.each { |s| s.save! }
-        save!
-      end
+    def is_male?
+      sex == sex_male_value  
     end
-
 
     module ClassMethods
     end
