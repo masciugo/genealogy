@@ -6,6 +6,9 @@ require "debugger"
 # installed on the system.
 require File.expand_path('../../lib/genealogy', __FILE__)
 
+# requiring supporting files like shared examples
+Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
+
 module GenealogyTestModel
   def self.connect_to_database
     config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))

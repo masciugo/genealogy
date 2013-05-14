@@ -45,18 +45,31 @@ module Genealogy
       [:father, :mother].each do |grandparent|
 
         # no-bang version
+        # add
         define_method "add_#{grandparents_lineage_name[parent]}_grand#{grandparent}" do |relative|
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           raise IncompatibleRelationshipException, "#{self} can't be grand#{grandparent} of itself" if relative == self
           send(parent).send("add_#{grandparent}",relative)
         end
 
+        # remove
+        define_method "remove_#{grandparents_lineage_name[parent]}_grand#{grandparent}" do
+          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
+          send(parent).send("remove_#{grandparent}")
+        end
+
         # bang version
+        # add
         define_method "add_#{grandparents_lineage_name[parent]}_grand#{grandparent}!" do |relative|
           send("add_#{grandparents_lineage_name[parent]}_grand#{grandparent}",relative)
           send(parent).save!
         end
 
+        # remove
+        define_method "remove_#{grandparents_lineage_name[parent]}_grand#{grandparent}!" do
+          send("remove_#{grandparents_lineage_name[parent]}_grand#{grandparent}")
+          send(parent).save!
+        end
       end
     end
 
