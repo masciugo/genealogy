@@ -9,18 +9,18 @@ module QueryMethodsSpec
       QueryMethodsSpec.define_test_model_class({:spouse => true })
     end
 
-    let(:uccio) {TestModel.create!(:name => "Uccio", :sex => "M", )}
-    let(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
-    let(:maria) {TestModel.create!(:name => "Maria", :sex => "F", )}
-    let(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F", )}
-    let(:antonio) {TestModel.create!(:name => "Antonio", :sex => "M", )}
-    let(:assunta) {TestModel.create!(:name => "Assunta", :sex => "F", )}
-    let(:gina) {TestModel.create!(:name => "Gina", :sex => "F")}
-    let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
-    let(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
-    let(:walter) {TestModel.create!(:name => "Walter", :sex => "M")}
-    let(:manu) {TestModel.create!(:name => "Manu", :sex => "F")}
-    let(:alessandro) {TestModel.create!(:name => "Alessandro", :sex => "M")}
+    let!(:uccio) {TestModel.create!(:name => "Uccio", :sex => "M", )}
+    let!(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
+    let!(:maria) {TestModel.create!(:name => "Maria", :sex => "F", )}
+    let!(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F", )}
+    let!(:antonio) {TestModel.create!(:name => "Antonio", :sex => "M", )}
+    let!(:assunta) {TestModel.create!(:name => "Assunta", :sex => "F", )}
+    let!(:gina) {TestModel.create!(:name => "Gina", :sex => "F")}
+    let!(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
+    let!(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
+    let!(:walter) {TestModel.create!(:name => "Walter", :sex => "M")}
+    let!(:manu) {TestModel.create!(:name => "Manu", :sex => "F")}
+    let!(:alessandro) {TestModel.create!(:name => "Alessandro", :sex => "M")}
 
     before(:each) do
       corrado.add_father!(uccio)
@@ -38,25 +38,25 @@ module QueryMethodsSpec
 
     describe "parents" do
       subject {corrado.parents}
-      specify { should include tetta,uccio }
+      specify { should =~ [tetta,uccio] }
     end
 
     describe "offspring" do
 
       describe "tetta #offspring" do
         subject {tetta.offspring}
-        specify { should include corrado,stefano }
+        specify { should =~ [corrado,stefano] }
         specify { should_not include walter }
       end
 
       describe "uccio #offspring" do
         subject {uccio.offspring}
-        specify { should include corrado,stefano,walter }
+        specify { should =~ [corrado,stefano,walter] }
       end
 
       describe "gina #offspring" do
         subject {gina.offspring}
-        specify { should include walter }
+        specify { should =~ [walter] }
         specify { should_not include corrado,stefano }
       end
 
@@ -66,7 +66,7 @@ module QueryMethodsSpec
 
       describe "corrado #siblings" do
         subject { corrado.siblings }
-        specify { should include stefano }
+        specify { should =~ [stefano] }
         specify { should_not include walter,corrado }
       end
 
@@ -77,7 +77,7 @@ module QueryMethodsSpec
 
       describe "corrado #half_siblings" do
         subject {corrado.half_siblings}
-        specify { should include walter }
+        specify { should =~ [walter] }
         specify { should_not include stefano }
       end
 
@@ -88,30 +88,33 @@ module QueryMethodsSpec
 
     end
 
+    describe "descendants", :wip => true do
 
-    describe "descendants" do
+      { :uccio => [:corrado, :stefano, :alessandro, :walter], 
+        :stefano => [:alessandro], 
+        :antonio => [:tetta,:corrado,:stefano,:alessandro] 
+      }.each do |origin,descendants|
+        describe "#{origin}#descendants" do
+          subject { eval(origin.to_s).descendants }
+          specify { should =~ descendants.map{|d| eval(d.to_s)} }
+        end
 
-      describe "uccio#descendants" do
-        subject { uccio.descendants }
-        specify { should include corrado,stefano,alessandro }
       end
 
     end
 
     describe "ancestors", :wip => true do
 
-      describe "alessandro#ancestors" do
-        subject { alessandro.ancestors }
-        specify { should include stefano,manu,uccio,narduccio,maria,tetta,antonio,assunta }
+      { :alessandro => [:stefano,:manu,:uccio,:narduccio,:maria,:tetta,:antonio,:assunta], 
+        :corrado => [:uccio,:narduccio,:maria,:tetta,:antonio,:assunta],
+        :narduccio => [] 
+      }.each do |origin,ancestors|
+        describe "#{origin}#ancestors" do
+          subject { eval(origin.to_s).ancestors }
+          specify { should =~ ancestors.map{|d| eval(d.to_s)} }
+        end
       end
-      describe "corrado#ancestors" do
-        subject { alessandro.ancestors }
-        specify { should include uccio,narduccio,maria,tetta }
-      end
-      describe "narduccio#ancestors" do
-        subject { narduccio.ancestors }
-        specify { should be_empty }
-      end
+
     end
   end
 

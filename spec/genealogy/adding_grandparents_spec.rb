@@ -45,8 +45,8 @@ module AddingGrandparentsSpec
           expect { subject.add_paternal_grandfather!(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException)
         end
 
-        it "raises an InfiniteLoopException when adding himself as grandfather" do
-          expect { subject.add_paternal_grandfather!(subject) }.to raise_error(Genealogy::InfiniteLoopException)
+        it "raises an IncompatibleRelationshipException when adding himself as grandfather" do
+          expect { subject.add_paternal_grandfather!(subject) }.to raise_error(Genealogy::IncompatibleRelationshipException)
         end
 
 
@@ -85,8 +85,8 @@ module AddingGrandparentsSpec
           subject.reload.maternal_grandmother.should == assunta
         end
 
-        it "raises an InfiniteLoopException when adding himself as grandmother" do
-          expect { subject.add_maternal_grandmother!(subject) }.to raise_error(Genealogy::InfiniteLoopException)
+        it "raises an IncompatibleRelationshipException when adding himself as grandmother" do
+          expect { subject.add_maternal_grandmother!(subject) }.to raise_error(Genealogy::IncompatibleRelationshipException)
         end
 
       end

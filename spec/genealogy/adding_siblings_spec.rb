@@ -86,9 +86,9 @@ module AddingSiblingsSpec
       context "when trying to add an ancestor" do
         let(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
         subject{ corrado }
-        it "raises an InfiniteLoopException" do
+        it "raises an IncompatibleRelationshipException" do
           subject.add_paternal_grandfather!(narduccio)
-          expect { subject.add_siblings!([narduccio]) }.to raise_error(Genealogy::InfiniteLoopException)
+          expect { subject.add_siblings!([narduccio]) }.to raise_error(Genealogy::IncompatibleRelationshipException)
         end
       end
     end

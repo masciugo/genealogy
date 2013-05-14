@@ -13,7 +13,8 @@ module Genealogy
       # add method
       define_method "add_#{parent}" do |relative|
         raise IncompatibleObjectException, "Linked objects must be instances of the same class: got #{relative.class} for #{self.class}" unless relative.is_a? self.class
-        raise InfiniteLoopException, "#{self} can't be #{parent} of itself" if relative == self
+        incompatible_parents = self.offspring | self.siblings.to_a | [self] 
+        raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
         raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
         send("#{parent}=",relative) == relative
       end
@@ -39,27 +40,20 @@ module Genealogy
     end
 
     # grandparents
-    translation = { :father => :paternal, :mother => :maternal }
+    grandparents_lineage_name = { :father => :paternal, :mother => :maternal }
     [:father, :mother].each do |parent|
       [:father, :mother].each do |grandparent|
 
-        # query methods
-        define_method "#{translation[parent]}_grand#{grandparent}" do
-          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
-          send(parent).send(grandparent)
-        end
-        
-        # add methods
         # no-bang version
-        define_method "add_#{translation[parent]}_grand#{grandparent}" do |relative|
+        define_method "add_#{grandparents_lineage_name[parent]}_grand#{grandparent}" do |relative|
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
-          raise InfiniteLoopException, "#{self} can't be grand#{grandparent} of itself" if relative == self
+          raise IncompatibleRelationshipException, "#{self} can't be grand#{grandparent} of itself" if relative == self
           send(parent).send("add_#{grandparent}",relative)
         end
 
         # bang version
-        define_method "add_#{translation[parent]}_grand#{grandparent}!" do |relative|
-          send("add_#{translation[parent]}_grand#{grandparent}",relative)
+        define_method "add_#{grandparents_lineage_name[parent]}_grand#{grandparent}!" do |relative|
+          send("add_#{grandparents_lineage_name[parent]}_grand#{grandparent}",relative)
           send(parent).save!
         end
 
@@ -70,7 +64,7 @@ module Genealogy
     # no bang version
     def add_siblings(sibs)
       raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
-      raise InfiniteLoopException, "Can't add an ancestor as sibling" unless (ancestors.to_a & [sibs].flatten).empty?
+      raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & [sibs].flatten).empty?
       results = []
       [sibs].flatten.each do |sib|
         results << sib.add_father(self.father)
@@ -89,7 +83,7 @@ module Genealogy
     end
 
     ##################################################################
-    ## remaining query methods
+    ## query methods
     ##################################################################
     
     def parents
@@ -100,6 +94,18 @@ module Genealogy
       end
     end
 
+    # grandparents
+    [:father, :mother].each do |parent|
+      [:father, :mother].each do |grandparent|
+
+        define_method "#{grandparents_lineage_name[parent]}_grand#{grandparent}" do
+          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
+          send(parent).send(grandparent)
+        end
+
+      end
+    end
+
     def ancestors
       result = []
       remaining = parents.to_a.compact
@@ -107,7 +113,7 @@ module Genealogy
         result << remaining.shift
         remaining += result.last.parents.to_a.compact
       end
-      result
+      result.uniq
     end
 
     def offspring
@@ -118,6 +124,17 @@ module Genealogy
         self.class.find_all_by_mother_id(id)
       end
     end
+
+    def descendants
+      result = []
+      remaining = offspring.to_a.compact
+      until remaining.empty?
+        result << remaining.shift
+        remaining += result.last.offspring.to_a.compact
+      end
+      result.uniq
+    end
+
 
     def siblings
       if father and mother

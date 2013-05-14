@@ -24,8 +24,8 @@ module AddingParentsSpec
         expect { subject.add_father!(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException)
       end
 
-      it "raises an InfiniteLoopException when adding himself as father" do
-        expect { subject.add_father!(subject) }.to raise_error(Genealogy::InfiniteLoopException)
+      it "raises an IncompatibleRelationshipException when adding himself as father" do
+        expect { subject.add_father!(subject) }.to raise_error(Genealogy::IncompatibleRelationshipException)
       end
 
       let(:tetta) {TestModel.create!(:name => "tetta", :sex => "F")}
