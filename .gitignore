@@ -15,3 +15,5 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+spec/debug.log
+spec/test2.sqlite3.db

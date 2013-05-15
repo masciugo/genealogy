@@ -3,7 +3,7 @@ require 'spec_helper'
 module QueryMethodsSpec
   extend GenealogyTestModel
   
-  describe "query methods", :wip => true  do
+  describe "query methods" do
 
     before(:all) do
       QueryMethodsSpec.define_test_model_class({:spouse => true })
@@ -23,17 +23,17 @@ module QueryMethodsSpec
     let(:alessandro) {TestModel.create!(:name => "Alessandro", :sex => "M")}
 
     before(:each) do
-      corrado.add_father!(uccio)
-      corrado.add_mother!(tetta)
-      corrado.add_siblings!([stefano])
-      walter.add_father!(uccio)
-      walter.add_mother!(gina)
-      corrado.add_paternal_grandfather!(narduccio)
-      corrado.add_paternal_grandmother!(maria)
-      corrado.add_maternal_grandfather!(antonio)
-      corrado.add_maternal_grandmother!(assunta)
-      alessandro.add_father!(stefano)
-      alessandro.add_mother!(manu)
+      corrado.add_father(uccio)
+      corrado.add_mother(tetta)
+      corrado.add_siblings([stefano])
+      walter.add_father(uccio)
+      walter.add_mother(gina)
+      corrado.add_paternal_grandfather(narduccio)
+      corrado.add_paternal_grandmother(maria)
+      corrado.add_maternal_grandfather(antonio)
+      corrado.add_maternal_grandmother(assunta)
+      alessandro.add_father(stefano)
+      alessandro.add_mother(manu)
     end
 
     describe "corrado" do

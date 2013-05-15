@@ -9,31 +9,19 @@ module Genealogy
     # parents 
     [:father, :mother].each do |parent|
 
-      ## no-bang version
       # add method
       define_method "add_#{parent}" do |relative|
         raise IncompatibleObjectException, "Linked objects must be instances of the same class: got #{relative.class} for #{self.class}" unless relative.is_a? self.class
         incompatible_parents = self.offspring | self.siblings.to_a | [self] 
         raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
         raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
-        send("#{parent}=",relative) == relative
+        send("#{parent}=",relative)
+        save!
       end
       
       # remove method
       define_method "remove_#{parent}" do
-        send("#{parent}=",nil).nil?
-      end
-
-      # bang version
-      # add method
-      define_method "add_#{parent}!" do |relative|
-        send("add_#{parent}",relative)
-        save!
-      end
-
-      # remove method
-      define_method "remove_#{parent}!" do 
-        send("remove_#{parent}")
+        send("#{parent}=",nil)
         save!
       end
 
@@ -58,18 +46,6 @@ module Genealogy
           send(parent).send("remove_#{grandparent}")
         end
 
-        # bang version
-        # add
-        define_method "add_#{grandparents_lineage_name[parent]}_grand#{grandparent}!" do |relative|
-          send("add_#{grandparents_lineage_name[parent]}_grand#{grandparent}",relative)
-          send(parent).save!
-        end
-
-        # remove
-        define_method "remove_#{grandparents_lineage_name[parent]}_grand#{grandparent}!" do
-          send("remove_#{grandparents_lineage_name[parent]}_grand#{grandparent}")
-          send(parent).save!
-        end
       end
     end
 
@@ -78,20 +54,27 @@ module Genealogy
     def add_siblings(sibs)
       raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
       raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & [sibs].flatten).empty?
-      results = []
-      [sibs].flatten.each do |sib|
-        results << sib.add_father(self.father)
-        results << sib.add_mother(self.mother)
+      transaction do
+        [sibs].flatten.each do |sib|
+          sib.add_father(self.father)
+          sib.add_mother(self.mother)
+        end
       end
-      results.inject(true){|memo,r| memo &= r}
     end
 
-    # bang version
-    def add_siblings!(sibs)
+    # children
+    # no bang version
+    def add_children(children)
+      raise WrongSexException, "Can't add children: undefined sex for #{self}" unless is_male? or is_female?
       transaction do
-        add_siblings(sibs)
-        [sibs].flatten.each { |s| s.save! }
-        save!
+        [children].flatten.each do |child|
+          case sex
+          when sex_male_value
+            child.add_father(self)
+          when sex_female_value
+            child.add_mother(self)
+          end
+        end
       end
     end
 

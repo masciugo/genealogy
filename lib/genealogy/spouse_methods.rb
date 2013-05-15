@@ -9,29 +9,18 @@ module Genealogy
       raise WrongSexException, "Can't add spouse with same sex" if self.sex == obj.sex
       self.spouse = obj
       obj.spouse = self
-    end
-
-    # remove method
-    def remove_spouse
-      spouse.spouse = nil
-      self.spouse = nil
-    end
-
-    ## bang version
-    # add method
-    def add_spouse!(obj)
       transaction do
-        add_spouse obj
         obj.save!
         save!
       end
     end
 
     # remove method
-    def remove_spouse!
+    def remove_spouse
       transaction do
         ex_spouse = spouse
-        remove_spouse
+        spouse.spouse = nil
+        self.spouse = nil
         ex_spouse.save!
         save!
       end

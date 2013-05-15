@@ -18,15 +18,15 @@ module AddingSiblingsSpec
     let(:dylan) {TestModel.create!(:name => "Dylan", :sex => "M")}
 
     before(:each) do
-      corrado.add_father!(uccio)
-      corrado.add_mother!(tetta)
+      corrado.add_father(uccio)
+      corrado.add_mother(tetta)
     end
 
-    describe "#add_siblings!" do
+    describe "#add_siblings" do
 
-      context "when add_sibling! stefano to corrado" do
+      context "when add_sibling stefano to corrado" do
         before(:each) do
-          corrado.add_siblings!(stefano)
+          corrado.add_siblings(stefano)
         end
 
         describe "corrado siblings" do
@@ -47,23 +47,23 @@ module AddingSiblingsSpec
           stefano.always_fail_validation = true
         end
 
-        specify { expect { corrado.add_siblings!(stefano) }.to raise_error ActiveRecord::RecordInvalid }
+        specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid }
 
         describe "corrado siblings" do
           subject { corrado.siblings }
-          specify { expect { corrado.add_siblings!(stefano) }.to raise_error ActiveRecord::RecordInvalid and corrado.reload.siblings.should_not include stefano }
+          specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid and corrado.reload.siblings.should_not include stefano }
         end
 
         describe "stefano siblings" do
           subject { stefano.siblings }
-          specify { expect { corrado.add_siblings!(stefano) }.to raise_error ActiveRecord::RecordInvalid and stefano.reload.siblings.should be_nil}
+          specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid and stefano.reload.siblings.should be_nil}
         end
 
       end
 
       context "when adding more than one sibling" do
         before(:each) do
-          corrado.add_siblings!([stefano,walter])
+          corrado.add_siblings([stefano,walter])
         end
 
         describe "corrado siblings" do
@@ -87,76 +87,10 @@ module AddingSiblingsSpec
         let(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
         subject{ corrado }
         it "raises an IncompatibleRelationshipException" do
-          subject.add_paternal_grandfather!(narduccio)
-          expect { subject.add_siblings!([narduccio]) }.to raise_error(Genealogy::IncompatibleRelationshipException)
+          subject.add_paternal_grandfather(narduccio)
+          expect { subject.add_siblings([narduccio]) }.to raise_error(Genealogy::IncompatibleRelationshipException)
         end
       end
-    end
-
-    describe "#add_siblings" do
-      
-      describe "result" do
-
-        it "must be true" do
-          corrado.add_siblings(stefano).should be_true
-        end
-
-        context "when adding more than one sibling with success" do
-
-          it "must be true" do
-            corrado.add_siblings([stefano,walter]).should be_true
-          end
-          
-        end
-
-      end
-
-      context "when add_sibling stefano to corrado" do
-
-        before(:each) do
-          corrado.add_siblings(stefano)
-        end
-
-        context "and stefano is saved" do
-
-          before(:each) do
-            stefano.save!
-          end
-
-          describe "corrado siblings" do
-            subject { corrado.reload.siblings }
-            specify {should include stefano}
-          end
-
-          describe "stefano siblings" do
-            subject { stefano.reload.siblings }
-            specify {should include corrado}
-          end
-
-        end
-
-        context "and stefano is not saved" do
-
-          describe "corrado siblings" do
-            subject { corrado.reload.siblings }
-            specify {should_not include stefano}
-          end
-
-          describe "stefano siblings" do
-            subject { stefano.reload.siblings }
-            specify {should be_nil}
-          end
-
-        end
-
-      end
-
-      context "when add_sibling to (whose both parents are nil)" do
-
-        specify { expect { dylan.add_siblings(stefano) }.to raise_error Genealogy::LineageGapException }
-
-      end
-
     end
 
   end
