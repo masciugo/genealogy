@@ -15,16 +15,32 @@ module Genealogy
         incompatible_parents = self.offspring | self.siblings.to_a | [self] 
         raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
         raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
-        send("#{parent}=",relative)
+        self.send("#{parent}=",relative)
         save!
       end
       
       # remove method
       define_method "remove_#{parent}" do
-        send("#{parent}=",nil)
+        self.send("#{parent}=",nil)
         save!
       end
 
+    end
+
+    # add both
+    def add_parents(father,mother)
+      transaction do
+        add_father(father)
+        add_mother(mother)
+      end
+    end
+
+    # remove both
+    def remove_parents
+      transaction do
+        remove_father
+        remove_mother
+      end
     end
 
     # grandparents
@@ -62,12 +78,12 @@ module Genealogy
       end
     end
 
-    # children
+    # offspring
     # no bang version
-    def add_children(children)
-      raise WrongSexException, "Can't add children: undefined sex for #{self}" unless is_male? or is_female?
+    def add_offspring(children)
+      raise WrongSexException, "Can't add offspring: undefined sex for #{self}" unless is_male? or is_female?
       transaction do
-        [children].flatten.each do |child|
+        [offspring].flatten.each do |child|
           case sex
           when sex_male_value
             child.add_father(self)
@@ -99,6 +115,15 @@ module Genealogy
           send(parent).send(grandparent)
         end
 
+      end
+    end
+
+    def grandparents
+      result = []
+      [:father, :mother].each do |parent|
+        [:father, :mother].each do |grandparent|
+          result << send("#{grandparents_lineage_name[parent]}_grand#{grandparent}")
+        end
       end
     end
 
