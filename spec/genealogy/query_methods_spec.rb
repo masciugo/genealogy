@@ -43,6 +43,7 @@ module QueryMethodsSpec
       its(:paternal_grandmother) {should == maria}
       its(:maternal_grandfather) {should == antonio}
       its(:maternal_grandmother) {should == assunta}
+      its(:grandparents) {should =~ [assunta,antonio,narduccio,maria]}
       its(:siblings) {pending}
       its(:offspring) {pending}
       its(:half_siblings) {pending}
