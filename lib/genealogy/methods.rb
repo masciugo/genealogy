@@ -44,20 +44,20 @@ module Genealogy
     end
 
     # grandparents
-    grandparents_lineage_name = { :father => :paternal, :mother => :maternal }
+    LINEAGE_NAME = { :father => :paternal, :mother => :maternal }
     [:father, :mother].each do |parent|
       [:father, :mother].each do |grandparent|
 
         # no-bang version
         # add
-        define_method "add_#{grandparents_lineage_name[parent]}_grand#{grandparent}" do |relative|
+        define_method "add_#{LINEAGE_NAME[parent]}_grand#{grandparent}" do |relative|
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           raise IncompatibleRelationshipException, "#{self} can't be grand#{grandparent} of itself" if relative == self
           send(parent).send("add_#{grandparent}",relative)
         end
 
         # remove
-        define_method "remove_#{grandparents_lineage_name[parent]}_grand#{grandparent}" do
+        define_method "remove_#{LINEAGE_NAME[parent]}_grand#{grandparent}" do
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           send(parent).send("remove_#{grandparent}")
         end
@@ -110,7 +110,7 @@ module Genealogy
     [:father, :mother].each do |parent|
       [:father, :mother].each do |grandparent|
 
-        define_method "#{grandparents_lineage_name[parent]}_grand#{grandparent}" do
+        define_method "#{LINEAGE_NAME[parent]}_grand#{grandparent}" do
           raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           send(parent).send(grandparent)
         end
@@ -122,7 +122,7 @@ module Genealogy
       result = []
       [:father, :mother].each do |parent|
         [:father, :mother].each do |grandparent|
-          result << send("#{grandparents_lineage_name[parent]}_grand#{grandparent}")
+          result << send("#{LINEAGE_NAME[parent]}_grand#{grandparent}")
         end
       end
     end
