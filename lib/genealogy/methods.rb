@@ -83,7 +83,7 @@ module Genealogy
     def add_offspring(children)
       raise WrongSexException, "Can't add offspring: undefined sex for #{self}" unless is_male? or is_female?
       transaction do
-        [offspring].flatten.each do |child|
+        [children].flatten.each do |child|
           case sex
           when sex_male_value
             child.add_father(self)
@@ -125,6 +125,7 @@ module Genealogy
           result << send("#{LINEAGE_NAME[parent]}_grand#{grandparent}")
         end
       end
+      result
     end
 
     def ancestors

@@ -44,7 +44,7 @@ module AddingSiblingsSpec
       context "when add_sibling! stefano to corrado but something goes wrong while saving stefano" do
 
         before(:each) do
-          stefano.always_fail_validation = true
+          stefano.always_fail!
         end
 
         specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid }

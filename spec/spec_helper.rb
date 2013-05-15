@@ -33,6 +33,10 @@ module GenealogyTestModel
         "#{id} - #{name } - #{object_id}"
       end
 
+      def always_fail!
+        self.always_fail_validation = true
+      end
+
       private
 
       def check_always_fail_validation

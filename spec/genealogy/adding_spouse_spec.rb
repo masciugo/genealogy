@@ -31,7 +31,7 @@ module AddingSpouseSpec
 
       context "when something goes wrong during adding" do
         it "has no spouse" do
-          subject.always_fail_validation = true
+          subject.always_fail!
           expect { subject.add_spouse(nicole) }.to raise_error and 
           subject.reload.spouse.should be(nil) and 
           nicole.reload.spouse.should be(nil)
@@ -50,7 +50,7 @@ module AddingSpouseSpec
       end
       context "when something goes wrong during removeing" do
         it "has still nicole as spouse" do
-          subject.always_fail_validation = true
+          subject.always_fail!
           expect { subject.remove_spouse }.to raise_error and 
           subject.reload.spouse.should == nicole and 
           nicole.reload.spouse.should == subject
