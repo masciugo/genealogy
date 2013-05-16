@@ -17,7 +17,7 @@ module QueryMethodsSpec
     let!(:pasquale) {TestModel.create!(:name => "Pasquale Antonio", :sex => "M", :father_id => gianbattista.id, :mother_id => luigia.id)}
     let!(:irene) {TestModel.create!(:name => "Irene Silvia Alfonsina", :sex => "F", :father_id => tommaso.id, :mother_id => celestina.id)}
     let!(:pietro) {TestModel.create!(:name => "Pietro", :sex => "M")}
-    let!(:teresa) {TestModel.create!(:name => "Teresa", :sex => "F")}
+    let!(:teresa) {TestModel.create!(:name => "Teresa", :sex => "F", :father_id => marcello.id)}
     let!(:giovanni) {TestModel.create!(:name => "Giovanni", :sex => "M")}
     let!(:margherita) {TestModel.create!(:name => "Margherita", :sex => "F")}
     let!(:celestina) {TestModel.create!(:name => "Celestina", :sex => "F", :father_id => luigi.id, :mother_id => marina.id)}
@@ -26,6 +26,7 @@ module QueryMethodsSpec
     let!(:marina) {TestModel.create!(:name => "Marina", :sex => "F")}
     let!(:gianbattista) {TestModel.create!(:name => "Gianbattista", :sex => "M")}
     let!(:luigia) {TestModel.create!(:name => "Luigia", :sex => "F")}
+    let!(:marcello) {TestModel.create!(:name => "Marcello", :sex => "M")}
 
     describe "benito" do
       subject {benito}
@@ -39,7 +40,7 @@ module QueryMethodsSpec
       its(:paternal_grandparents) {should =~ [pietro,teresa]}
       its(:maternal_grandparents) {should =~ [pasquale,irene]}
       its(:half_siblings) {should =~ [annamaria]}
-      its(:ancestors) {should =~ [paolo,antonietta,pietro,teresa,pasquale,irene,tommaso,celestina,gianbattista,luigia,luigi,marina]}
+      its(:ancestors) {should =~ [paolo,antonietta,pietro,teresa,pasquale,irene,tommaso,celestina,gianbattista,luigia,luigi,marina,marcello]}
     end
 
     describe "annamaria" do
@@ -55,7 +56,7 @@ module QueryMethodsSpec
       its(:half_siblings) {should == [benito]}
       its(:descendants) {should =~ []}
       its(:siblings) {should_not =~ [benito]}
-      its(:ancestors) {should =~ [paolo,barbara,pietro,teresa,giovanni,margherita]}
+      its(:ancestors) {should =~ [paolo,barbara,pietro,teresa,giovanni,margherita,marcello]}
     end
 
     describe "paolo" do
@@ -63,7 +64,18 @@ module QueryMethodsSpec
       its(:parents) {should =~ [pietro,teresa]}
       its(:offspring) {should =~ [benito,annamaria]}
       its(:descendants) {should =~ [benito,annamaria]}
-      its(:ancestors) {should =~ [pietro,teresa]}
+      its(:ancestors) {should =~ [pietro,teresa,marcello,nil]}
+      its(:maternal_grandmother) {should == nil}
+      its(:maternal_grandparents) {should =~ [marcello,nil]}
+      its(:grandparents) {should =~ [nil,nil,marcello,nil]}
+    end
+
+    describe "teresa" do
+      subject {teresa}
+      its(:father) {should == marcello}
+      its(:mother) {should == nil}
+      its(:parents) {should =~ [marcello,nil]}
+      its(:ancestors) {should =~ [marcello,nil]}
     end
 
     describe "barbara" do
