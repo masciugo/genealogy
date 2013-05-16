@@ -51,6 +51,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should == margherita}
       its(:paternal_grandparents) {should =~ [pietro,teresa]}
       its(:maternal_grandparents) {should =~ [giovanni,margherita]}
+      its(:grandparents) {should =~ [pietro,teresa,giovanni,margherita]}
       its(:half_siblings) {should == [benito]}
       its(:descendants) {should =~ []}
       its(:siblings) {should_not =~ [benito]}
@@ -69,6 +70,7 @@ module QueryMethodsSpec
       subject {barbara}
       its(:offspring) {should =~ [annamaria]}
       its(:descendants) {should =~ [annamaria]}
+      its(:grandparents) {should =~ []}
     end
     
     describe "pasquale" do
