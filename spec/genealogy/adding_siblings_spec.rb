@@ -22,7 +22,7 @@ module AddingSiblingsSpec
       corrado.add_mother(tetta)
     end
 
-    describe "corrado", :wip => true do
+    describe "corrado" do
       subject { corrado }
 
       context "when #add_sibling(stefano)" do
@@ -53,7 +53,7 @@ module AddingSiblingsSpec
           subject { stefano }
           its(:siblings) do
             corrado.add_siblings(stefano) rescue true
-            should be_nil
+            should be_empty
           end
 
         end
@@ -117,7 +117,7 @@ module AddingSiblingsSpec
           specify { expect { corrado.add_siblings(walter, :mother => gina, :father => ciccio ) }.to raise_error Genealogy::OptionException }
           describe "walter" do
             subject { walter }
-            its(:parents) { should be_nil }
+            its(:parents) { should be_empty }
           end
         end
 

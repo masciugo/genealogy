@@ -88,6 +88,34 @@ module AddingGrandparentsSpec
         end
 
       end
+
+      context "when add grandparents all toghether" do
+        its(:grandparents) do
+          corrado.add_grandparents(narduccio,maria,antonio,assunta)
+          should =~ [narduccio,maria,antonio,assunta]
+        end
+        its(:grandparents) do
+          corrado.add_grandparents(narduccio,nil,antonio,nil)
+          should =~ [narduccio,nil,antonio,nil]
+        end
+
+      end
+
+      describe "removing grandparents" do
+        before(:each) do
+          corrado.add_grandparents(narduccio,maria,antonio,assunta)
+        end
+
+        context "when removing all of them" do
+          its(:grandparents) do
+            corrado.remove_grandparents
+            should be_empty
+          end
+        end
+
+
+
+      end
     end
 
   end

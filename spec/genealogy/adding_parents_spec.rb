@@ -55,7 +55,7 @@ module AddingParentsSpec
           its(:parents) do
             corrado.add_parents(uccio,tetta) rescue true
             corrado.reload
-            should be_nil
+            should be_empty
           end
         end
 
@@ -85,11 +85,31 @@ module AddingParentsSpec
           describe "#remove_parents" do
             its(:parents) do
               corrado.remove_parents
-              should be_nil
+              should be_empty
             end
           end
 
         end
+
+        context "and #add_father(nil)" do
+          
+          its(:father) do
+            corrado.add_father(nil)
+            should be_nil
+          end
+
+        end
+
+        context "and #add_parents(nil,nil)", :wip => true do
+          
+          its(:parents) do
+            corrado.add_parents(nil,nil)
+            should be_empty
+          end
+
+        end
+
+
       end
 
     end

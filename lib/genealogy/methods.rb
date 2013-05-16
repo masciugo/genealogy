@@ -11,10 +11,12 @@ module Genealogy
 
       # add method
       define_method "add_#{parent}" do |relative|
-        raise IncompatibleObjectException, "Linked objects must be instances of the same class: got #{relative.class} for #{self.class}" unless relative.is_a? self.class
-        incompatible_parents = self.offspring | self.siblings.to_a | [self] 
-        raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
-        raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
+        unless relative.nil?
+          raise IncompatibleObjectException, "Linked objects must be instances of the same class: got #{relative.class} for #{self.class}" unless relative.is_a? self.class
+          incompatible_parents = self.offspring | self.siblings.to_a | [self] 
+          raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
+          raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
+        end
         self.send("#{parent}=",relative)
         save!
       end
@@ -46,24 +48,54 @@ module Genealogy
     # grandparents
     LINEAGE_NAME = { :father => :paternal, :mother => :maternal }
     [:father, :mother].each do |parent|
+      
+      raise LineageGapException, "#{self} doesn't have #{parent}" unless parent
+      
       [:father, :mother].each do |grandparent|
 
-        # no-bang version
         # add
         define_method "add_#{LINEAGE_NAME[parent]}_grand#{grandparent}" do |relative|
-          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           raise IncompatibleRelationshipException, "#{self} can't be grand#{grandparent} of itself" if relative == self
           send(parent).send("add_#{grandparent}",relative)
         end
 
         # remove
         define_method "remove_#{LINEAGE_NAME[parent]}_grand#{grandparent}" do
-          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           send(parent).send("remove_#{grandparent}")
         end
 
       end
     end
+
+    # add all
+    def add_grandparents(pgf,pgm,mgf,mgm)
+      transaction do
+        father.add_parents(pgf,pgm)
+        mother.add_parents(mgf,mgm)
+      end
+    end
+
+    # remove all
+    def remove_grandparents
+      transaction do
+        father.remove_parents
+        mother.remove_parents
+      end
+    end
+
+    LINEAGE_NAME.each do |parent,lineage|
+      define_method "add_#{lineage}_grandparents" do |grandfather,grandmother|
+        raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
+        send(parent).send("add_parents",grandfather,grandmother)
+      end
+
+      define_method "remove_#{lineage}_grandparents" do
+        raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
+        send(parent).send("remove_parents")
+      end
+
+    end
+
 
     ## add siblings
     # no bang version
@@ -110,20 +142,27 @@ module Genealogy
       if father or mother
         [father,mother]
       else
-        nil
+        []
       end
     end
 
     # grandparents
     [:father, :mother].each do |parent|
+
+      raise LineageGapException, "#{self} doesn't have #{parent}" unless parent
+      
       [:father, :mother].each do |grandparent|
 
         define_method "#{LINEAGE_NAME[parent]}_grand#{grandparent}" do
-          raise LineageGapException, "#{self} doesn't have #{parent}" unless send(parent)
           send(parent).send(grandparent)
         end
 
       end
+
+      define_method "#{LINEAGE_NAME[parent]}_grandparents" do
+        send(parent).parents
+      end
+
     end
 
     def grandparents
@@ -133,7 +172,7 @@ module Genealogy
           result << send("#{LINEAGE_NAME[parent]}_grand#{grandparent}")
         end
       end
-      result
+      result.compact! if result.all?{|gp| gp.nil? }
     end
 
     def ancestors
