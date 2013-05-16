@@ -100,7 +100,7 @@ module AddingParentsSpec
 
         end
 
-        context "and #add_parents(nil,nil)", :wip => true do
+        context "and #add_parents(nil,nil)" do
           
           its(:parents) do
             corrado.add_parents(nil,nil)

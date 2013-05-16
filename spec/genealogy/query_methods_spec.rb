@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-module CinziaQueryMethodsSpec
+module QueryMethodsSpec
   extend GenealogyTestModel
   
   describe "query methods", :cinzia => true  do
 
     before(:all) do
-      CinziaQueryMethodsSpec.define_test_model_class({:spouse => true })
+      QueryMethodsSpec.define_test_model_class({:spouse => true })
     end
 
     let!(:paolo) {TestModel.create!(:name => "Paolo Lodovico", :sex => "M", :father_id => pietro.id, :mother_id => teresa.id)}

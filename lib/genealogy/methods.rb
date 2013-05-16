@@ -173,6 +173,7 @@ module Genealogy
         end
       end
       result.compact! if result.all?{|gp| gp.nil? }
+      result
     end
 
     def ancestors

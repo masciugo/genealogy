@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors       = ["masciugo"]
   s.email         = ["masciugo@gmail.com"]
   s.homepage      = "https://github.com//genealogy"
-  s.summary       = "Organise ActiveRecord model into a genealogical tree structure"
+  s.summary       = "Organise ActiveRecord models into a genealogical tree structure"
   s.description   = "a description"
 
   s.files         = `git ls-files app lib`.split("\n")
@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport'
   
   s.add_development_dependency 'sqlite3'
-  # s.add_development_dependency 'mysql2'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'debugger'

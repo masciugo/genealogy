@@ -90,10 +90,12 @@ module AddingGrandparentsSpec
       end
 
       context "when add grandparents all toghether" do
+        
         its(:grandparents) do
           corrado.add_grandparents(narduccio,maria,antonio,assunta)
           should =~ [narduccio,maria,antonio,assunta]
         end
+        
         its(:grandparents) do
           corrado.add_grandparents(narduccio,nil,antonio,nil)
           should =~ [narduccio,nil,antonio,nil]
@@ -101,7 +103,7 @@ module AddingGrandparentsSpec
 
       end
 
-      describe "removing grandparents" do
+      describe "removing grandparents", :wip => true do
         before(:each) do
           corrado.add_grandparents(narduccio,maria,antonio,assunta)
         end
