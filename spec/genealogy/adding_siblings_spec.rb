@@ -63,7 +63,7 @@ module AddingSiblingsSpec
 
       context "when adding more than one sibling" do
         before(:each) do
-          corrado.add_siblings([stefano,walter])
+          corrado.add_siblings(stefano,walter)
         end
 
         describe "corrado siblings" do
@@ -88,10 +88,12 @@ module AddingSiblingsSpec
         subject{ corrado }
         it "raises an IncompatibleRelationshipException" do
           subject.add_paternal_grandfather(narduccio)
-          expect { subject.add_siblings([narduccio]) }.to raise_error(Genealogy::IncompatibleRelationshipException)
+          expect { subject.add_siblings(narduccio) }.to raise_error(Genealogy::IncompatibleRelationshipException)
         end
       end
     end
+
+    it "testa add hal siblings"
 
   end
 

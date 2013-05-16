@@ -25,11 +25,11 @@ module AddingChildrenSpec
         end
       end
       
-      context "when #add_offspring([corrado,stefano])" do
+      context "when #add_offspring(corrado,stefano)" do
         let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
         
         context "when corrado and stefano are valid" do
-          before(:each) { tetta.add_offspring([corrado,stefano]) }
+          before(:each) { tetta.add_offspring(corrado,stefano) }
           its(:offspring) { should =~ [corrado,stefano] }
           describe "corrado" do
             subject { corrado }
@@ -45,9 +45,9 @@ module AddingChildrenSpec
 
         context "when stefano is invalid" do
           before(:each) { stefano.always_fail! }
-          specify { expect { tetta.add_offspring([corrado,stefano]) }.to raise_error }
+          specify { expect { tetta.add_offspring(corrado,stefano) }.to raise_error }
           its(:offspring) do
-            tetta.add_offspring([corrado,stefano]) rescue true
+            tetta.add_offspring(corrado,stefano) rescue true
             should be_empty
           end
         end
@@ -65,16 +65,17 @@ module AddingChildrenSpec
         specify { expect { tetta.add_offspring(corrado) }.to raise_error(Genealogy::WrongSexException) }
       end
 
-      # context "when #add_offspring(corrado, :father => luigi)" do
-      #   let(:luigi) {TestModel.create!(:name => "Luigi", :sex => "M")}
-      #   before(:each) { tetta.add_offspring(corrado, :father => luigi) }
-      #   its(:offspring) { should =~ [corrado] }
-      #   describe "luigi" do
-      #     subject { luigi }
-      #     its(:offspring) { should =~ [corrado] }
-      #   end
-      # end
+      context "when #add_offspring(corrado, :father => luigi)", :wip => true do
+        let(:luigi) {TestModel.create!(:name => "Luigi", :sex => "M")}
+        before(:each) { tetta.add_offspring(corrado, :father => luigi) }
+        its(:offspring) { should =~ [corrado] }
+        describe "luigi" do
+          subject { luigi }
+          its(:offspring) { should =~ [corrado] }
+        end
+      end
 
+      it "testa le eccezioni"
 
     end
   end

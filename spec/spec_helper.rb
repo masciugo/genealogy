@@ -1,4 +1,5 @@
 require "active_record"
+require "active_support"
 require "logger"
 require "debugger"
 
@@ -29,8 +30,10 @@ module GenealogyTestModel
       attr_accessor :always_fail_validation
       validate :check_always_fail_validation
 
-      def to_s
-        "#{id} - #{name } - #{object_id}"
+      def inspect
+        # "[#{id}]-#{name }"
+        "#{name }"
+        # "[#{id}-#{object_id}]#{name }"
       end
 
       def always_fail!

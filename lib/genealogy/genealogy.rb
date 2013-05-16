@@ -3,7 +3,7 @@ module Genealogy
   def has_parents options = {}
 
     # Check options
-    raise OptionException.new("Options for has_parents must be in a hash.") unless options.is_a? Hash
+    raise OptionException, "Options for add_offspring must be in a hash." unless options.is_a? Hash
     options.each do |key, value|
       unless [:sex_column, :sex_values, :father_column, :mother_column, :spouse_column, :spouse].include? key
         raise OptionException.new("Unknown option for has_parents: #{key.inspect} => #{value.inspect}.")

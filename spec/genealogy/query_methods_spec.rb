@@ -25,7 +25,7 @@ module QueryMethodsSpec
     before(:each) do
       corrado.add_father(uccio)
       corrado.add_mother(tetta)
-      corrado.add_siblings([stefano])
+      corrado.add_siblings(stefano)
       walter.add_father(uccio)
       walter.add_mother(gina)
       corrado.add_paternal_grandfather(narduccio)

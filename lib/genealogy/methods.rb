@@ -67,11 +67,13 @@ module Genealogy
 
     ## add siblings
     # no bang version
-    def add_siblings(sibs)
+    def add_siblings(*args)
+      options = args.extract_options!
+
       raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
-      raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & [sibs].flatten).empty?
+      raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & args).empty?
       transaction do
-        [sibs].flatten.each do |sib|
+        args.each do |sib|
           sib.add_father(self.father)
           sib.add_mother(self.mother)
         end
@@ -80,14 +82,20 @@ module Genealogy
 
     # offspring
     # no bang version
-    def add_offspring(children)
+    def add_offspring(*args)
+      options = args.extract_options!
+      raise OptionException, "Can't specify father if reciever is male" if options[:father] and is_male?
+      raise OptionException, "Can't specify mother if reciever is female" if options[:mother] and is_female?
+      
       raise WrongSexException, "Can't add offspring: undefined sex for #{self}" unless is_male? or is_female?
       transaction do
-        [children].flatten.each do |child|
+        args.each do |child|
           case sex
           when sex_male_value
             child.add_father(self)
+            child.add_mother(options[:mother]) if options[:mother]
           when sex_female_value
+            child.add_father(options[:father]) if options[:father]
             child.add_mother(self)
           end
         end

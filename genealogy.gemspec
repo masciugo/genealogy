@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.licenses    = ["MIT"]
 
   s.add_dependency 'activerecord'
+  s.add_dependency 'activesupport'
   
   s.add_development_dependency 'sqlite3'
   # s.add_development_dependency 'mysql2'
