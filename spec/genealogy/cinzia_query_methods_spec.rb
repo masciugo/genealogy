@@ -102,6 +102,7 @@ module CinziaQueryMethodsSpec
       its(:descendants) {should =~ [tommaso,pasquale,irene,antonietta,benito]}
       its(:descendants) {should_not =~ [annamaria]}
       its(:ancestors) {should =~ []}
+      its(:offspring) {should_not =~ [irene]}
     end
 
   end
