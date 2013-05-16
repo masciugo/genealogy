@@ -55,7 +55,7 @@ module CinziaQueryMethodsSpec
       # # its(:offspring) {pending}
       its(:half_siblings) {should =~ [annamaria]}
       # # its(:descendants) {pending}
-      its(:ancestors) {should =~ [paolo,antonietta,pietro,teresa,pasquale,irene,gianbattista,luigia,luigi,marina]}
+      its(:ancestors) {should =~ [paolo,antonietta,pietro,teresa,pasquale,irene,tommaso,celestina,gianbattista,luigia,luigi,marina]}
     end
 
     describe "annamaria" do
@@ -69,7 +69,7 @@ module CinziaQueryMethodsSpec
       # # its(:offspring) {pending}
       its(:half_siblings) {should == [benito]}
       # # its(:descendants) {pending}
-      # # its(:ancestors) {pending}
+      its(:ancestors) {should =~ [paolo,barbara,pietro,teresa,giovanni,margherita]}
     end
 
     describe "paolo" do
@@ -92,7 +92,16 @@ module CinziaQueryMethodsSpec
       its(:offspring) {should =~ [antonietta]}
       its(:descendants) {should =~ [antonietta,benito]}
       its(:descendants) {should_not =~ [annamaria]}
+      its(:siblings) {should =~ [tommaso]}
       # # its(:ancestors) {pending}
+    end
+
+    describe "luigia" do
+      subject {luigia}
+      its(:offspring) {should =~ [tommaso,pasquale]}
+      its(:descendants) {should =~ [tommaso,pasquale,irene,antonietta,benito]}
+      its(:descendants) {should_not =~ [annamaria]}
+      its(:ancestors) {should =~ []}
     end
 
   end
