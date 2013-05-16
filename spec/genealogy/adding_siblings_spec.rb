@@ -15,85 +15,116 @@ module AddingSiblingsSpec
     let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
     let(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
     let(:walter) {TestModel.create!(:name => "Walter", :sex => "M")}
-    let(:dylan) {TestModel.create!(:name => "Dylan", :sex => "M")}
+    let(:ciccio) {TestModel.create!(:name => "Ciccio", :sex => "M")}
 
     before(:each) do
       corrado.add_father(uccio)
       corrado.add_mother(tetta)
     end
 
-    describe "#add_siblings" do
+    describe "corrado", :wip => true do
+      subject { corrado }
 
-      context "when add_sibling stefano to corrado" do
-        before(:each) do
-          corrado.add_siblings(stefano)
-        end
+      context "when #add_sibling(stefano)" do
+        
+        before(:each) { corrado.add_siblings(stefano) }
 
-        describe "corrado siblings" do
-          subject { corrado.siblings }
-          specify {should include stefano}
-        end
-
-        describe "stefano siblings" do
-          subject { stefano.siblings }
-          specify {should include corrado}
+        its(:siblings) { should include stefano }
+        describe "stefano" do
+          subject { stefano.reload }
+          its(:siblings) { should include corrado }
         end
 
       end
 
-      context "when add_sibling! stefano to corrado but something goes wrong while saving stefano" do
+      context "when #add_sibling(stefano) but something goes wrong while saving stefano" do
 
-        before(:each) do
-          stefano.always_fail!
-        end
+        before(:each) {stefano.always_fail!}
 
         specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid }
 
-        describe "corrado siblings" do
-          subject { corrado.siblings }
-          specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid and corrado.reload.siblings.should_not include stefano }
+        its(:siblings) do
+          corrado.add_siblings(stefano) rescue true
+          should_not include stefano
         end
 
-        describe "stefano siblings" do
-          subject { stefano.siblings }
-          specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid and stefano.reload.siblings.should be_nil}
+        describe "stefano" do
+
+          subject { stefano }
+          its(:siblings) do
+            corrado.add_siblings(stefano) rescue true
+            should be_nil
+          end
+
         end
 
       end
 
-      context "when adding more than one sibling" do
-        before(:each) do
-          corrado.add_siblings(stefano,walter)
+      context "when adding more than one sibling: #add_siblings(stefano,walter)" do
+        before(:each) { corrado.add_siblings(stefano,walter) }
+
+        its(:siblings) { should =~ [stefano,walter] }
+
+        describe "stefano" do
+          subject { stefano }
+          its(:siblings) { should =~ [corrado,walter] }
         end
 
-        describe "corrado siblings" do
-          subject { corrado.siblings }
-          specify {should include stefano,walter}
-        end
-
-        describe "stefano siblings" do
-          subject { stefano.siblings }
-          specify {should include corrado,walter}
-        end
-
-        describe "walter siblings" do
-          subject { walter.siblings }
-          specify {should include corrado,stefano}
+        describe "walter" do
+          subject { walter }
+          its(:siblings) { should =~ [corrado,stefano] }
         end
 
       end
 
       context "when trying to add an ancestor" do
         let(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
-        subject{ corrado }
         it "raises an IncompatibleRelationshipException" do
-          subject.add_paternal_grandfather(narduccio)
-          expect { subject.add_siblings(narduccio) }.to raise_error(Genealogy::IncompatibleRelationshipException)
+          corrado.add_paternal_grandfather(narduccio)
+          expect { corrado.add_siblings(narduccio) }.to raise_error(Genealogy::IncompatibleRelationshipException)
         end
       end
+
+      describe "adding half siblings" do
+        
+        context "when #add_siblings(walter, :father => ciccio )" do
+          before(:each) {corrado.add_siblings(walter, :father => ciccio )}
+          its(:half_siblings) do
+             should =~ [walter]
+          end
+          its(:siblings) { should be_empty }
+          describe "walter" do
+            subject { walter }
+            its(:father) { should == ciccio }
+            its(:mother) { should == tetta }
+          end
+        end
+
+        context "when #add_siblings(walter, :mother => gina )" do
+          before(:each) {corrado.add_siblings(walter, :mother => gina )}
+          its(:half_siblings) do
+             should =~ [walter]
+          end
+          its(:siblings) { should be_empty }
+          describe "walter" do
+            subject { walter }
+            its(:father) { should == uccio }
+            its(:mother) { should == gina }
+          end
+        end
+
+        context "when specify mother and father: #add_siblings(walter, :mother => gina, :father => ciccio )" do
+          specify { expect { corrado.add_siblings(walter, :mother => gina, :father => ciccio ) }.to raise_error Genealogy::OptionException }
+          describe "walter" do
+            subject { walter }
+            its(:parents) { should be_nil }
+          end
+        end
+
+      end
+
     end
 
-    it "testa add hal siblings"
 
   end
 

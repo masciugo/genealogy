@@ -12,7 +12,7 @@ module AddingChildrenSpec
     let(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F")}
     let(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
     
-    describe "tetta", :wip => true do
+    describe "tetta" do
       subject { tetta }
       
       context "when #add_offspring(corrado)" do
@@ -65,7 +65,7 @@ module AddingChildrenSpec
         specify { expect { tetta.add_offspring(corrado) }.to raise_error(Genealogy::WrongSexException) }
       end
 
-      context "when #add_offspring(corrado, :father => luigi)", :wip => true do
+      context "when #add_offspring(corrado, :father => luigi)" do
         let(:luigi) {TestModel.create!(:name => "Luigi", :sex => "M")}
         before(:each) { tetta.add_offspring(corrado, :father => luigi) }
         its(:offspring) { should =~ [corrado] }
@@ -75,7 +75,11 @@ module AddingChildrenSpec
         end
       end
 
-      it "testa le eccezioni"
+      context "when trying to add_offspring to a female specifying mother #add_offspring(corrado, :mother => gina)" do
+        let(:gina) {TestModel.create!(:name => "Gina", :sex => "F")}
+        specify { expect { tetta.add_offspring(corrado, :mother => gina) }.to raise_error(Genealogy::OptionException) }
+      end
+
 
     end
   end

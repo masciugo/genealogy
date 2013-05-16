@@ -69,13 +69,13 @@ module Genealogy
     # no bang version
     def add_siblings(*args)
       options = args.extract_options!
-
+      raise OptionException, "Can't specify father and mother at the same time: sibling should have at least one common parent" if (options[:father] and options[:mother])
       raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
       raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & args).empty?
       transaction do
         args.each do |sib|
-          sib.add_father(self.father)
-          sib.add_mother(self.mother)
+          sib.add_father(options[:father] || self.father)
+          sib.add_mother(options[:mother] || self.mother)
         end
       end
     end

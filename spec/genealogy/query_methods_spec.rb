@@ -1,70 +1,84 @@
 require 'spec_helper'
 
-module QueryMethodsSpec
+module CinziaQueryMethodsSpec
   extend GenealogyTestModel
   
-  describe "query methods" do
+  describe "query methods", :cinzia => true  do
 
     before(:all) do
-      QueryMethodsSpec.define_test_model_class({:spouse => true })
+      CinziaQueryMethodsSpec.define_test_model_class({:spouse => true })
     end
 
-    let(:uccio) {TestModel.create!(:name => "Uccio", :sex => "M", )}
-    let(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
-    let(:maria) {TestModel.create!(:name => "Maria", :sex => "F", )}
-    let(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F", )}
-    let(:antonio) {TestModel.create!(:name => "Antonio", :sex => "M", )}
-    let(:assunta) {TestModel.create!(:name => "Assunta", :sex => "F", )}
-    let(:gina) {TestModel.create!(:name => "Gina", :sex => "F")}
-    let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
-    let(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
-    let(:walter) {TestModel.create!(:name => "Walter", :sex => "M")}
-    let(:manu) {TestModel.create!(:name => "Manu", :sex => "F")}
-    let(:alessandro) {TestModel.create!(:name => "Alessandro", :sex => "M")}
+    let!(:paolo) {TestModel.create!(:name => "Paolo Lodovico", :sex => "M", :father_id => pietro.id, :mother_id => teresa.id)}
+    let!(:antonietta) {TestModel.create!(:name => "Antonietta", :sex => "F", :father_id => pasquale.id, :mother_id => irene.id)}
+    let!(:benito) {TestModel.create!(:name => "Benito Pietro Pasquale", :sex => "M", :father_id => paolo.id, :mother_id => antonietta.id)}
+    let!(:annamaria) {TestModel.create!(:name => "Annamaria", :sex => "F", :father_id => paolo.id, :mother_id => barbara.id)}
+    let!(:barbara) {TestModel.create!(:name => "Barbara", :sex => "F", :father_id => giovanni.id, :mother_id => margherita.id)}
+    let!(:pasquale) {TestModel.create!(:name => "Pasquale Antonio", :sex => "M", :father_id => gianbattista.id, :mother_id => luigia.id)}
+    let!(:irene) {TestModel.create!(:name => "Irene Silvia Alfonsina", :sex => "F", :father_id => tommaso.id, :mother_id => celestina.id)}
+    let!(:pietro) {TestModel.create!(:name => "Pietro", :sex => "M")}
+    let!(:teresa) {TestModel.create!(:name => "Teresa", :sex => "F")}
+    let!(:giovanni) {TestModel.create!(:name => "Giovanni", :sex => "M")}
+    let!(:margherita) {TestModel.create!(:name => "Margherita", :sex => "F")}
+    let!(:celestina) {TestModel.create!(:name => "Celestina", :sex => "F", :father_id => luigi.id, :mother_id => marina.id)}
+    let!(:tommaso) {TestModel.create!(:name => "Tommaso", :sex => "M", :father_id => gianbattista.id, :mother_id => luigia.id)}
+    let!(:luigi) {TestModel.create!(:name => "Luigi Stefano Antonio", :sex => "M")}
+    let!(:marina) {TestModel.create!(:name => "Marina", :sex => "F")}
+    let!(:gianbattista) {TestModel.create!(:name => "Gianbattista", :sex => "M")}
+    let!(:luigia) {TestModel.create!(:name => "Luigia", :sex => "F")}
 
-    before(:each) do
-      corrado.add_father(uccio)
-      corrado.add_mother(tetta)
-      corrado.add_siblings(stefano)
-      walter.add_father(uccio)
-      walter.add_mother(gina)
-      corrado.add_paternal_grandfather(narduccio)
-      corrado.add_paternal_grandmother(maria)
-      corrado.add_maternal_grandfather(antonio)
-      corrado.add_maternal_grandmother(assunta)
-      alessandro.add_father(stefano)
-      alessandro.add_mother(manu)
+    describe "benito" do
+      subject {benito}
+      its(:parents) {should =~ [paolo,antonietta]}
+      its(:paternal_grandfather) {should == pietro}
+      its(:paternal_grandmother) {should == teresa}
+      its(:maternal_grandfather) {should == pasquale}
+      its(:maternal_grandmother) {should == irene}
+      its(:grandparents) {should =~ [pietro,teresa,pasquale,irene]}
+      its(:siblings) {should =~ []}
+      its(:half_siblings) {should =~ [annamaria]}
+      its(:ancestors) {should =~ [paolo,antonietta,pietro,teresa,pasquale,irene,tommaso,celestina,gianbattista,luigia,luigi,marina]}
     end
 
-    describe "corrado" do
-      subject {corrado}
-      its(:parents) {should =~ [tetta,uccio]}
-      its(:paternal_grandfather) {should == narduccio}
-      its(:paternal_grandmother) {should == maria}
-      its(:maternal_grandfather) {should == antonio}
-      its(:maternal_grandmother) {should == assunta}
-      its(:grandparents) {should =~ [assunta,antonio,narduccio,maria]}
-      its(:siblings) {pending}
-      its(:offspring) {pending}
-      its(:half_siblings) {pending}
-      its(:descendants) {pending}
-      its(:ancestors) {pending}
+    describe "annamaria" do
+      subject {annamaria}
+      its(:parents) {should =~ [paolo,barbara]}
+      its(:paternal_grandfather) {should == pietro}
+      its(:paternal_grandmother) {should == teresa}
+      its(:maternal_grandfather) {should == giovanni}
+      its(:maternal_grandmother) {should == margherita}
+      its(:half_siblings) {should == [benito]}
+      its(:ancestors) {should =~ [paolo,barbara,pietro,teresa,giovanni,margherita]}
     end
 
-    describe "stefano" do
-      subject {stefano}
-      its(:parents) {should =~ [tetta,uccio]}
-      its(:paternal_grandfather) {should == narduccio}
-      its(:paternal_grandmother) {should == maria}
-      its(:maternal_grandfather) {should == antonio}
-      its(:maternal_grandmother) {should == assunta}
-      its(:siblings) {pending}
-      its(:offspring) {pending}
-      its(:half_siblings) {pending}
-      its(:descendants) {pending}
-      its(:ancestors) {pending}
+    describe "paolo" do
+      subject {paolo}
+      its(:parents) {should =~ [pietro,teresa]}
+      its(:offspring) {should =~ [benito,annamaria]}
+      its(:descendants) {should =~ [benito,annamaria]}
     end
 
+    describe "barbara" do
+      subject {barbara}
+      its(:offspring) {should =~ [annamaria]}
+      its(:descendants) {should =~ [annamaria]}
+    end
+    
+    describe "pasquale" do
+      subject {pasquale}
+      its(:offspring) {should =~ [antonietta]}
+      its(:descendants) {should =~ [antonietta,benito]}
+      its(:descendants) {should_not =~ [annamaria]}
+      its(:siblings) {should =~ [tommaso]}
+    end
+
+    describe "luigia" do
+      subject {luigia}
+      its(:offspring) {should =~ [tommaso,pasquale]}
+      its(:descendants) {should =~ [tommaso,pasquale,irene,antonietta,benito]}
+      its(:descendants) {should_not =~ [annamaria]}
+      its(:ancestors) {should =~ []}
+    end
 
   end
 
