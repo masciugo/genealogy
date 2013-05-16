@@ -36,7 +36,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should == irene}
       its(:grandparents) {should =~ [pietro,teresa,pasquale,irene]}
       its(:siblings) {should =~ []}
-      its(:paternal_grandparents) {should =~ [pietro,tresa]}
+      its(:paternal_grandparents) {should =~ [pietro,teresa]}
       its(:maternal_grandparents) {should =~ [pasquale,irene]}
       its(:half_siblings) {should =~ [annamaria]}
       its(:ancestors) {should =~ [paolo,antonietta,pietro,teresa,pasquale,irene,tommaso,celestina,gianbattista,luigia,luigi,marina]}
@@ -49,10 +49,11 @@ module QueryMethodsSpec
       its(:paternal_grandmother) {should == teresa}
       its(:maternal_grandfather) {should == giovanni}
       its(:maternal_grandmother) {should == margherita}
-      its(:paternal_grandparents) {should =~ [pietro,tresa]}
+      its(:paternal_grandparents) {should =~ [pietro,teresa]}
       its(:maternal_grandparents) {should =~ [giovanni,margherita]}
       its(:half_siblings) {should == [benito]}
-      its(:descendants) {should == []}
+      its(:descendants) {should =~ []}
+      its(:siblings) {should_not =~ [benito]}
       its(:ancestors) {should =~ [paolo,barbara,pietro,teresa,giovanni,margherita]}
     end
 
