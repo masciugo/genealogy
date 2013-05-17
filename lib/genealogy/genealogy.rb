@@ -47,7 +47,6 @@ module Genealogy
 
     # Include instance methods and class methods
     include Genealogy::Methods
-    include Genealogy::SpouseMethods if spouse_enabled
 
   end
   

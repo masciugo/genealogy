@@ -3,7 +3,7 @@ require 'spec_helper'
 module AddingGrandparentsSpec
   extend GenealogyTestModel
 
-  describe "corrado" do
+  describe "corrado", :wip => true do
     
     before(:all) do
       AddingGrandparentsSpec.define_test_model_class({})
@@ -67,13 +67,49 @@ module AddingGrandparentsSpec
         specify { expect { corrado.add_paternal_grandmother(narduccio) }.to raise_error(Genealogy::WrongSexException) }
       end
 
-      context "when has narduccio e maria as paternal grandparents" do
-        before(:each) do
-          corrado.add_paternal_grandfather(narduccio)
-          corrado.add_paternal_grandmother(maria)
+      context "when add grandparents all toghether: corrado.add_grandparents(narduccio,maria,antonio,assunta)" do
+        
+        its(:grandparents) do
+          corrado.add_grandparents(narduccio,maria,antonio,assunta)
+          should =~ [narduccio,maria,antonio,assunta]
+        end
+      
+      end
+
+      context "when add some nil as grandparents: corrado.add_grandparents(narduccio,maria,antonio,assunta)" do
+        
+        its(:grandparents) do
+          corrado.add_grandparents(narduccio,nil,antonio,nil)
+          should =~ [narduccio,nil,antonio,nil]
         end
 
-        context "and #remove_parental_grandfather" do
+      end
+
+      context "when add grandparents by lineage: corrado.add_paternal_grandparents(narduccio,maria)" do
+        
+        its(:grandparents) do
+          corrado.add_paternal_grandparents(narduccio,maria)
+          should =~ [narduccio,maria,nil,nil]
+        end
+
+      end
+
+      context "when add grandparents by lineage: corrado.add_maternal_grandparents(narduccio,maria)" do
+        
+        its(:grandparents) do
+          corrado.add_maternal_grandparents(narduccio,maria)
+          should =~ [nil,nil,narduccio,maria]
+        end
+
+      end
+
+
+      describe "removing grandparents" do
+        before(:each) do
+          corrado.add_grandparents(narduccio,maria,antonio,assunta)
+        end
+
+        context "when #remove_parental_grandfather" do
           before(:each) do
             corrado.remove_paternal_grandfather
           end
@@ -85,27 +121,6 @@ module AddingGrandparentsSpec
             its('reload.paternal_grandmother') {should == maria}
             its('reload.paternal_grandfather') {should be_nil}
           end
-        end
-
-      end
-
-      context "when add grandparents all toghether" do
-        
-        its(:grandparents) do
-          corrado.add_grandparents(narduccio,maria,antonio,assunta)
-          should =~ [narduccio,maria,antonio,assunta]
-        end
-        
-        its(:grandparents) do
-          corrado.add_grandparents(narduccio,nil,antonio,nil)
-          should =~ [narduccio,nil,antonio,nil]
-        end
-
-      end
-
-      describe "removing grandparents", :wip => true do
-        before(:each) do
-          corrado.add_grandparents(narduccio,maria,antonio,assunta)
         end
 
         context "when removing all of them" do

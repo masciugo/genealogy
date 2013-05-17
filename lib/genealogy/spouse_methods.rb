@@ -2,9 +2,8 @@ module Genealogy
   module SpouseMethods
     extend ActiveSupport::Concern
 
-   ## no-bang version
-   # add method
-   def add_spouse(obj)
+    # add method
+    def add_spouse(obj)
       raise IncompatibleObjectException, "Linked objects must be instances of the same class" unless obj.is_a? self.class
       raise WrongSexException, "Can't add spouse with same sex" if self.sex == obj.sex
       self.spouse = obj
