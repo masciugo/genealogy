@@ -36,7 +36,7 @@ module QueryMethodsSpec
       its(:maternal_grandfather) {should == pasquale}
       its(:maternal_grandmother) {should == irene}
       its(:grandparents) {should =~ [pietro,teresa,pasquale,irene]}
-      its(:siblings) {should =~ []}
+      its(:siblings) {should be_empty}
       its(:paternal_grandparents) {should =~ [pietro,teresa]}
       its(:maternal_grandparents) {should =~ [pasquale,irene]}
       its(:half_siblings) {should =~ [annamaria]}
@@ -54,7 +54,7 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [giovanni,margherita]}
       its(:grandparents) {should =~ [pietro,teresa,giovanni,margherita]}
       its(:half_siblings) {should == [benito]}
-      its(:descendants) {should =~ []}
+      its(:descendants) {should be_empty}
       its(:siblings) {should_not =~ [benito]}
       its(:ancestors) {should =~ [paolo,barbara,pietro,teresa,giovanni,margherita,marcello]}
     end
@@ -63,11 +63,13 @@ module QueryMethodsSpec
       subject {paolo}
       its(:parents) {should =~ [pietro,teresa]}
       its(:offspring) {should =~ [benito,annamaria]}
-      its(:offspring)(:with => barbara) {should == annamaria}
-      its(:offspring)(:with => barbara) {should_not == benito}
+      describe "offspring with barbara" do
+        specify { paolo.offspring(:with => barbara).should =~ [annamaria] }
+        specify { paolo.offspring(:with => barbara).should_not =~ [benito] }
+      end
       its(:descendants) {should =~ [benito,annamaria]}
-      its(:ancestors) {should =~ [pietro,teresa,marcello,nil]}
-      its(:maternal_grandmother) {should == nil}
+      its(:ancestors) {should =~ [pietro,teresa,marcello]}
+      its(:maternal_grandmother) {should be_nil}
       its(:maternal_grandparents) {should =~ [marcello,nil]}
       its(:grandparents) {should =~ [nil,nil,marcello,nil]}
     end
@@ -75,17 +77,19 @@ module QueryMethodsSpec
     describe "teresa" do
       subject {teresa}
       its(:father) {should == marcello}
-      its(:mother) {should == nil}
+      its(:mother) {should be_nil}
       its(:parents) {should =~ [marcello,nil]}
-      its(:ancestors) {should =~ [marcello,nil]}
+      its(:ancestors) {should =~ [marcello]}
     end
 
     describe "barbara" do
       subject {barbara}
       its(:offspring) {should =~ [annamaria]}
-      its(:offspring)(:with => pietro ){should =~ []}
+      describe "offspring with pietro" do
+        specify { barbara.offspring(:with => pietro).should be_empty }
+      end
       its(:descendants) {should =~ [annamaria]}
-      its(:grandparents) {should =~ []}
+      its(:grandparents) {should be_empty}
     end
     
     describe "pasquale" do
@@ -101,10 +105,10 @@ module QueryMethodsSpec
       its(:offspring) {should =~ [tommaso,pasquale]}
       its(:descendants) {should =~ [tommaso,pasquale,irene,antonietta,benito]}
       its(:descendants) {should_not =~ [annamaria]}
-      its(:ancestors) {should =~ []}
+      its(:ancestors) {should be_empty}
       its(:offspring) {should_not =~ [irene]}
-      its(:father){should == nil}
-      its(:parents){should =~ []}
+      its(:father){should be_nil}
+      its(:parents){should be_empty}
     end
 
   end

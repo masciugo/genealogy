@@ -93,8 +93,7 @@ module Genealogy
     end
 
 
-    ## add siblings
-    # no bang version
+    ## siblings
     def add_siblings(*args)
       options = args.extract_options!
       raise OptionException, "Can't specify father and mother at the same time: sibling should have at least one common parent" if (options[:father] and options[:mother])
@@ -108,26 +107,50 @@ module Genealogy
       end
     end
 
+    def remove_siblings
+      
+    end
+
     # offspring
-    # no bang version
     def add_offspring(*args)
       options = args.extract_options!
-      raise OptionException, "Can't specify father if reciever is male" if options[:father] and is_male?
-      raise OptionException, "Can't specify mother if reciever is female" if options[:mother] and is_female?
       
-      raise WrongSexException, "Can't add offspring: undefined sex for #{self}" unless is_male? or is_female?
+      raise_if_sex_undefined
+
       transaction do
         args.each do |child|
           case sex
           when sex_male_value
             child.add_father(self)
-            child.add_mother(options[:mother]) if options[:mother]
+            child.add_mother(options[:with]) if options[:with]
           when sex_female_value
-            child.add_father(options[:father]) if options[:father]
+            child.add_father(options[:with]) if options[:with]
             child.add_mother(self)
           end
         end
       end
+    end
+
+    def remove_offspring(options = {})
+      
+      raise_if_sex_undefined
+
+      children = offspring(options)
+      transaction do
+        children.each do |child|
+          if options[:with] and (options[:affect_with] == true)
+            child.remove_parents
+          else
+            case sex
+            when sex_male_value
+              child.remove_father
+            when sex_female_value
+              child.remove_mother
+            end  
+          end
+        end
+      end
+      children.empty? ? false : true
     end
 
     ##################################################################
@@ -172,35 +195,18 @@ module Genealogy
       result
     end
 
-    def ancestors
-      result = []
-      remaining = parents.to_a.compact
-      until remaining.empty?
-        result << remaining.shift
-        remaining += result.last.parents.to_a.compact
-      end
-      result.uniq
-    end
+    def offspring(options = {})
 
-    def offspring
+      if spouse = options[:with]
+        raise WrongSexException, "Something wrong with spouse #{spouse} gender." if spouse.sex == sex 
+      end
       case sex
       when sex_male_value
-        self.class.find_all_by_father_id(id)
+        self.class.find_all_by_father_id(id, :conditions => (["mother_id == ?", spouse.id] if spouse) )
       when sex_female_value
-        self.class.find_all_by_mother_id(id)
+        self.class.find_all_by_mother_id(id, :conditions => (["father_id == ?", spouse.id] if spouse) )
       end
     end
-
-    def descendants
-      result = []
-      remaining = offspring.to_a.compact
-      until remaining.empty?
-        result << remaining.shift
-        remaining += result.last.offspring.to_a.compact
-      end
-      result.uniq
-    end
-
 
     def siblings
       if father or mother
@@ -218,6 +224,27 @@ module Genealogy
       end
     end
 
+    def ancestors
+      result = []
+      remaining = parents.to_a.compact
+      until remaining.empty?
+        result << remaining.shift
+        remaining += result.last.parents.to_a.compact
+      end
+      result.uniq
+    end
+
+    def descendants
+      result = []
+      remaining = offspring.to_a.compact
+      until remaining.empty?
+        result << remaining.shift
+        remaining += result.last.offspring.to_a.compact
+      end
+      result.uniq
+    end
+
+
     def is_female?
       sex == sex_female_value
     end
@@ -232,6 +259,10 @@ module Genealogy
 
     def raise_if_gap_on(relative)
       raise LineageGapException, "#{self} doesn't have #{relative}" unless send(relative)
+    end
+
+    def raise_if_sex_undefined
+      raise WrongSexException, "Can't proceed if sex undefined for #{self}" unless is_male? or is_female?
     end
 
     module ClassMethods

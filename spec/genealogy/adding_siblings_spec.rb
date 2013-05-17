@@ -3,7 +3,8 @@ require 'spec_helper'
 module AddingSiblingsSpec
   extend GenealogyTestModel
 
-  describe "adding siblings" do
+  describe "corrado" do
+    subject { corrado }
 
     before(:all) do
       AddingSiblingsSpec.define_test_model_class({})
@@ -22,9 +23,8 @@ module AddingSiblingsSpec
       corrado.add_mother(tetta)
     end
 
-    describe "corrado" do
-      subject { corrado }
-
+    describe "adding siblings" do
+      
       context "when #add_sibling(stefano)" do
         
         before(:each) { corrado.add_siblings(stefano) }
@@ -39,7 +39,7 @@ module AddingSiblingsSpec
 
       context "when #add_sibling(stefano) but something goes wrong while saving stefano" do
 
-        before(:each) {stefano.always_fail!}
+        before(:each) {stefano.mark_invalid!}
 
         specify { expect { corrado.add_siblings(stefano) }.to raise_error ActiveRecord::RecordInvalid }
 
@@ -125,6 +125,17 @@ module AddingSiblingsSpec
 
     end
 
+    describe "removing siblings" do
+
+      before(:each) do
+        corrado.add_siblings(stefano)
+        corrado.add_siblings(walter, :mother => gina )
+        ciccio.add_mother(corrado.mother)
+      end
+      
+      
+      
+    end
 
   end
 

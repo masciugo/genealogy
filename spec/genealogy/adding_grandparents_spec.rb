@@ -3,7 +3,7 @@ require 'spec_helper'
 module AddingGrandparentsSpec
   extend GenealogyTestModel
 
-  describe "corrado", :wip => true do
+  describe "corrado" do
     
     before(:all) do
       AddingGrandparentsSpec.define_test_model_class({})

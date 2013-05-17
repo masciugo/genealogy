@@ -49,7 +49,7 @@ module AddingParentsSpec
 
         context "when corrado is invalid" do
           before(:each) do
-            corrado.always_fail!
+            corrado.mark_invalid!
           end
           specify { expect { corrado.add_parents(uccio,tetta) }.to raise_error }
           its(:parents) do

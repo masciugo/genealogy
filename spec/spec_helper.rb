@@ -25,10 +25,9 @@ module GenealogyTestModel
 
       has_parents has_parents_opts
 
-      attr_accessible :name, :sex
+      attr_accessible :name, :sex, :isinvalid
 
-      attr_accessor :always_fail_validation
-      validate :check_always_fail_validation
+      validate :check_invalid
 
       def inspect
         # "[#{id}]-#{name }"
@@ -36,14 +35,14 @@ module GenealogyTestModel
         # "[#{id}-#{object_id}]#{name }"
       end
 
-      def always_fail!
-        self.always_fail_validation = true
+      def mark_invalid!
+        update_attribute(:isinvalid,true)
       end
 
       private
 
-      def check_always_fail_validation
-        errors.add(:base, "This object was flagged to always fail") if @always_fail_validation == true
+      def check_invalid
+        errors.add(:base, "This object was flagged to always fail") if isinvalid == true
       end
 
     end
@@ -60,6 +59,7 @@ module GenealogyTestModel
       table.integer self::TestModel.father_column
       table.integer self::TestModel.mother_column
       table.integer self::TestModel.spouse_column if self::TestModel.spouse_enabled?
+      table.boolean 'isinvalid'
     end
 
     self::TestModel.reset_column_information
