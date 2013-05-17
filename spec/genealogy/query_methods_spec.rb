@@ -63,6 +63,8 @@ module QueryMethodsSpec
       subject {paolo}
       its(:parents) {should =~ [pietro,teresa]}
       its(:offspring) {should =~ [benito,annamaria]}
+      its(:offspring)(:with => barbara) {should == annamaria}
+      its(:offspring)(:with => barbara) {should_not == benito}
       its(:descendants) {should =~ [benito,annamaria]}
       its(:ancestors) {should =~ [pietro,teresa,marcello,nil]}
       its(:maternal_grandmother) {should == nil}
@@ -81,6 +83,7 @@ module QueryMethodsSpec
     describe "barbara" do
       subject {barbara}
       its(:offspring) {should =~ [annamaria]}
+      its(:offspring)(:with => pietro ){should =~ []}
       its(:descendants) {should =~ [annamaria]}
       its(:grandparents) {should =~ []}
     end
