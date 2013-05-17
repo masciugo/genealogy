@@ -101,7 +101,7 @@ module QueryMethodsSpec
       its(:ancestors) {should =~ []}
       its(:offspring) {should_not =~ [irene]}
       its(:father){should == nil}
-      its(:parents){should =~ [nil,nil]}
+      its(:parents){should =~ []}
     end
 
   end
