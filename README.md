@@ -1,7 +1,7 @@
 # Genealogy
 
 ## Premise
-Genealogy is still under development and need to be improved and extended. Developed features so far were the ones I needed for my personal applications but also the basic ones for a genealogy managment system that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and contructive sense.
+Genealogy is still under development and need to be improved and extended. Developed features so far were the ones I needed for my personal applications but also the basic ones for a genealogy management system that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense.
 
 
 ## Description
@@ -44,7 +44,7 @@ These self explaining methods simply parse the tree through parents' association
 * `george.siblings` will return full-siblings array (same father and mother)
 * `george.siblings(:half => :mother)` will return maternal half-siblings array (same mother)
 * `george.siblings(:half => :only)` will return only half-siblings 
-* `george.siblings(:half => :include)` will return only full-siblings and half-siblings all toghether
+* `george.siblings(:half => :include)` will return only full-siblings and half-siblings all together
 
 * `george.offspring` will return all individuals that have george as father (mother can be any)
 * `george.offspring(:spouse => :gina)` will return all individuals that have george as father and gina as mother
@@ -109,7 +109,7 @@ pending
 
 ### Test as documentation
 
-A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpouse I tried to make the test output as readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant human readable format.
+A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant human readable format.
 
 
 
