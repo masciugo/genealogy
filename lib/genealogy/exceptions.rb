@@ -1,5 +1,7 @@
 module Genealogy
-  class OptionException < RuntimeError;  end
+  class WrongArgumentException < RuntimeError;  end
+  class WrongOptionException < RuntimeError;  end
+  class WrongOptionValueException < RuntimeError;  end
   class LineageGapException < RuntimeError;  end
   class IncompatibleObjectException < RuntimeError;  end
   class WrongSexException < RuntimeError;  end

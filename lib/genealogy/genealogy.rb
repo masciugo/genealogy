@@ -1,18 +1,30 @@
 module Genealogy
 
-  def has_parents options = {}
+  def check_options(options, admitted_keys)
+    raise WrongArgumentException, "first argument must be in a hash." unless options.is_a? Hash
+    raise WrongArgumentException, "seconf argument must be in an array." unless admitted_keys.is_a? Array
 
-    # Check options
-    raise OptionException, "Options for add_offspring must be in a hash." unless options.is_a? Hash
     options.each do |key, value|
-      unless [:sex_column, :sex_values, :father_column, :mother_column, :spouse_column, :spouse].include? key
-        raise OptionException.new("Unknown option for has_parents: #{key.inspect} => #{value.inspect}.")
+      unless admitted_keys.include? key
+        raise WrongOptionException.new("Unknown option: #{key.inspect} => #{value.inspect}.")
       end
-      if key == :sex_values
-        raise OptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
+      if block_given?
+        yield key, value
       end
     end
 
+  end
+
+  def has_parents options = {}
+
+    # Check options
+    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :spouse_column, :spouse]
+    check_options(options, admitted_keys) do |key, value|
+      if key == :sex_values
+        raise WrongOptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
+      end
+    end
+    
     class_attribute :spouse_enabled
     self.spouse_enabled = options[:spouse].try(:==,true) || false
     tracked_parents = [:father, :mother]

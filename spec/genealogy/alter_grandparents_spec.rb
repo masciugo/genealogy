@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-module AddingGrandparentsSpec
+module AlterGrandparentsSpec
   extend GenealogyTestModel
 
   describe "corrado" do
     
     before(:all) do
-      AddingGrandparentsSpec.define_test_model_class({})
+      AlterGrandparentsSpec.define_test_model_class({})
     end
 
     subject(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}

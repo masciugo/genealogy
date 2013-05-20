@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-module AddingParentsSpec
+module AlterParentsSpec
   extend GenealogyTestModel
   
   describe "adding/removing parents" do
 
     before(:all) do
-      AddingParentsSpec.define_test_model_class({})
+      AlterParentsSpec.define_test_model_class({})
     end
 
     subject(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
@@ -44,7 +44,7 @@ module AddingParentsSpec
         its(:parents) do
           corrado.add_parents(uccio,tetta)
           corrado.reload
-          should == [uccio,tetta]
+          should =~ [uccio,tetta]
         end
 
         context "when corrado is invalid" do
@@ -76,7 +76,7 @@ module AddingParentsSpec
 
         end
 
-        context "and tetta as mother" do
+        context "and has tetta as mother" do
         
           before(:each) do
             corrado.add_mother(tetta)

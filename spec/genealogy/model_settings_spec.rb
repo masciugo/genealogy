@@ -91,7 +91,26 @@ module ModelSettingsSpec
       end
 
     end
-
-
+  
   end
+
+  describe "model and table settings with wrong options" do
+
+    context "has_parents_opts: {:foo => 'bar' }" do
+
+      let(:has_parents_opts) { {:foo => "bar" } }
+      specify { expect { ModelSettingsSpec.define_test_model_class(has_parents_opts) }.to raise_error Genealogy::WrongOptionException }
+      
+    end
+
+    context "has_parents_opts: {:foo => 'bar' }" do
+
+      let(:has_parents_opts) { {:sex_column => "gender", :sex_values => [1,2,3]} }
+      specify { expect { ModelSettingsSpec.define_test_model_class(has_parents_opts) }.to raise_error Genealogy::WrongOptionException }
+      
+    end
+
+    
+  end
+
 end

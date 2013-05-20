@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-module AddingSpouseSpec
+module AlterSpouseSpec
   extend GenealogyTestModel
   
   describe "adding spouse" do
 
     before(:all) do
-      AddingSpouseSpec.define_test_model_class({:spouse => true})
+      AlterSpouseSpec.define_test_model_class({:spouse => true})
     end
 
     subject {TestModel.create!(:name => "Corrado", :sex => "M")}

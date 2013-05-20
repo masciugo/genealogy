@@ -96,19 +96,41 @@ module Genealogy
     ## siblings
     def add_siblings(*args)
       options = args.extract_options!
-      raise OptionException, "Can't specify father and mother at the same time: sibling should have at least one common parent" if (options[:father] and options[:mother])
       raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
       raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & args).empty?
       transaction do
         args.each do |sib|
-          sib.add_father(options[:father] || self.father)
-          sib.add_mother(options[:mother] || self.mother)
+          case options[:half]
+          when :father
+            sib.add_father(self.father)
+            sib.add_mother(options[:spouse]) if options[:spouse]
+          when :mother
+            sib.add_father(options[:spouse]) if options[:spouse]
+            sib.add_mother(self.mother)
+          else
+            sib.add_father(self.father)
+            sib.add_mother(self.mother)
+          end
         end
       end
     end
 
-    def remove_siblings
-      
+    def remove_siblings(options = {})
+      resulting_indivs = siblings(options)
+
+      transaction do
+        resulting_indivs.each do |sib|
+          case options[:half]
+          when :father
+            sib.remove_father
+          when :mother
+            sib.remove_mother
+          else
+            sib.remove_parents
+          end  
+        end
+      end
+
     end
 
     # offspring
@@ -122,9 +144,9 @@ module Genealogy
           case sex
           when sex_male_value
             child.add_father(self)
-            child.add_mother(options[:with]) if options[:with]
+            child.add_mother(options[:spouse]) if options[:spouse]
           when sex_female_value
-            child.add_father(options[:with]) if options[:with]
+            child.add_father(options[:spouse]) if options[:spouse]
             child.add_mother(self)
           end
         end
@@ -135,10 +157,10 @@ module Genealogy
       
       raise_if_sex_undefined
 
-      children = offspring(options)
+      resulting_indivs = offspring(options)
       transaction do
-        children.each do |child|
-          if options[:with] and (options[:affect_with] == true)
+        resulting_indivs.each do |child|
+          if options[:affect_spouse] == true
             child.remove_parents
           else
             case sex
@@ -150,7 +172,7 @@ module Genealogy
           end
         end
       end
-      children.empty? ? false : true
+      resulting_indivs.empty? ? false : true
     end
 
     ##################################################################
@@ -197,7 +219,7 @@ module Genealogy
 
     def offspring(options = {})
 
-      if spouse = options[:with]
+      if spouse = options[:spouse]
         raise WrongSexException, "Something wrong with spouse #{spouse} gender." if spouse.sex == sex 
       end
       case sex
@@ -208,20 +230,27 @@ module Genealogy
       end
     end
 
-    def siblings
-      if father or mother
-        (father.try(:offspring).to_a & mother.try(:offspring).to_a) - [self]
+    def siblings(options = {})
+      result = case options[:half]
+      when :father # common father
+        father.try(:offspring, options).to_a
+      when :mother # common mother
+        mother.try(:offspring, options).to_a
+      when nil # exluding half siblings
+        siblings(:half => :father) & siblings(:half => :mother)
+      when :only # only half siblings
+        siblings(:half => :include) - siblings
+      when :include # including half siblings
+        siblings(:half => :father) | siblings(:half => :mother)
       else
-        []
+        raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, false, true or nil"
       end
+      result - [self]
     end
 
-    def half_siblings
-      if father or mother
-        (father.try(:offspring).to_a | mother.try(:offspring).to_a) - [self] - siblings
-      else
-        []
-      end
+    def half_siblings(options = {})
+      siblings(:half => :only)
+      # todo: inprove with option :father and :mother 
     end
 
     def ancestors
