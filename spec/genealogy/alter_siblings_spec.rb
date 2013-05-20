@@ -146,12 +146,48 @@ module AlterSiblingsSpec
       describe "#remove_siblings" do
         before(:each) do
           corrado.remove_siblings
+          corrado.reload
         end
         its(:siblings) { should be_empty }
         its(:half_siblings) { should =~ [walter,agata] }
         describe "stefano" do
           subject { stefano.reload }
           its(:siblings) { should be_empty }
+          its(:mother) { should be_nil }
+        end
+      end
+
+      describe "#remove_siblings(:half => :father) " do
+        before(:each) do
+          corrado.remove_siblings(:half => :father )
+        end
+        its(:siblings) { should be_empty }
+        its(:half_siblings) { should =~ [stefano,agata] }
+        its(:mother) { should be(tetta) }
+      end
+
+      describe "#remove_siblings(:half => :mother) " do
+        before(:each) do
+          corrado.remove_siblings(:half => :mother )
+        end
+        its(:siblings) { should be_empty }
+        its(:half_siblings) { should =~ [stefano,walter] }
+        its(:father) { should be(uccio) }
+      end
+
+      describe "#remove_siblings(:half => :father, :affect_spouse => true ) " do
+        before(:each) do
+          corrado.remove_siblings(:half => :father, :affect_spouse => true  )
+        end
+        its(:siblings) { should be_empty }
+        its(:half_siblings) { should =~ [agata] }
+        describe "stefano" do
+          subject {stefano.reload}
+          its(:parents) { should be_empty }
+        end
+        describe "walter" do
+          subject {walter.reload}
+          its(:parents) { should be_empty }
         end
       end
 

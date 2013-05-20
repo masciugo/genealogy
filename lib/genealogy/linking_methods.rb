@@ -1,11 +1,7 @@
 module Genealogy
-  module Methods
+  module LinkingMethods
     extend ActiveSupport::Concern
 
-    ##################################################################
-    ## linking methods
-    ##################################################################
-    
     # parents 
     [:father, :mother].each do |parent|
 
@@ -46,17 +42,16 @@ module Genealogy
     end
 
     # grandparents
-    LINEAGE_NAME = { :father => :paternal, :mother => :maternal }
     [:father, :mother].each do |parent|
       [:father, :mother].each do |grandparent|
         # add one 
-        define_method "add_#{LINEAGE_NAME[parent]}_grand#{grandparent}" do |relative|
+        define_method "add_#{Genealogy::LINEAGE_NAME[parent]}_grand#{grandparent}" do |relative|
           raise IncompatibleRelationshipException, "#{self} can't be grand#{grandparent} of itself" if relative == self
           raise_if_gap_on(parent)
           send(parent).send("add_#{grandparent}",relative)
         end
         # remove one
-        define_method "remove_#{LINEAGE_NAME[parent]}_grand#{grandparent}" do
+        define_method "remove_#{Genealogy::LINEAGE_NAME[parent]}_grand#{grandparent}" do
           raise_if_gap_on(parent)
           send(parent).send("remove_#{grandparent}")
         end
@@ -65,12 +60,12 @@ module Genealogy
 
     [:father, :mother].each do |parent|
       # add two by lineage
-      define_method "add_#{LINEAGE_NAME[parent]}_grandparents" do |grandfather,grandmother|
+      define_method "add_#{Genealogy::LINEAGE_NAME[parent]}_grandparents" do |grandfather,grandmother|
         raise_if_gap_on(parent)
         send(parent).send("add_parents",grandfather,grandmother)
       end
       # remove two by lineage
-      define_method "remove_#{LINEAGE_NAME[parent]}_grandparents" do
+      define_method "remove_#{Genealogy::LINEAGE_NAME[parent]}_grandparents" do
         raise_if_gap_on(parent)
         send(parent).send("remove_parents")
       end
@@ -107,27 +102,35 @@ module Genealogy
           when :mother
             sib.add_father(options[:spouse]) if options[:spouse]
             sib.add_mother(self.mother)
-          else
+          when nil
             sib.add_father(self.father)
             sib.add_mother(self.mother)
+          else
+            raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother or nil"
           end
         end
       end
     end
 
     def remove_siblings(options = {})
+      options.delete_if{ |key,value| key == :half and ![:father,:mother].include?(value) }
+
       resulting_indivs = siblings(options)
 
       transaction do
+
         resulting_indivs.each do |sib|
           case options[:half]
           when :father
             sib.remove_father
+            sib.remove_mother if options[:affect_spouse] == true
           when :mother
+            sib.remove_father if options[:affect_spouse] == true
             sib.remove_mother
-          else
+          when nil
             sib.remove_parents
           end  
+
         end
       end
 
@@ -175,116 +178,7 @@ module Genealogy
       resulting_indivs.empty? ? false : true
     end
 
-    ##################################################################
-    ## query methods
-    ##################################################################
-    
-    def parents
-      if father or mother
-        [father,mother]
-      else
-        []
-      end
-    end
-
-    # grandparents
-    [:father, :mother].each do |parent|
-      [:father, :mother].each do |grandparent|
-
-        # get one
-        define_method "#{LINEAGE_NAME[parent]}_grand#{grandparent}" do
-          send(parent) && send(parent).send(grandparent)
-        end
-
-      end
-
-      # get two by lineage
-      define_method "#{LINEAGE_NAME[parent]}_grandparents" do
-        (send(parent) && send(parent).parents) || []
-      end
-
-    end
-
-    # get all
-    def grandparents
-      result = []
-      [:father, :mother].each do |parent|
-        [:father, :mother].each do |grandparent|
-          result << send("#{LINEAGE_NAME[parent]}_grand#{grandparent}")
-        end
-      end
-      result.compact! if result.all?{|gp| gp.nil? }
-      result
-    end
-
-    def offspring(options = {})
-
-      if spouse = options[:spouse]
-        raise WrongSexException, "Something wrong with spouse #{spouse} gender." if spouse.sex == sex 
-      end
-      case sex
-      when sex_male_value
-        self.class.find_all_by_father_id(id, :conditions => (["mother_id == ?", spouse.id] if spouse) )
-      when sex_female_value
-        self.class.find_all_by_mother_id(id, :conditions => (["father_id == ?", spouse.id] if spouse) )
-      end
-    end
-
-    def siblings(options = {})
-      result = case options[:half]
-      when :father # common father
-        father.try(:offspring, options).to_a
-      when :mother # common mother
-        mother.try(:offspring, options).to_a
-      when nil # exluding half siblings
-        siblings(:half => :father) & siblings(:half => :mother)
-      when :only # only half siblings
-        siblings(:half => :include) - siblings
-      when :include # including half siblings
-        siblings(:half => :father) | siblings(:half => :mother)
-      else
-        raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, false, true or nil"
-      end
-      result - [self]
-    end
-
-    def half_siblings(options = {})
-      siblings(:half => :only)
-      # todo: inprove with option :father and :mother 
-    end
-
-    def ancestors
-      result = []
-      remaining = parents.to_a.compact
-      until remaining.empty?
-        result << remaining.shift
-        remaining += result.last.parents.to_a.compact
-      end
-      result.uniq
-    end
-
-    def descendants
-      result = []
-      remaining = offspring.to_a.compact
-      until remaining.empty?
-        result << remaining.shift
-        remaining += result.last.offspring.to_a.compact
-      end
-      result.uniq
-    end
-
-
-    def is_female?
-      sex == sex_female_value
-    end
-
-    def is_male?
-      sex == sex_male_value  
-    end
-
-    ##################################################################
-    ## checking methods
-    ##################################################################
+    private
 
     def raise_if_gap_on(relative)
       raise LineageGapException, "#{self} doesn't have #{relative}" unless send(relative)
@@ -292,9 +186,6 @@ module Genealogy
 
     def raise_if_sex_undefined
       raise WrongSexException, "Can't proceed if sex undefined for #{self}" unless is_male? or is_female?
-    end
-
-    module ClassMethods
     end
 
   end

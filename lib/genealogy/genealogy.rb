@@ -1,6 +1,7 @@
 module Genealogy
 
   def check_options(options, admitted_keys)
+
     raise WrongArgumentException, "first argument must be in a hash." unless options.is_a? Hash
     raise WrongArgumentException, "seconf argument must be in an array." unless admitted_keys.is_a? Array
 
@@ -15,9 +16,9 @@ module Genealogy
 
   end
 
+
   def has_parents options = {}
 
-    # Check options
     admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :spouse_column, :spouse]
     check_options(options, admitted_keys) do |key, value|
       if key == :sex_values
@@ -58,7 +59,8 @@ module Genealogy
     end
 
     # Include instance methods and class methods
-    include Genealogy::Methods
+    include Genealogy::QueryMethods
+    include Genealogy::LinkingMethods
 
   end
   
