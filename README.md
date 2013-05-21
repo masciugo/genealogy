@@ -7,18 +7,18 @@ Genealogy is still under development and need to be improved and extended. Devel
 ## Description
 
 Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family just add two parents column to its table (i.e.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother*, whose everything depend on.  
-Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represent genealogies in terms of set of trios: *individual-id*, *father-id*, *mother-id*. Basically the only **primitive** familiar relationships are associations father and mother, all others like grandparents, siblings or offspring are **derived**. This means that all methods in charge of update the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` to the right records
+Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represent genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically the only **primitive** familiar relationships are associations father and mother, all others like grandparents, siblings or offspring are **derived**. This means that all methods in charge of update the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` to the right records
 
 ## Installation
 
 To apply Genealogy in its simplest form to any ActiveRecord model, follow these simple steps:  
 
 1. Install   
-    1. Add to Gemfile: gem ‘genealogy’   
+    1. Add to Gemfile: gem ‘genealogy’ or, if you want to be always on the edge, gem 'genealogy', :git => "https://github.com/masciugo/genealogy.git"
     2. Install required gems: bundle install    
 
 2. Add the foreign key parents columns to your table     
-    1. Create migration: `rails g migration add_parents_to_[table] father_id:integer mother_id:integer`. A **sex column is also required**, add it if not exists.
+    1. Create migration: `rails g migration add_parents_to_<table> father_id:integer mother_id:integer [spouse_id:integer]`. A **sex column is also required**, add it if not exists. Read [here](https://github.com/masciugo/genealogy#spouse-option) for spouse column explanation.
     2. Add index separately and in combination to parents columns   
     3. Migrate your database: `rake db:migrate`
 
@@ -121,8 +121,7 @@ Some options are available to suit your existing table:
 
 #### spouse option
 
-You can also consider individual's consort providing the option `:spouse => true` which will make genealogy keep track of the current spouse through the extra spouse association. The term 'spouse' here is really different from the spouse mentioned so far which was intended to refer the individual with who someone bred something. Spouse association, for the moment, never comes into play while querying or building the genealogy on other relatives! In the future spouse association can be used but referential integrity among parents and current spouse must be strongly considered.
-
+You can also consider individual's consort providing the option `:spouse => true` which will make genealogy keep track of the current spouse through the extra spouse association. The term 'spouse' here is really different from the spouse mentioned so far which was intended to refer the individual with who someone bred something. Spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future spouse association can be used to add/remove siblings/offspring in a more concise way.
 
 #### defaults
 
@@ -135,7 +134,8 @@ You can also consider individual's consort providing the option `:spouse => true
 
 ### Test as documentation
 
-A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as human readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant format.
+A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as human readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant format. 
+To best understand genealogy features I recommend to read first the query methods test outcome (`rake specfile[spec/genealogy/query_methods_spec.rb]`) which was build on [this pedigree]() 
 
 
 

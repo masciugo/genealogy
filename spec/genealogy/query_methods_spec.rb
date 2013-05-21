@@ -42,7 +42,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should == irene}
       its(:grandparents) {should =~ [manuel,terry,paso,irene]}
       # its(:siblings) {should be_empty}
-      specify { peter.siblings.should be_empty }
+      specify { debugger; sleep 0; peter.siblings.should be_empty }
       its(:paternal_grandparents) {should =~ [manuel,terry]}
       its(:maternal_grandparents) {should =~ [paso,irene]}
       # its(:half_siblings) {should =~ [mary]}
