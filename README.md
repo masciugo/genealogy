@@ -1,12 +1,12 @@
 # Genealogy
 
 ## Premise
-Genealogy is still under development and need to be improved and extended. Developed features so far were the ones I needed for my personal applications but also the basic ones for a genealogy management system that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense.
+Genealogy is still under development and need to be improved and extended. Developed features so far were the ones I needed for my personal applications where I had to provide data entry facilities to insert, given an individual, relatives' vital records keeping track of their familiar relationship. However they are the basic features for a genealogy management system and that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense as I am really interested in improving it.
 
 
 ## Description
 
-Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family just add two parents column to its table (ie.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother*, whose everything depend on.  
+Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family just add two parents column to its table (i.e.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother*, whose everything depend on.  
 Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represent genealogies in terms of set of trios: *individual-id*, *father-id*, *mother-id*. Basically the only **primitive** familiar relationships are associations father and mother, all others like grandparents, siblings or offspring are **derived**. This means that all methods in charge of update the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` to the right records
 
 ## Installation
@@ -26,20 +26,27 @@ To apply Genealogy in its simplest form to any ActiveRecord model, follow these 
 
 ## Usage
 
-Instance methods are two kinds: *queries* and *modifiers*
+As the original aim was to add relatives concerning a specific individual, all relevant methods are instance methods called on that individual. They are two kinds: *queries* and *modifiers*
 
 ### Query methods
 
-These self explaining methods simply parse the tree through parents' associations to answer query like:
+These self explaining methods simply parse the tree through parents' associations to answer queries. 
 
 * `george.father` will retrieve george's father
+* `george.paternal_grandfather` will retrieve parents of george's father 
+
+Some methods return a sorted array:
+
 * `george.parents` will retrieve george's parents as 2 elements sorted array: [father,mother] 
-* `george.paternal_grandfather` 
 * `george.paternal_grandparents` will return a 2 elements sorted array: [paternal_grandfather, paternal_granmother]
 * `george.grandparents` will return a 4 elements sorted array: [paternal_grandfather, paternal_granmdother, maternal_grandfather, maternal_grandmother]
 
+Some other return an unsorted array:
+
 * `george.ancestors` will return an unsorted array
 * `george.descendants` idem
+
+Genealogy strongly considers multiple mates procreation so siblings and offspring are really featured methods:  
 
 * `george.siblings` will return full-siblings array (same father and mother)
 * `george.siblings(:half => :mother)` will return maternal half-siblings array (same mother)
@@ -63,7 +70,7 @@ Not always the method's receiver is the instance that get updated (target record
 
 * `george.add_paternal_grandmother(gina)` will change mother of george's father. No changes for george and gina. It can seem weird but think about it as an intuitive shortcut to quickly build the genealogy as a whole entity.
 
-* `george.add_paternal_grandparents(julius,marta)` will change parents of george's father like the *add_parents* method does.
+* `george.add_paternal_grandparents(julius, marta)` will change parents of george's father like the *add_parents* method does.
 
 Some methods can take a list of individuals:
 
@@ -103,13 +110,32 @@ Removing methods examples are:
 * `george.remove_siblings(:half => :father)` will nullify only father of all records that have same george's father as father
 * `george.remove_siblings(:half => :father, :affect_spouse => true)` will nullify also mother of all records that have same george's father as father
 
+
 ### *has_parents* options
 
-pending
+Some options are available to suit your existing table: 
+
+    class Individual<ActiveRecord::Base
+      has_parents :father_column => "padre", :mother_column => "madre", :sex_column => "gender", :sex_values => [1,2]
+    end
+
+#### spouse option
+
+You can also consider individual's consort providing the option `:spouse => true` which will make genealogy keep track of the current spouse through the extra spouse association. The term 'spouse' here is really different from the spouse mentioned so far which was intended to refer the individual with who someone bred something. Spouse association, for the moment, never comes into play while querying or building the genealogy on other relatives! In the future spouse association can be used but referential integrity among parents and current spouse must be strongly considered.
+
+
+#### defaults
+
+    father_column: 'father_id'   
+    mother_column: 'mother_id'   
+    spouse_column: 'spouse_id'   
+    sex_column: 'sex'   
+    sex_values: ['M','F']   
+
 
 ### Test as documentation
 
-A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant human readable format.
+A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as human readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant format.
 
 
 
