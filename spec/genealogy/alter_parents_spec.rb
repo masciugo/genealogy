@@ -14,7 +14,7 @@ module AlterParentsSpec
     let(:titty) {TestModel.create!(:name => "titty", :sex => "F")}
 
     describe "peter" do
-      subject(peter)
+      subject{ peter }
       
       describe "#add_father(Object.new)" do
         specify { expect { peter.add_father(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
