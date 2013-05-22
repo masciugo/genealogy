@@ -18,15 +18,20 @@ module QueryMethodsSpec
     let!(:irene) {TestModel.create!(:name => "Irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
     let!(:manuel) {TestModel.create!(:name => "manuel", :sex => "M")}
     let!(:terry) {TestModel.create!(:name => "terry", :sex => "F", :father_id => marcel.id)}
-    let!(:john) {TestModel.create!(:name => "john", :sex => "M")}
+    let!(:john) {TestModel.create!(:name => "john", :sex => "M", :father_id => jack.id, :mother_id => alison.id)}
+    let!(:jack) {TestModel.create!(:name => "jack", :sex => "M", :father_id => bob.id, :mother_id => louise.id)}
+    let!(:bob) {TestModel.create!(:name => "bob", :sex => "M")}
+    let!(:debby) {TestModel.create!(:name => "debby", :sex => "F", :father_id => bob.id, :mother_id => louise.id)}
+    let!(:alison) {TestModel.create!(:name => "alison", :sex => "F")}
     let!(:maggie) {TestModel.create!(:name => "maggie", :sex => "F")}
     let!(:emily) {TestModel.create!(:name => "emily", :sex => "F", :father_id => luis.id, :mother_id => rosa.id)}
-    let!(:tommy) {TestModel.create!(:name => "tommy", :sex => "M", :father_id => larry.id, :mother_id => luise.id)}
+    let!(:tommy) {TestModel.create!(:name => "tommy", :sex => "M", :father_id => larry.id, :mother_id => louise.id)}
     let!(:luis) {TestModel.create!(:name => "luis", :sex => "M")}
     let!(:rosa) {TestModel.create!(:name => "rosa", :sex => "F")}
     let!(:larry) {TestModel.create!(:name => "larry", :sex => "M")}
-    let!(:luise) {TestModel.create!(:name => "luise", :sex => "F")}
+    let!(:louise) {TestModel.create!(:name => "louise", :sex => "F")}
     let!(:ned) {TestModel.create!(:name => "ned", :sex => "M")}
+    let!(:steve) {TestModel.create!(:name => "steve", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
     let!(:naomi) {TestModel.create!(:name => "naomi", :sex => "F")}
     let!(:michelle) {TestModel.create!(:name => "michelle", :sex => "F", :father_id => ned.id, :mother_id => naomi.id)}
     let!(:marcel) {TestModel.create!(:name => "marcel", :sex => "M")}
@@ -47,7 +52,7 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso,irene]}
       # its(:half_siblings) {should =~ [mary]}
       specify {peter.siblings(:half => :only).should =~ [mary,julian,beatrix] }
-      its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,luise,luis,rosa,marcel]}
+      its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
     end
 
     describe "mary" do
@@ -74,9 +79,20 @@ module QueryMethodsSpec
       its(:siblings) {should =~ [julian]}
       its(:half_siblings) {should =~ [peter,mary]}
       describe "paternal half_siblings" do 
-        specify {beatrix.siblings(:half => :father).should =~ [peter,mary]}
-        
+        specify {beatrix.siblings(:half => :father).should =~ [peter,mary]}    
       end
+      describe "all half_siblings and siblings" do
+        specify {beatrix.siblings(:half => :include).should =~ [peter,mary,julian]}
+      end  
+      describe "half_siblings only" do
+        specify {beatrix.siblings(:half => :only).should =~ [peter,mary]}
+      end 
+      describe "half_siblings with titty" do
+        specify {beatrix.siblings(:stepmother => titty).should =~ [peter]}
+      end
+      describe "half_siblings with mary" do
+        specify {beatrix.siblings(:stepmother => barbara).should =~ [mary]}
+      end  
     end
 
     describe "paul" do
@@ -123,8 +139,8 @@ module QueryMethodsSpec
       its(:descendants) {should_not =~ [mary]}
     end
 
-    describe "luise" do
-      subject {luise}
+    describe "louise" do
+      subject {louise}
       its(:offspring) {should =~ [tommy]}
       its(:descendants) {should =~ [tommy,irene,titty,peter]}
       its(:descendants) {should_not =~ [mary]}
