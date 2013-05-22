@@ -14,7 +14,7 @@ module QueryMethodsSpec
     let!(:peter) {TestModel.create!(:name => "peter", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
     let!(:mary) {TestModel.create!(:name => "mary", :sex => "F", :father_id => paul.id, :mother_id => barbara.id)}
     let!(:barbara) {TestModel.create!(:name => "Barbara", :sex => "F", :father_id => john.id, :mother_id => maggie.id)}
-    let!(:paso) {TestModel.create!(:name => "paso", :sex => "M", :father_id => larry.id, :mother_id => luise.id)}
+    let!(:paso) {TestModel.create!(:name => "paso", :sex => "M")}
     let!(:irene) {TestModel.create!(:name => "Irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
     let!(:manuel) {TestModel.create!(:name => "manuel", :sex => "M")}
     let!(:terry) {TestModel.create!(:name => "terry", :sex => "F", :father_id => marcel.id)}
