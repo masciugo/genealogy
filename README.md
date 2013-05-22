@@ -132,22 +132,22 @@ You can also consider individual's consort providing the option `:spouse => true
     sex_values: ['M','F']   
 
 
-### Test as documentation
+## Test as documentation
 
 A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose, I tried to make the test output as human readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all tests on query and alter methods and get the output in a pleasant format. 
 To best understand genealogy features, I recommend to read first the query methods test outcome (`rake specfile[spec/genealogy/query_methods_spec.rb]`) which was build on [this pedigree](https://github.com/masciugo/genealogy/blob/master/spec/sample_pedigree.pdf) 
 
-# Contributing
+## Contributing
 
-## Guidelines
+### Guidelines
 
-## Upcoming features
+### Upcoming features
 
 * Usage of current spouse for more concise alter methods
 * Date of birth consideration
 * Other more complex query methods like minimal ancestors
 
-## Steps
+### Steps
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -155,7 +155,7 @@ To best understand genealogy features, I recommend to read first the query metho
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-### Acknowledgement
+## Acknowledgement
 
 I'd like to thank all people from Dr. Toniolo's laboratory at San Raffaele Hospital in Milan, especially Dr. Cinzia Sala for her direct help.
 
