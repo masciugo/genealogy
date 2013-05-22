@@ -56,16 +56,16 @@ module Genealogy
 
     def siblings(options = {})
       result = case options[:half]
-      when :father # common father
-        father.try(:offspring, options).to_a
-      when :mother # common mother
-        mother.try(:offspring, options).to_a
       when nil # exluding half siblings
-        siblings(:half => :father) & siblings(:half => :mother)
+        father.try(:offspring, :spouse => mother ).to_a
+      when :father # common father
+        father.try(:offspring).to_a - mother.try(:offspring).to_a
+      when :mother # common mother
+        mother.try(:offspring).to_a - father.try(:offspring).to_a
       when :only # only half siblings
         siblings(:half => :include) - siblings
       when :include # including half siblings
-        siblings(:half => :father) | siblings(:half => :mother)
+        father.try(:offspring).to_a + mother.try(:offspring).to_a
       else
         raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, false, true or nil"
       end

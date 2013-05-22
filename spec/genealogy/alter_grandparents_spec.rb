@@ -3,136 +3,143 @@ require 'spec_helper'
 module AlterGrandparentsSpec
   extend GenealogyTestModel
 
-  describe "corrado" do
-    
+  describe "*** Alter grandparents methods ***" do
+
     before(:all) do
       AlterGrandparentsSpec.define_test_model_class({})
     end
 
-    subject(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
-    
-    let(:uccio) {TestModel.create!(:name => "Uccio", :sex => "M", )}
-    let(:narduccio) {TestModel.create!(:name => "Narduccio", :sex => "M", )}
-    let(:maria) {TestModel.create!(:name => "Maria", :sex => "F", )}
-    let(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F", )}
-    let(:antonio) {TestModel.create!(:name => "Antonio", :sex => "M", )}
-    let(:assunta) {TestModel.create!(:name => "Assunta", :sex => "F", )}
-    let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M", )}
+    let(:paul) {TestModel.create!(:name => "paul", :sex => "M", )}
+    let(:manuel) {TestModel.create!(:name => "manuel", :sex => "M", )}
+    let(:terry) {TestModel.create!(:name => "terry", :sex => "F", )}
+    let(:titty) {TestModel.create!(:name => "titty", :sex => "F", )}
+    let(:paso) {TestModel.create!(:name => "paso", :sex => "M", )}
+    let(:irene) {TestModel.create!(:name => "irene", :sex => "F", )}
+    let(:steve) {TestModel.create!(:name => "steve", :sex => "M", )}
+    let(:peter) {TestModel.create!(:name => "peter", :sex => "M")}
 
-    context "when has no father and #add_paternal_grandfather(narduccio)" do
-      specify { expect { corrado.add_paternal_grandfather(narduccio) }.to raise_error(Genealogy::LineageGapException)}
-    end
-
-    context "when has uccio and tetta as parents and stefano as sibling" do
-      before(:each) do
-        corrado.add_father(uccio)
-        corrado.add_mother(tetta)
-        corrado.add_siblings(stefano)
-      end
+    describe "peter" do
+      subject{ peter }
       
-      its(:father) {should == uccio}
 
-      context "when #add_paternal_grandfather(narduccio)" do
+      context "when has no father" do
 
-        before(:each) { corrado.add_paternal_grandfather(narduccio) }
-        its('reload.paternal_grandfather') {should == narduccio}
-        
-        describe "stefano" do
-          subject {stefano}
-          its('reload.paternal_grandfather') {should == narduccio}
+        describe "#add_paternal_grandfather(manuel)" do
+          specify { expect { peter.add_paternal_grandfather(manuel) }.to raise_error(Genealogy::LineageGapException)}
         end
+      end
+
+      context "when has paul and titty as parents and steve as sibling" do
         
-      end
-
-      context "when add_paternal_grandfather(maria)" do
-        specify { expect { corrado.add_paternal_grandfather(maria)}.to raise_error(Genealogy::WrongSexException) }
-      end
-
-      context "when add_paternal_grandfather(Object.new)" do
-        specify { expect { corrado.add_paternal_grandfather(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
-      end
-
-      context "when add_paternal_grandfather(corrado)" do
-        specify { expect { corrado.add_paternal_grandfather(corrado) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
-      end
-
-      context "when #add_paternal_grandmother(maria)" do
-
-        before(:each) { corrado.add_paternal_grandmother(maria) }
-        its('reload.paternal_grandmother') {should == maria}
-
-      end
-
-      context "when add_paternal_grandmother(narduccio)" do
-        specify { expect { corrado.add_paternal_grandmother(narduccio) }.to raise_error(Genealogy::WrongSexException) }
-      end
-
-      context "when add grandparents all toghether: corrado.add_grandparents(narduccio,maria,antonio,assunta)" do
-        
-        its(:grandparents) do
-          corrado.add_grandparents(narduccio,maria,antonio,assunta)
-          should =~ [narduccio,maria,antonio,assunta]
-        end
-      
-      end
-
-      context "when add some nil as grandparents: corrado.add_grandparents(narduccio,maria,antonio,assunta)" do
-        
-        its(:grandparents) do
-          corrado.add_grandparents(narduccio,nil,antonio,nil)
-          should =~ [narduccio,nil,antonio,nil]
-        end
-
-      end
-
-      context "when add grandparents by lineage: corrado.add_paternal_grandparents(narduccio,maria)" do
-        
-        its(:grandparents) do
-          corrado.add_paternal_grandparents(narduccio,maria)
-          should =~ [narduccio,maria,nil,nil]
-        end
-
-      end
-
-      context "when add grandparents by lineage: corrado.add_maternal_grandparents(narduccio,maria)" do
-        
-        its(:grandparents) do
-          corrado.add_maternal_grandparents(narduccio,maria)
-          should =~ [nil,nil,narduccio,maria]
-        end
-
-      end
-
-
-      describe "removing grandparents" do
         before(:each) do
-          corrado.add_grandparents(narduccio,maria,antonio,assunta)
+          peter.add_father(paul)
+          peter.add_mother(titty)
+          peter.add_siblings(steve)
+        end
+        
+        describe "##add_paternal_grandfather(manuel)" do
+
+          before(:each) { peter.add_paternal_grandfather(manuel) }
+          its('reload.paternal_grandfather') {should == manuel}
+          
+          describe "steve" do
+            subject {steve}
+            its('reload.paternal_grandfather') {should == manuel}
+          end
+          
         end
 
-        context "when #remove_parental_grandfather" do
-          before(:each) do
-            corrado.remove_paternal_grandfather
-          end
-          its('reload.paternal_grandmother') {should == maria}
-          its('reload.paternal_grandfather') {should be_nil}
-
-          describe "stefano" do
-            subject {stefano}
-            its('reload.paternal_grandmother') {should == maria}
-            its('reload.paternal_grandfather') {should be_nil}
-          end
+        describe "#add_paternal_grandfather(terry)" do
+          specify { expect { peter.add_paternal_grandfather(terry)}.to raise_error(Genealogy::WrongSexException) }
         end
 
-        context "when removing all of them" do
+        describe "#add_paternal_grandfather(Object.new)" do
+          specify { expect { peter.add_paternal_grandfather(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
+        end
+
+        describe "#add_paternal_grandfather(peter)" do
+          specify { expect { peter.add_paternal_grandfather(peter) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
+        end
+
+        describe "#add_paternal_grandmother(terry)" do
+
+          before(:each) { peter.add_paternal_grandmother(terry) }
+          its('reload.paternal_grandmother') {should == terry}
+
+        end
+
+        describe "#add_paternal_grandmother(manuel)" do
+          specify { expect { peter.add_paternal_grandmother(manuel) }.to raise_error(Genealogy::WrongSexException) }
+        end
+
+        describe "#add_grandparents(manuel,terry,paso,irene)" do
+          
           its(:grandparents) do
-            corrado.remove_grandparents
-            should be_empty
+            peter.add_grandparents(manuel,terry,paso,irene)
+            should =~ [manuel,terry,paso,irene]
           end
+        
+        end
+
+        describe "#add_grandparents(manuel,nil,paso,nil)" do
+          
+          its(:grandparents) do
+            peter.add_grandparents(manuel,nil,paso,nil)
+            should =~ [manuel,nil,paso,nil]
+          end
+
+        end
+
+        describe "#add_paternal_grandparents(manuel,terry)" do
+          
+          its(:grandparents) do
+            peter.add_paternal_grandparents(manuel,terry)
+            should =~ [manuel,terry,nil,nil]
+          end
+
+        end
+
+        describe "#add_maternal_grandparents(manuel,terry)" do
+          
+          its(:grandparents) do
+            peter.add_maternal_grandparents(manuel,terry)
+            should =~ [nil,nil,manuel,terry]
+          end
+
         end
 
 
+        describe "when has manuel and terry as paternal grandparents and paso and irene as maternal grandparents" do
+          before(:each) do
+            peter.add_grandparents(manuel,terry,paso,irene)
+          end
 
+          describe "#remove_parental_grandfather" do
+            before(:each) do
+              peter.remove_paternal_grandfather
+            end
+            its('reload.paternal_grandmother') {should == terry}
+            its('reload.paternal_grandfather') {should be_nil}
+
+            describe "steve" do
+              subject {steve}
+              its('reload.paternal_grandmother') {should == terry}
+              its('reload.paternal_grandfather') {should be_nil}
+            end
+          end
+
+          describe "#remove_grandparents" do
+            its(:grandparents) do
+              peter.remove_grandparents
+              should be_empty
+            end
+          end
+
+
+
+        end
       end
+
     end
 
   end

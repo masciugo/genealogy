@@ -7,7 +7,7 @@ Genealogy is still under development and need to be improved and extended. Devel
 ## Description
 
 Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family just add two parents column to its table (i.e.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother*, whose everything depend on.  
-Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represent genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically the only **primitive** familiar relationships are associations father and mother, all others like grandparents, siblings or offspring are **derived**. This means that all methods in charge of update the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` to the right records
+Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represent genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically the only **primitive** familiar relationships are associations father and mother, all others like grandparents, siblings or offspring are **derived**. This means that all methods in charge of alter the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` applied to the right records.
 
 ## Installation
 
@@ -26,7 +26,7 @@ To apply Genealogy in its simplest form to any ActiveRecord model, follow these 
 
 ## Usage
 
-As the original aim was to add relatives concerning a specific individual, all relevant methods are instance methods called on that individual. They are two kinds: *queries* and *modifiers*
+As the original aim was to add relatives concerning a specific individual, all relevant methods are instance methods called on that individual. They are two kinds: *query methods* and *alter methods*
 
 ### Query methods
 
@@ -57,7 +57,7 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 * `george.offspring(:spouse => :gina)` will return all individuals that have george as father and gina as mother
 
 
-### Modifiers methods
+### Alter methods
 
 They change the genealogy updating one ore more target individuals (the ones that are actually modified). These methods overwrite old values and call internally *save!* so all validation and callbacks are regularly run. Here are some examples where target individual correspond with method's receiver:
 
@@ -101,7 +101,7 @@ Removing methods examples are:
 * `george.remove_paternal_grandparents` will set both george's parent to nil
 * `george.remove_grandparents` will set all parents' parents to nil
 *
- `george.remove_offspring` will nullify the father of all that records that have george as father
+* `george.remove_offspring` will nullify the father of all that records that have george as father
 * `george.remove_offspring(:affect_spouse => true)` will also nullify mother of all that records that have george as father
 * `george.remove_offspring(:spouse => gina)` will nullify the father of all that records that have george as father and gina as mother
 * `george.remove_offspring(:spouse => gina, :affect_spouse => true)` will do both last two actions
@@ -111,7 +111,7 @@ Removing methods examples are:
 * `george.remove_siblings(:half => :father, :affect_spouse => true)` will nullify also mother of all records that have same george's father as father
 
 
-### *has_parents* options
+## *has_parents* options
 
 Some options are available to suit your existing table: 
 
@@ -119,11 +119,11 @@ Some options are available to suit your existing table:
       has_parents :father_column => "padre", :mother_column => "madre", :sex_column => "gender", :sex_values => [1,2]
     end
 
-#### spouse option
+### spouse option
 
 You can also consider individual's consort providing the option `:spouse => true` which will make genealogy keep track of the current spouse through the extra spouse association. The term 'spouse' here is really different from the spouse mentioned so far which was intended to refer the individual with who someone bred something. Spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future spouse association can be used to add/remove siblings/offspring in a more concise way.
 
-#### defaults
+### defaults
 
     father_column: 'father_id'   
     mother_column: 'mother_id'   
@@ -132,10 +132,12 @@ You can also consider individual's consort providing the option `:spouse => true
     sex_values: ['M','F']   
 
 
-### Test as documentation
+## Test as documentation
 
-A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as human readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all of them and get the output in a pleasant format. 
-To best understand genealogy features I recommend to read first the query methods test outcome (`rake specfile[spec/genealogy/query_methods_spec.rb]`) which was build on [this pedigree]() 
+A rich amount of test examples were written using the RSpec suite. Beyond the canonical testing purpose I tried to make the test output as human readable as possible in order to serve as auxiliary documentation. Just type *rake* to run all tests on query and alter methods and get the output in a pleasant format. 
+To best understand genealogy features, I recommend to read first the query methods test outcome (`rake specfile[spec/genealogy/query_methods_spec.rb]`) which was build on [this pedigree](https://github.com/masciugo/genealogy/blob/master/spec/sample_pedigree.pdf) 
 
+## Acknowledgement
 
+I'd like to thank all people from Dott.ssa Toniolo laboratory at San Raffaele Hospital in Milan, especially Dott.ssa Cinzia Sala for her direct help.
 

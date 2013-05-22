@@ -3,88 +3,77 @@ require 'spec_helper'
 module AlterParentsSpec
   extend GenealogyTestModel
   
-  describe "adding/removing parents" do
+  describe "*** Alter parents methods ***" do
 
     before(:all) do
       AlterParentsSpec.define_test_model_class({})
     end
 
-    subject(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
-    let(:uccio) {TestModel.create!(:name => "Uccio", :sex => "M")}
-    let(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F")}
+    let(:peter) {TestModel.create!(:name => "peter", :sex => "M")}
+    let(:paul) {TestModel.create!(:name => "paul", :sex => "M")}
+    let(:titty) {TestModel.create!(:name => "titty", :sex => "F")}
 
-    describe "corrado" do
+    describe "peter" do
+      subject(peter)
       
-      describe "#add_father(uccio)" do
-
-        it "has uccio as father" do
-          corrado.add_father(uccio)
-          corrado.reload
-          corrado.father.should == uccio
-        end
-
-        it "raises an IncompatibleObjectException when adding other class objects" do
-          expect { corrado.add_father(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException)
-        end
-
-        it "raises an IncompatibleRelationshipException when adding himself as father" do
-          expect { corrado.add_father(corrado) }.to raise_error(Genealogy::IncompatibleRelationshipException)
-        end
-
-        let(:tetta) {TestModel.create!(:name => "tetta", :sex => "F")}
-
-        it "raises a WrongSexException when adding a female as father" do
-          expect { corrado.add_father(tetta) }.to raise_error(Genealogy::WrongSexException)
-        end
-
+      describe "#add_father(Object.new)" do
+        specify { expect { peter.add_father(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
       end
 
-      describe "#add_parents(uccio,tetta)" do
+      describe "#add_father(peter)" do
+        specify { expect { peter.add_father(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
+      end
+
+      describe "#add_father(titty)" do
+        specify { expect { peter.add_father(titty) }.to raise_error(Genealogy::WrongSexException) }
+      end
+
+      describe "#add_parents(paul,titty)" do
         
         its(:parents) do
-          corrado.add_parents(uccio,tetta)
-          corrado.reload
-          should =~ [uccio,tetta]
+          peter.add_parents(paul,titty)
+          peter.reload
+          should =~ [paul,titty]
         end
 
-        context "when corrado is invalid" do
+        context "when peter is invalid" do
           before(:each) do
-            corrado.mark_invalid!
+            peter.mark_invalid!
           end
-          specify { expect { corrado.add_parents(uccio,tetta) }.to raise_error }
+          specify { expect { peter.add_parents(paul,titty) }.to raise_error }
           its(:parents) do
-            corrado.add_parents(uccio,tetta) rescue true
-            corrado.reload
+            peter.add_parents(paul,titty) rescue true
+            peter.reload
             should be_empty
           end
         end
 
       end
 
-      context "when has uccio as father" do
+      context "when has paul as father" do
         
         before(:each) do
-          corrado.add_father(uccio)
+          peter.add_father(paul)
         end
 
         describe "#remove_father" do
 
           it "has no father" do
-            corrado.remove_father
-            corrado.reload.father.should be_nil
+            peter.remove_father
+            peter.reload.father.should be_nil
           end
 
         end
 
-        context "and has tetta as mother" do
+        context "and has titty as mother" do
         
           before(:each) do
-            corrado.add_mother(tetta)
+            peter.add_mother(titty)
           end
 
           describe "#remove_parents" do
             its(:parents) do
-              corrado.remove_parents
+              peter.remove_parents
               should be_empty
             end
           end
@@ -94,7 +83,7 @@ module AlterParentsSpec
         context "and #add_father(nil)" do
           
           its(:father) do
-            corrado.add_father(nil)
+            peter.add_father(nil)
             should be_nil
           end
 
@@ -103,7 +92,7 @@ module AlterParentsSpec
         context "and #add_parents(nil,nil)" do
           
           its(:parents) do
-            corrado.add_parents(nil,nil)
+            peter.add_parents(nil,nil)
             should be_empty
           end
 
