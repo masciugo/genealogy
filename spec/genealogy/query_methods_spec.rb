@@ -3,7 +3,7 @@ require 'spec_helper'
 module QueryMethodsSpec
   extend GenealogyTestModel
   
-  describe "query methods", :cinzia => true  do
+  describe "*** Query methods ***", :cinzia => true  do
 
     before(:all) do
       QueryMethodsSpec.define_test_model_class({:spouse => true })
@@ -13,9 +13,9 @@ module QueryMethodsSpec
     let!(:titty) {TestModel.create!(:name => "titty", :sex => "F", :father_id => paso.id, :mother_id => irene.id)}
     let!(:peter) {TestModel.create!(:name => "peter", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
     let!(:mary) {TestModel.create!(:name => "mary", :sex => "F", :father_id => paul.id, :mother_id => barbara.id)}
-    let!(:barbara) {TestModel.create!(:name => "Barbara", :sex => "F", :father_id => john.id, :mother_id => maggie.id)}
+    let!(:barbara) {TestModel.create!(:name => "barbara", :sex => "F", :father_id => john.id, :mother_id => maggie.id)}
     let!(:paso) {TestModel.create!(:name => "paso", :sex => "M")}
-    let!(:irene) {TestModel.create!(:name => "Irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
+    let!(:irene) {TestModel.create!(:name => "irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
     let!(:manuel) {TestModel.create!(:name => "manuel", :sex => "M")}
     let!(:terry) {TestModel.create!(:name => "terry", :sex => "F", :father_id => marcel.id)}
     let!(:john) {TestModel.create!(:name => "john", :sex => "M", :father_id => jack.id, :mother_id => alison.id)}
@@ -46,12 +46,10 @@ module QueryMethodsSpec
       its(:maternal_grandfather) {should == paso}
       its(:maternal_grandmother) {should == irene}
       its(:grandparents) {should =~ [manuel,terry,paso,irene]}
-      # its(:siblings) {should be_empty}
-      specify {peter.siblings.should =~ [steve] }
+      its(:siblings) {should =~ [steve]}
       its(:paternal_grandparents) {should =~ [manuel,terry]}
       its(:maternal_grandparents) {should =~ [paso,irene]}
-      # its(:half_siblings) {should =~ [mary]}
-      specify {peter.siblings(:half => :only).should =~ [mary,julian,beatrix] }
+      its(:half_siblings) {should =~ [mary,julian,beatrix]}
       its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
     end
 
@@ -65,11 +63,9 @@ module QueryMethodsSpec
       its(:paternal_grandparents) {should =~ [manuel,terry]}
       its(:maternal_grandparents) {should =~ [john,maggie]}
       its(:grandparents) {should =~ [manuel,terry,john,maggie]}
-      # its(:half_siblings) {should == [peter]}
-      specify { mary.siblings(:half => :only).should =~ [peter,julian,beatrix,steve] }
+      its(:half_siblings) { should =~ [peter,julian,beatrix,steve] }
       its(:descendants) {should be_empty}
-      # its(:siblings) {should_not =~ [peter]}
-      specify { mary.siblings.should_not include peter }
+      its(:siblings) { should_not include peter }
       its(:ancestors) {should =~ [paul,barbara,manuel,terry,john,maggie,marcel,jack,alison,bob,louise]}
     end
 
@@ -78,36 +74,29 @@ module QueryMethodsSpec
       its(:parents) {should =~ [paul,michelle]}
       its(:siblings) {should =~ [julian]}
       its(:half_siblings) {should =~ [peter,steve,mary]}
-      describe "paternal half_siblings" do 
-        specify {beatrix.siblings(:half => :father).should =~ [peter,steve,mary]}    
-      end
-      describe "all half_siblings and siblings" do
+      its(:paternal_half_siblings) {should =~ [peter,steve,mary]}
+      describe "all half_siblings and siblings: #siblings(:half => :include)" do
         specify {beatrix.siblings(:half => :include).should =~ [peter,steve,mary,julian]}
       end  
-      describe "half_siblings only" do
-        specify {beatrix.siblings(:half => :only).should =~ [peter,steve,mary]}
-      end 
-      describe "half_siblings with titty" do
-        specify {beatrix.siblings(:stepmother => titty).should =~ [peter,steve]}
+      describe "half_siblings with titty: #siblings(:half => father, :spouse => titty)" do
+        specify {beatrix.siblings(:half => :father, :spouse => titty).should =~ [peter,steve]}
       end
-      describe "half_siblings with mary" do
-        specify {beatrix.siblings(:stepmother => barbara).should =~ [mary]}
+      describe "half_siblings with mary: #siblings(:half => father, :spouse => barbara)" do
+        specify {beatrix.siblings(:half => :father, :spouse => barbara).should =~ [mary]}
       end  
     end
 
-    describe "paul" do
+    describe "paul", :wip => true do
       subject {paul}
       its(:parents) {should =~ [manuel,terry]}
-      its(:offspring) {should =~ [peter,mary,julian,beatrix]}
-      describe "offspring with barbara" do
+      its(:offspring) {should =~ [peter,mary,julian,beatrix,steve]}
+      describe "#offspring(:spouse => barbara)" do
         specify { paul.offspring(:spouse => barbara).should =~ [mary] }
-        specify { paul.offspring(:spouse => barbara).should_not =~ [peter] }
       end
-      describe "offspring with michelle" do
+      describe "#offspring(:spouse => michelle)" do
         specify { paul.offspring(:spouse => michelle).should =~ [julian,beatrix] }
-        specify { paul.offspring(:spouse => barbara).should_not =~ [peter,mary] }
       end
-      its(:descendants) {should =~ [peter,mary,julian,beatrix]}
+      its(:descendants) {should =~ [peter,mary,julian,beatrix,steve]}
       its(:ancestors) {should =~ [manuel,terry,marcel]}
       its(:maternal_grandmother) {should be_nil}
       its(:maternal_grandparents) {should =~ [marcel,nil]}
@@ -129,23 +118,20 @@ module QueryMethodsSpec
         specify { barbara.offspring(:spouse => manuel).should be_empty }
       end
       its(:descendants) {should =~ [mary]}
-      its(:grandparents) {should be_empty}
+      its(:grandparents) {should =~ [jack,alison,nil,nil]}
     end
     
     describe "paso" do
       subject {paso}
       its(:offspring) {should =~ [titty]}
-      its(:descendants) {should =~ [titty,peter]}
-      its(:descendants) {should_not =~ [mary]}
+      its(:descendants) {should =~ [titty,peter,steve]}
     end
 
     describe "louise" do
       subject {louise}
-      its(:offspring) {should =~ [tommy]}
-      its(:descendants) {should =~ [tommy,irene,titty,peter]}
-      its(:descendants) {should_not =~ [mary]}
+      its(:offspring) {should =~ [tommy,jack,debby]}
+      its(:descendants) {should =~ [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve]}
       its(:ancestors) {should be_empty}
-      its(:offspring) {should_not =~ [irene]}
       its(:father){should be_nil}
       its(:parents){should be_empty}
     end

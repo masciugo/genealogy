@@ -59,9 +59,9 @@ module Genealogy
       when nil # exluding half siblings
         father.try(:offspring, :spouse => mother ).to_a
       when :father # common father
-        father.try(:offspring).to_a - mother.try(:offspring).to_a
+        father.try(:offspring, :spouse => options[:spouse]).to_a - mother.try(:offspring).to_a
       when :mother # common mother
-        mother.try(:offspring).to_a - father.try(:offspring).to_a
+        mother.try(:offspring, :spouse => options[:spouse]).to_a - father.try(:offspring).to_a
       when :only # only half siblings
         siblings(:half => :include) - siblings
       when :include # including half siblings
@@ -69,12 +69,20 @@ module Genealogy
       else
         raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, false, true or nil"
       end
-      result - [self]
+      result.uniq - [self]
     end
 
-    def half_siblings(options = {})
+    def half_siblings
       siblings(:half => :only)
       # todo: inprove with option :father and :mother 
+    end
+
+    def paternal_half_siblings
+      siblings(:half => :father)
+    end
+
+    def maternal_half_siblings
+      siblings(:half => :mother)
     end
 
     def ancestors
