@@ -47,7 +47,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should == irene}
       its(:grandparents) {should =~ [manuel,terry,paso,irene]}
       # its(:siblings) {should be_empty}
-      specify {peter.siblings.should be_empty }
+      specify {peter.siblings.should =~ [steve] }
       its(:paternal_grandparents) {should =~ [manuel,terry]}
       its(:maternal_grandparents) {should =~ [paso,irene]}
       # its(:half_siblings) {should =~ [mary]}
@@ -66,29 +66,29 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [john,maggie]}
       its(:grandparents) {should =~ [manuel,terry,john,maggie]}
       # its(:half_siblings) {should == [peter]}
-      specify { mary.siblings(:half => :only).should =~ [peter,julian,beatrix] }
+      specify { mary.siblings(:half => :only).should =~ [peter,julian,beatrix,steve] }
       its(:descendants) {should be_empty}
       # its(:siblings) {should_not =~ [peter]}
       specify { mary.siblings.should_not include peter }
-      its(:ancestors) {should =~ [paul,barbara,manuel,terry,john,maggie,marcel]}
+      its(:ancestors) {should =~ [paul,barbara,manuel,terry,john,maggie,marcel,jack,alison,bob,louise]}
     end
 
     describe "beatrix" do
       subject {beatrix}
       its(:parents) {should =~ [paul,michelle]}
       its(:siblings) {should =~ [julian]}
-      its(:half_siblings) {should =~ [peter,mary]}
+      its(:half_siblings) {should =~ [peter,steve,mary]}
       describe "paternal half_siblings" do 
-        specify {beatrix.siblings(:half => :father).should =~ [peter,mary]}    
+        specify {beatrix.siblings(:half => :father).should =~ [peter,steve,mary]}    
       end
       describe "all half_siblings and siblings" do
-        specify {beatrix.siblings(:half => :include).should =~ [peter,mary,julian]}
+        specify {beatrix.siblings(:half => :include).should =~ [peter,steve,mary,julian]}
       end  
       describe "half_siblings only" do
-        specify {beatrix.siblings(:half => :only).should =~ [peter,mary]}
+        specify {beatrix.siblings(:half => :only).should =~ [peter,steve,mary]}
       end 
       describe "half_siblings with titty" do
-        specify {beatrix.siblings(:stepmother => titty).should =~ [peter]}
+        specify {beatrix.siblings(:stepmother => titty).should =~ [peter,steve]}
       end
       describe "half_siblings with mary" do
         specify {beatrix.siblings(:stepmother => barbara).should =~ [mary]}
