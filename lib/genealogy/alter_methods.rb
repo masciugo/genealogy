@@ -1,5 +1,5 @@
 module Genealogy
-  module LinkingMethods
+  module AlterMethods
     extend ActiveSupport::Concern
 
     # parents 

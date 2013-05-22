@@ -60,7 +60,8 @@ module Genealogy
 
     # Include instance methods and class methods
     include Genealogy::QueryMethods
-    include Genealogy::LinkingMethods
+    include Genealogy::AlterMethods
+    include Genealogy::SpouseMethods if spouse_enabled
 
   end
   

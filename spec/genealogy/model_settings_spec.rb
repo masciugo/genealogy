@@ -3,7 +3,7 @@ require 'spec_helper'
 module ModelSettingsSpec
   extend GenealogyTestModel
 
-  describe "model and table settings" do
+  describe "*** Model and table settings ***" do
 
     before(:each) do
       ModelSettingsSpec.define_test_model_class(has_parents_opts)
