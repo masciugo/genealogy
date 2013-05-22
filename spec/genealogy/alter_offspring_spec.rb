@@ -3,170 +3,176 @@ require 'spec_helper'
 module AlterOffspringSpec
   extend GenealogyTestModel
 
-  describe "offspring methods applied to tetta: "  do
-    subject { tetta }
+  describe "*** Alter offspring methods ***"  do
       
     before(:all) do
       AlterOffspringSpec.define_test_model_class({})
     end
 
-    let(:tetta) {TestModel.create!(:name => "Tetta", :sex => "F")}
-    let(:corrado) {TestModel.create!(:name => "Corrado", :sex => "M")}
-    let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
-    let(:walter) {TestModel.create!(:name => "Walter", :sex => "M")}
-    let(:ciccio) {TestModel.create!(:name => "Ciccio", :sex => "M")}
-    let(:uccio) {TestModel.create!(:name => "Uccio", :sex => "M")}
-    let(:dylan) {TestModel.create!(:name => "Dylan", :sex => "M")}
-    let(:gina) {TestModel.create!(:name => "Gina", :sex => "F")}
+    let(:titty) {TestModel.create!(:name => "titty", :sex => "F")}
+    let(:peter) {TestModel.create!(:name => "peter", :sex => "M")}
+    let(:steve) {TestModel.create!(:name => "steve", :sex => "M")}
+    let(:paul) {TestModel.create!(:name => "paul", :sex => "M")}
+    let(:michelle) {TestModel.create!(:name => "michelle", :sex => "F")}
+    let(:maggie) {TestModel.create!(:name => "maggie", :sex => "F")}
+    let(:julian) {TestModel.create!(:name => "julian", :sex => "M")}
+    let(:john) {TestModel.create!(:name => "john", :sex => "M")}
+    let(:dylan) {TestModel.create!(:name => "dylan", :sex => "M")}
 
-    describe "#add_offspring(corrado)" do
-      
-      context "when all is ok" do
-        before(:each) { tetta.add_offspring(corrado) }
-        its(:offspring) { should =~ [corrado] }
-        describe "corrado" do
-          subject { corrado.reload }
-          its('mother') { should == tetta }
-          its('father') { should be_nil }
-        end
-      end
+    describe "paul" do
+      subject { paul }
 
-      context "when corrado is an ancestor" do
-        before(:each) { tetta.add_father(corrado) }
-        specify { expect { tetta.add_offspring(corrado) }.to raise_error(Genealogy::IncompatibleRelationshipException)}
-      end
-
-      context "when tetta has undefined sex" do
-        before(:each) { tetta.sex = nil }
-        specify { expect { tetta.add_offspring(corrado) }.to raise_error(Genealogy::WrongSexException) }
-      end
-
-    end
-    
-    describe "#add_offspring(corrado,stefano)" do
-      let(:stefano) {TestModel.create!(:name => "Stefano", :sex => "M")}
-      
-      context "when corrado and stefano are valid" do
-        before(:each) { tetta.add_offspring(corrado,stefano) }
-        its(:offspring) { should =~ [corrado,stefano] }
-        describe "corrado" do
-          subject { corrado }
-          its(:mother) { should be(tetta) }
-          its(:father) { should be_nil }
-        end
-        describe "stefano" do
-          subject { stefano }
-          its(:mother) { should be(tetta) }
-          its(:father) { should be_nil }
-        end
-      end
-
-      context "when stefano is invalid" do
-        before(:each) { stefano.mark_invalid! }
-        specify { expect { tetta.add_offspring(corrado,stefano) }.to raise_error }
-        its(:offspring) do
-          tetta.add_offspring(corrado,stefano) rescue true
-          should be_empty
-        end
-      end
-
-    end
-
-    describe "#add_offspring(corrado, :spouse => luigi)" do
-      let(:luigi) {TestModel.create!(:name => "Luigi", :sex => "M")}
-      before(:each) { tetta.add_offspring(corrado, :spouse => luigi) }
-      its(:offspring) { should =~ [corrado] }
-      describe "luigi" do
-        subject { luigi }
-        its(:offspring) { should =~ [corrado] }
-      end
-    end
-
-    context "when trying to add_offspring to a female specifying a female spouse" do
-      let(:gina) {TestModel.create!(:name => "Gina", :sex => "F")}
-      describe "#add_offspring(corrado, :spouse => gina)" do
-        specify { expect { tetta.add_offspring(corrado, :spouse => gina) }.to raise_error(Genealogy::WrongSexException) }
-      end
-    end
-
-    context "when already has two children with uccio (stefano and corrado) and one with ciccio (walter) and a last one with an unknown spouse (dylan)" do
-      before(:each) do
-        tetta.add_offspring(corrado,stefano, :spouse => uccio)
-        tetta.add_offspring(walter, :spouse => ciccio)
-        tetta.add_offspring(dylan)
-      end
-
-      describe "#remove_offspring returned value" do
-        specify { tetta.remove_offspring.should be_true }
-      end
-
-      describe "#remove_offspring" do
-        context "when offspring are all valid" do
-          before(:each) { tetta.remove_offspring }
-          its(:offspring) { should be_empty }
-          describe "uccio" do
-            subject {uccio}
-            its(:offspring) { should =~ [stefano,corrado] }
+      describe "#add_offspring(peter)" do
+        
+        context "when all is ok" do
+          before(:each) { paul.add_offspring(peter) }
+          its(:offspring) { should =~ [peter] }
+          describe "peter" do
+            subject { peter.reload }
+            its('mother') { should be_nil }
+            its('father') { should == paul }
           end
         end
-        context "stefano is invalid" do
-          before(:each) { stefano.mark_invalid! }
-          specify { expect { tetta.remove_offspring }.to raise_error }
+
+        context "when peter is an ancestor" do
+          before(:each) { paul.add_father(peter) }
+          specify { expect { paul.add_offspring(peter) }.to raise_error(Genealogy::IncompatibleRelationshipException)}
+        end
+
+        context "when paul has undefined sex" do
+          before(:each) { paul.sex = nil }
+          specify { expect { paul.add_offspring(peter) }.to raise_error(Genealogy::WrongSexException) }
+        end
+
+      end
+
+      describe "#add_offspring(peter,steve)" do
+        
+        context "when peter and steve are valid" do
+          before(:each) { paul.add_offspring(peter,steve) }
+          its(:offspring) { should =~ [peter,steve] }
+          describe "peter" do
+            subject { peter }
+            its(:father) { should be(paul) }
+            its(:mother) { should be_nil }
+          end
+          describe "steve" do
+            subject { steve }
+            its(:father) { should be(paul) }
+            its(:mother) { should be_nil }
+          end
+        end
+
+        context "when steve is invalid" do
+          before(:each) { steve.mark_invalid! }
+          specify { expect { paul.add_offspring(peter,steve) }.to raise_error }
           its(:offspring) do
-            tetta.remove_offspring rescue true
-            should =~ [stefano,corrado,walter,dylan]
+            paul.add_offspring(peter,steve) rescue true
+            should be_empty
           end
         end
+
       end
 
-      describe "#remove_offspring(:affect_spouse => true)" do
-        before(:each) { tetta.remove_offspring(:affect_spouse => true) }
-        its(:offspring) {should_not include stefano,corrado}
-        describe "uccio" do
-          subject {uccio}
-          its(:offspring) { should_not include stefano,corrado }
-        end
-        describe "ciccio" do
-          subject {ciccio}
-          its(:offspring) { should_not include walter }
+      describe "#add_offspring(julian, :spouse => michelle)" do
+        before(:each) { paul.add_offspring(julian, :spouse => michelle) }
+        its(:offspring) { should =~ [julian] }
+        describe "michelle" do
+          subject { michelle }
+          its(:offspring) { should =~ [julian] }
         end
       end
 
-      describe "#remove_offspring(:spouse => uccio)" do
-        before(:each) { tetta.remove_offspring(:spouse => uccio) }
-        its(:offspring) {should_not include stefano,corrado}
-        describe "uccio" do
-          subject {uccio}
-          its(:offspring) { should include stefano,corrado }
+      describe "#add_offspring(peter, :spouse => john)" do
+        specify { expect { paul.add_offspring(peter, :spouse => john) }.to raise_error(Genealogy::WrongSexException) }
+      end
+      
+      context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (dylan)" do
+        before(:each) do
+          paul.add_offspring(peter,steve, :spouse => titty)
+          paul.add_offspring(julian, :spouse => michelle)
+          paul.add_offspring(dylan)
         end
+
+        describe "#remove_offspring returned value" do
+          specify { paul.remove_offspring.should be_true }
+        end
+
+        describe "#remove_offspring" do
+          context "when offspring are all valid" do
+            before(:each) { paul.remove_offspring }
+            its(:offspring) { should be_empty }
+            describe "titty" do
+              subject {titty}
+              its(:offspring) { should include steve,peter }
+            end
+          end
+          context "steve is invalid" do
+            before(:each) { steve.mark_invalid! }
+            specify { expect { paul.remove_offspring }.to raise_error }
+            its(:offspring) do
+              paul.remove_offspring rescue true
+              should =~ [steve,peter,julian,dylan]
+            end
+          end
+        end
+
+        describe "#remove_offspring(:affect_spouse => true)" do
+          before(:each) { paul.remove_offspring(:affect_spouse => true) }
+          its(:offspring) {should_not include steve,peter}
+          describe "titty" do
+            subject {titty}
+            its(:offspring) { should_not include steve,peter }
+          end
+          describe "michelle" do
+            subject {michelle}
+            its(:offspring) { should_not include julian }
+          end
+        end
+
+        describe "#remove_offspring(:spouse => titty)" do
+          before(:each) { paul.remove_offspring(:spouse => titty) }
+          its(:offspring) {should_not include steve,peter}
+          describe "titty" do
+            subject {titty}
+            its(:offspring) { should include steve,peter }
+          end
+          describe "michelle" do
+            subject {michelle}
+            its(:offspring) { should include julian }
+          end
+        end
+
+        describe "#remove_offspring(:spouse => titty, :affect_spouse => true)" do
+          before(:each) { paul.remove_offspring(:spouse => titty, :affect_spouse => true) }
+          its(:offspring) {should_not include steve,peter}
+          describe "titty" do
+            subject {titty}
+            its(:offspring) { should_not include steve,peter }
+          end
+        end
+
+        describe "#remove_offspring(:spouse => maggie)" do
+          its(:offspring) do
+            paul.remove_offspring(:spouse => maggie)
+            should =~ [steve,peter,julian,dylan]
+          end
+          describe "result" do
+            specify { paul.remove_offspring(:spouse => maggie).should be_false }
+          end
+        end
+
+        context "when specify a spouse with the same sex" do
+          describe "#remove_offspring(:spouse => john)" do
+            specify { expect { paul.remove_offspring(:spouse => john) }.to raise_error(Genealogy::WrongSexException) }
+          end
+        end
+
+
       end
 
-      describe "#remove_offspring(:spouse => uccio, :affect_spouse => true)" do
-        before(:each) { tetta.remove_offspring(:spouse => uccio, :affect_spouse => true) }
-        its(:offspring) {should_not include stefano,corrado}
-        describe "uccio" do
-          subject {uccio}
-          its(:offspring) { should_not include stefano,corrado }
-        end
-      end
-
-      describe "#remove_offspring(:spouse => walter)" do
-        its(:offspring) do
-          tetta.remove_offspring(:spouse => walter)
-          should =~ [stefano,corrado,walter,dylan]
-        end
-        describe "result" do
-          specify { tetta.remove_offspring(:spouse => walter).should be_false }
-        end
-      end
-
-      context "when specify a spouse with the same sex" do
-        describe "#remove_offspring(:spouse => gina)" do
-          specify { expect { tetta.remove_offspring(:spouse => gina) }.to raise_error(Genealogy::WrongSexException) }
-        end
-      end
-
-
+          
     end
+
   end
 end
