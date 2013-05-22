@@ -1,5 +1,7 @@
 # Genealogy
 
+## FEW DAYS TO GO. DON'T USE IT!!
+
 ## Premise
 Genealogy is still under development and need to be improved and extended. Developed features so far were the ones I needed for my personal applications where I had to provide data entry facilities to insert, given an individual, relatives' vital records keeping track of their familiar relationship. However they are the basic features for a genealogy management system and that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense as I am really interested in improving it.
 
@@ -82,11 +84,9 @@ Some methods can take a list of individuals:
 Multiple mating are supported so half parent relationships are admitted and can build separately:
 
 * `luke.add_offspring(julian)` will set only one of julian's parent depending on luke's gender. By the way, given luke is a male, this is of course equivalent to `julian.add_father(luke)`
-
 * `luke.add_offspring(julian, :spouse => gina)` will also change julian's mother
 
 * `walter.add_siblings(luke, :half => :father)` will add luke as a paternal half-sibling, that is only luke's father will be changed to walter's one
-
 * `walter.add_siblings(luke, :half => :father, :spouse => magda)` will also change luke's mother to magda. This let set a different mother for the sibling
 
 Methods that involves updates of two or more instances use transactions to ensure the good outcome of the whole operation:

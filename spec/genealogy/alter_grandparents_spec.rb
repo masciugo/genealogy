@@ -19,8 +19,7 @@ module AlterGrandparentsSpec
     let(:peter) {TestModel.create!(:name => "peter", :sex => "M")}
 
     describe "peter" do
-      subject{ peter }
-      
+      subject{ peter.reload }
 
       context "when has no father" do
 
@@ -40,11 +39,11 @@ module AlterGrandparentsSpec
         describe "##add_paternal_grandfather(manuel)" do
 
           before(:each) { peter.add_paternal_grandfather(manuel) }
-          its('reload.paternal_grandfather') {should == manuel}
+          its('paternal_grandfather') {should == manuel}
           
           describe "steve" do
             subject {steve}
-            its('reload.paternal_grandfather') {should == manuel}
+            its('paternal_grandfather') {should == manuel}
           end
           
         end
@@ -64,7 +63,7 @@ module AlterGrandparentsSpec
         describe "#add_paternal_grandmother(terry)" do
 
           before(:each) { peter.add_paternal_grandmother(terry) }
-          its('reload.paternal_grandmother') {should == terry}
+          its('paternal_grandmother') {should == terry}
 
         end
 
@@ -118,13 +117,13 @@ module AlterGrandparentsSpec
             before(:each) do
               peter.remove_paternal_grandfather
             end
-            its('reload.paternal_grandmother') {should == terry}
-            its('reload.paternal_grandfather') {should be_nil}
+            its('paternal_grandmother') {should == terry}
+            its('paternal_grandfather') {should be_nil}
 
             describe "steve" do
               subject {steve}
-              its('reload.paternal_grandmother') {should == terry}
-              its('reload.paternal_grandfather') {should be_nil}
+              its('paternal_grandmother') {should == terry}
+              its('paternal_grandfather') {should be_nil}
             end
           end
 
