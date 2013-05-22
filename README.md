@@ -8,7 +8,7 @@ Genealogy is still under development and need to be improved and extended. Devel
 
 ## Description
 
-Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family just add two parents column to its table (i.e.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother*, whose everything depend on.  
+Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family just add two parents column to its table (e.g..: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother*, whose everything depend on.  
 Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represent genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically, the only **primitive** familiar relationships are associations father and mother, all others like grandparents, siblings or offspring are **derived**. This means that all methods in charge of alter the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` applied to the right records.
 
 ## Installation
@@ -52,13 +52,11 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 
 * `george.siblings` will return full-siblings array (same father and mother)
 * `george.siblings(:half => :mother)` will return maternal half-siblings array (same mother)
-* `george.maternal_half_siblings` shortcut for the last one
-
+* `george.maternal_half_siblings` just a shortcut
 * `george.siblings(:half => :only)` will return only half-siblings 
-* `george.half_siblings` shortcut for the last one
-
+* `george.half_siblings` just a shortcut
+* `george.siblings(:half => :father, :spouse => :gina)` will return paternal half-siblings but the ones he had with gina
 * `george.siblings(:half => :include)` will return all kind of siblings: full and half
-
 * `george.offspring` will return all individuals that have george as father (mother can be any)
 * `george.offspring(:spouse => :gina)` will return all individuals that have george as father and gina as mother
 

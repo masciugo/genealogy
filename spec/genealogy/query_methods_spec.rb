@@ -3,7 +3,7 @@ require 'spec_helper'
 module QueryMethodsSpec
   extend GenealogyTestModel
   
-  describe "*** Query methods ***", :cinzia => true  do
+  describe "*** Query methods ***"  do
 
     before(:all) do
       QueryMethodsSpec.define_test_model_class({:spouse => true })
@@ -86,7 +86,7 @@ module QueryMethodsSpec
       end  
     end
 
-    describe "paul", :wip => true do
+    describe "paul" do
       subject {paul}
       its(:parents) {should =~ [manuel,terry]}
       its(:offspring) {should =~ [peter,mary,julian,beatrix,steve]}
