@@ -48,9 +48,17 @@ module Genealogy
       end
       case sex
       when sex_male_value
-        self.class.find_all_by_father_id(id, :conditions => (["mother_id == ?", spouse.id] if spouse) )
+        if spouse
+          self.class.find_all_by_father_id_and_mother_id(id,spouse.id)
+        else
+          self.class.find_all_by_father_id(id)
+        end
       when sex_female_value
-        self.class.find_all_by_mother_id(id, :conditions => (["father_id == ?", spouse.id] if spouse) )
+        if spouse
+          self.class.find_all_by_mother_id_and_father_id(id,spouse.id)
+        else
+          self.class.find_all_by_mother_id(id)
+        end
       end
     end
 
