@@ -26,7 +26,8 @@ module Genealogy
       end
     end
     
-    class_attribute :spouse_enabled
+    class_attribute :genealogy_enabled, :spouse_enabled
+    self.genealogy_enabled = true
     self.spouse_enabled = options[:spouse].try(:==,true) || false
     tracked_parents = [:father, :mother]
     tracked_parents << :spouse if spouse_enabled
