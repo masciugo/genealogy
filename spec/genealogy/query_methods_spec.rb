@@ -65,8 +65,7 @@ module QueryMethodsSpec
       its(:eligible_mothers) {should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa, louise]}
       its(:eligible_grandfathers) {should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
       its(:eligible_grandmothers) {should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,barbara,michelle]}
-      its(:eligible_half_siblings) {should =~ [julian,beatrix,mary,ned,naomi,irene,paso,john,maggie,emily,tommy,debby,jack,alison,bob,louise,larry,rosa,luis]}
-    end
+          end
 
     describe "mary" do
       subject {mary}
@@ -155,6 +154,14 @@ module QueryMethodsSpec
     describe "jack" do
       subject {jack}
       its(:eligible_siblings) {should =~ [larry,rosa,luis,marcel,emily,tommy,debby,maggie,paso,irene,manuel,terry,naomi,ned,michelle,paul,titty,julian,beatrix,peter,steve]}
+    end
+
+    describe "irene" do
+      subject {irene}
+      its(:eligible_fathers) {should =~ [julian,paul,ned,manuel,paso,john,marcel,jack,luis,bob]}
+      its(:eligible_mothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,louise]}
+      its(:eligible_grandfathers) {should =~ [julian,paul,ned,manuel,john,jack,marcel,bob,larry,luis]}
+      its(:eligible_grandmothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,rosa,louise]}      
     end
   end
 
