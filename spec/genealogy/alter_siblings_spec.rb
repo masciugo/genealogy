@@ -27,7 +27,7 @@ module AlterSiblingsSpec
       peter.add_mother(titty)
     end
 
-    describe "peter son of paul and titty", :wip => true do
+    describe "peter son of paul and titty" do
       subject { peter.reload }
 
       describe "#add_sibling(steve)" do
@@ -40,6 +40,12 @@ module AlterSiblingsSpec
           its(:siblings) { should include peter }
         end
 
+      end
+
+      describe "#add_siblings(steve) returned value" do
+        
+        specify { expect(peter.add_siblings(steve)).to be_true }
+      
       end
 
       context "steve is invalid" do
@@ -85,8 +91,7 @@ module AlterSiblingsSpec
         end
       end
 
-      describe "#add_siblings(julian, :half => :father)" do
-        before(:each) {peter.add_siblings(julian, :half => :father )}
+      shared_examples "adding julian to peter as paternal half sibling" do
         its(:half_siblings) do
            should =~ [julian]
         end
@@ -96,6 +101,16 @@ module AlterSiblingsSpec
           its(:father) { should == paul }
           its(:mother) { should be_nil}
         end
+      end
+
+      describe "#add_siblings(julian, :half => :father)" do
+        before(:each) {peter.add_siblings(julian, :half => :father )}
+        it_should_behave_like "adding julian to peter as paternal half sibling"
+      end
+
+      describe "#add_paternal_half_siblings(julian)" do
+        before(:each) {peter.add_paternal_half_siblings(julian)}
+        it_should_behave_like "adding julian to peter as paternal half sibling"
       end
 
       describe "#add_siblings(julian, :half => :father, :spouse => michelle )" do
@@ -132,18 +147,18 @@ module AlterSiblingsSpec
         end
       end
 
-      context "when he has steve as full sibling and julian as paternal halfsibling and agata as maternal half sibling" do
+      context "when he has steve and manuel as full sibling and julian and paso as paternal half sibling and agata as maternal half sibling" do
 
         before(:each) do
-          peter.add_siblings(steve)
-          peter.add_siblings(julian, :half => :father, :spouse => michelle )
+          peter.add_siblings(steve,manuel)
+          peter.add_siblings(julian,paso, :half => :father, :spouse => michelle )
           peter.add_siblings(agata, :half => :mother )
         end
         
         describe "#remove_siblings" do
           before(:each) { peter.remove_siblings }
           its(:siblings) { should be_empty }
-          its(:half_siblings) { should =~ [julian,agata] }
+          its(:half_siblings) { should =~ [julian,agata,paso] }
           its(:parents) { should =~ [paul,titty] }
           describe "steve" do
             subject { steve.reload }
@@ -152,9 +167,13 @@ module AlterSiblingsSpec
           end
         end
 
-        describe "#remove_siblings(:half => :father) " do
+        describe "#remove_siblings returned value" do
+          specify { expect(peter.remove_siblings).to be_true }
+        end
+
+        describe "#remove_siblings(:half => :father)" do
           before(:each) { peter.remove_siblings(:half => :father ) }
-          its(:siblings) { should =~ [steve] }
+          its(:siblings) { should =~ [steve, manuel] }
           its(:half_siblings) { should =~ [agata] }
           its(:parents) { should =~ [paul,titty] }
           describe "julian" do
@@ -164,14 +183,45 @@ module AlterSiblingsSpec
           end
         end
 
+        describe "#remove_paternal_half_siblings" do
+          before(:each) { peter.remove_paternal_half_siblings }
+          its(:siblings) { should =~ [steve, manuel] }
+          its(:half_siblings) { should =~ [agata] }
+          its(:parents) { should =~ [paul,titty] }
+          describe "julian" do
+            subject{ julian.reload }
+            its(:father) { should be_nil }
+            its(:mother) { should == michelle }
+          end
+        end
+
+        describe "#remove_paternal_half_siblings(julian)" do
+          before(:each) { peter.remove_paternal_half_siblings(julian) }
+          its(:half_siblings) { should =~ [agata,paso] }
+        end
+
+        describe "#remove_paternal_half_siblings(manuel) returned value" do
+          specify { expect(peter.remove_paternal_half_siblings(manuel)).to be_false }
+        end
+
+        describe "#remove_maternal_half_siblings" do
+          before(:each) { peter.remove_maternal_half_siblings }
+          its(:half_siblings) { should =~ [julian,paso] }
+        end
+
         describe "#remove_siblings(:half => :mother) " do
           before(:each) do
             peter.remove_siblings(:half => :mother )
           end
-          its(:siblings) { should =~ [steve] }
-          its(:half_siblings) { should =~ [julian] }
+          its(:siblings) { should =~ [steve, manuel] }
+          its(:half_siblings) { should =~ [julian,paso] }
           its(:parents) { should =~ [paul,titty] }
         end
+
+        describe "#remove_siblings(:half => :foo) " do
+          specify { expect { peter.remove_siblings(:half => :foo) }.to raise_error Genealogy::WrongOptionException }
+        end
+
 
         describe "#remove_siblings(:half => :father, :affect_spouse => true ) " do
           before(:each) { peter.remove_siblings(:half => :father, :affect_spouse => true  ) }
@@ -179,6 +229,20 @@ module AlterSiblingsSpec
             subject {julian.reload}
             its(:parents) { should be_empty }
           end
+        end
+
+        describe "#remove_sibling(steve)" do
+          before(:each) { peter.remove_siblings(steve) }
+          its(:siblings) { should =~ [manuel] }
+          describe "steve" do
+            subject {steve.reload}
+            its(:parents) { should be_empty }
+          end
+        end
+
+        describe "#remove_sibling(steve, :half => :father )" do
+          before(:each) { peter.remove_siblings(steve, :half => :father) }
+          its(:siblings) { should =~ [steve, manuel] }
         end
 
       end

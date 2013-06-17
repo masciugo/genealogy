@@ -3,42 +3,52 @@ require 'spec_helper'
 module QueryMethodsSpec
   extend GenealogyTestModel
   
-  describe "*** Query methods ***"  do
+  describe "*** Query methods ***", :wip => true do
 
     before(:all) do
       QueryMethodsSpec.define_test_model_class({:spouse => true })
     end
 
-    let!(:paul) {TestModel.create!(:name => "paul", :sex => "M", :father_id => manuel.id, :mother_id => terry.id)}
-    let!(:titty) {TestModel.create!(:name => "titty", :sex => "F", :father_id => paso.id, :mother_id => irene.id)}
-    let!(:peter) {TestModel.create!(:name => "peter", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
-    let!(:mary) {TestModel.create!(:name => "mary", :sex => "F", :father_id => paul.id, :mother_id => barbara.id)}
-    let!(:barbara) {TestModel.create!(:name => "barbara", :sex => "F", :father_id => john.id, :mother_id => maggie.id)}
-    let!(:paso) {TestModel.create!(:name => "paso", :sex => "M")}
-    let!(:irene) {TestModel.create!(:name => "irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
-    let!(:manuel) {TestModel.create!(:name => "manuel", :sex => "M")}
-    let!(:terry) {TestModel.create!(:name => "terry", :sex => "F", :father_id => marcel.id)}
-    let!(:john) {TestModel.create!(:name => "john", :sex => "M", :father_id => jack.id, :mother_id => alison.id)}
-    let!(:jack) {TestModel.create!(:name => "jack", :sex => "M", :father_id => bob.id, :mother_id => louise.id)}
-    let!(:bob) {TestModel.create!(:name => "bob", :sex => "M")}
-    let!(:debby) {TestModel.create!(:name => "debby", :sex => "F", :father_id => bob.id, :mother_id => louise.id)}
-    let!(:alison) {TestModel.create!(:name => "alison", :sex => "F")}
-    let!(:maggie) {TestModel.create!(:name => "maggie", :sex => "F")}
-    let!(:emily) {TestModel.create!(:name => "emily", :sex => "F", :father_id => luis.id, :mother_id => rosa.id)}
-    let!(:tommy) {TestModel.create!(:name => "tommy", :sex => "M", :father_id => larry.id, :mother_id => louise.id)}
-    let!(:luis) {TestModel.create!(:name => "luis", :sex => "M")}
-    let!(:rosa) {TestModel.create!(:name => "rosa", :sex => "F")}
-    let!(:larry) {TestModel.create!(:name => "larry", :sex => "M")}
-    let!(:louise) {TestModel.create!(:name => "louise", :sex => "F")}
-    let!(:ned) {TestModel.create!(:name => "ned", :sex => "M")}
-    let!(:steve) {TestModel.create!(:name => "steve", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
-    let!(:naomi) {TestModel.create!(:name => "naomi", :sex => "F")}
-    let!(:michelle) {TestModel.create!(:name => "michelle", :sex => "F", :father_id => ned.id, :mother_id => naomi.id)}
-    let!(:marcel) {TestModel.create!(:name => "marcel", :sex => "M")}
-    let!(:beatrix) {TestModel.create!(:name => "beatrix", :sex => "F", :father_id => paul.id, :mother_id => michelle.id)}
-    let!(:julian) {TestModel.create!(:name => "julian", :sex => "M", :father_id => paul.id, :mother_id => michelle.id)}
+    let!(:paul) {TestModel.find_or_create_by_name(:name => "paul", :sex => "M", :father_id => manuel.id, :mother_id => terry.id)}
+    let!(:titty) {TestModel.find_or_create_by_name(:name => "titty", :sex => "F", :father_id => paso.id, :mother_id => irene.id)}
+    let!(:peter) {TestModel.find_or_create_by_name(:name => "peter", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
+    let!(:mary) {TestModel.find_or_create_by_name(:name => "mary", :sex => "F", :father_id => paul.id, :mother_id => barbara.id)}
+    let!(:barbara) {TestModel.find_or_create_by_name(:name => "barbara", :sex => "F", :father_id => john.id, :mother_id => maggie.id)}
+    let!(:paso) {TestModel.find_or_create_by_name(:name => "paso", :sex => "M")}
+    let!(:irene) {TestModel.find_or_create_by_name(:name => "irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
+    let!(:manuel) {TestModel.find_or_create_by_name(:name => "manuel", :sex => "M")}
+    let!(:terry) {TestModel.find_or_create_by_name(:name => "terry", :sex => "F", :father_id => marcel.id)}
+    let!(:john) {TestModel.find_or_create_by_name(:name => "john", :sex => "M", :father_id => jack.id, :mother_id => alison.id)}
+    let!(:jack) {TestModel.find_or_create_by_name(:name => "jack", :sex => "M", :father_id => bob.id, :mother_id => louise.id)}
+    let!(:bob) {TestModel.find_or_create_by_name(:name => "bob", :sex => "M")}
+    let!(:debby) {TestModel.find_or_create_by_name(:name => "debby", :sex => "F", :father_id => bob.id, :mother_id => louise.id)}
+    let!(:alison) {TestModel.find_or_create_by_name(:name => "alison", :sex => "F")}
+    let!(:maggie) {TestModel.find_or_create_by_name(:name => "maggie", :sex => "F")}
+    let!(:emily) {TestModel.find_or_create_by_name(:name => "emily", :sex => "F", :father_id => luis.id, :mother_id => rosa.id)}
+    let!(:tommy) {TestModel.find_or_create_by_name(:name => "tommy", :sex => "M", :father_id => larry.id, :mother_id => louise.id)}
+    let!(:luis) {TestModel.find_or_create_by_name(:name => "luis", :sex => "M")}
+    let!(:rosa) {TestModel.find_or_create_by_name(:name => "rosa", :sex => "F")}
+    let!(:larry) {TestModel.find_or_create_by_name(:name => "larry", :sex => "M")}
+    let!(:louise) {TestModel.find_or_create_by_name(:name => "louise", :sex => "F")}
+    let!(:ned) {TestModel.find_or_create_by_name(:name => "ned", :sex => "M")}
+    let!(:steve) {TestModel.find_or_create_by_name(:name => "steve", :sex => "M", :father_id => paul.id, :mother_id => titty.id)}
+    let!(:naomi) {TestModel.find_or_create_by_name(:name => "naomi", :sex => "F")}
+    let!(:michelle) {TestModel.find_or_create_by_name(:name => "michelle", :sex => "F", :father_id => ned.id, :mother_id => naomi.id)}
+    let!(:marcel) {TestModel.find_or_create_by_name(:name => "marcel", :sex => "M")}
+    let!(:beatrix) {TestModel.find_or_create_by_name(:name => "beatrix", :sex => "F", :father_id => paul.id, :mother_id => michelle.id)}
+    let!(:julian) {TestModel.find_or_create_by_name(:name => "julian", :sex => "M", :father_id => paul.id, :mother_id => michelle.id)}
 
-    describe "peter", :wip => true do
+    describe "class methods" do
+      describe "#males" do
+        specify { TestModel.males.all.should =~ [paul,peter,paso,manuel,john,jack,bob,tommy,luis,larry,ned,steve,marcel,julian] }
+      end
+
+      describe "#females" do
+        specify { TestModel.females.all.should =~ [titty,mary,barbara,irene,terry,debby,alison,maggie,emily,rosa,louise,naomi,michelle,beatrix] }
+      end
+    end
+
+    describe "peter" do
       subject {peter}
       its(:parents) {should =~ [paul,titty]}
       its(:paternal_grandfather) {should == manuel}
@@ -51,11 +61,11 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso,irene]}
       its(:half_siblings) {should =~ [mary,julian,beatrix]}
       its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
-      its(:eligible_fathers) {should =~ [M] and should =~ [paul,ned,manuel,paso,john,marcel,tommy,jack,luis,larry,bob]}
-      its(:eligible_mothers) {should =~ [F] and should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa, louise]}
-      its(:eligible_grandfathers) {should_not =~ [F] and should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
-      its(:eligible_grandmothers) {should_not =~ [M] and should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise]}
-      ist(:eligible_half_siblings) {should =~ [julian,beatrix,mary,ned,naomi,irene,paso,john,maggie,emily,tommy,debby,jack,alison,bob,louise,larry,rosa,luis]}
+      its(:eligible_fathers) {should =~ [paul,ned,manuel,paso,john,marcel,tommy,jack,luis,larry,bob]}
+      its(:eligible_mothers) {should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa, louise]}
+      its(:eligible_grandfathers) {should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
+      its(:eligible_grandmothers) {should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,barbara,michelle]}
+      its(:eligible_half_siblings) {should =~ [julian,beatrix,mary,ned,naomi,irene,paso,john,maggie,emily,tommy,debby,jack,alison,bob,louise,larry,rosa,luis]}
     end
 
     describe "mary" do

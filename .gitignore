@@ -16,4 +16,4 @@ test/tmp
 test/version_tmp
 tmp
 spec/debug.log
-spec/test2.sqlite3.db
+spec/test.sqlite3.db

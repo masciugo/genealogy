@@ -11,6 +11,14 @@ module Genealogy
       end
     end
 
+    def eligible_fathers
+      self.class.males - descendants - siblings(:half => :include) - [self]
+    end
+
+    def eligible_mothers
+      self.class.females - descendants - siblings(:half => :include) - [self]
+    end
+
     # grandparents
     [:father, :mother].each do |parent|
       [:father, :mother].each do |grandparent|
@@ -27,9 +35,22 @@ module Genealogy
         (send(parent) && send(parent).parents) || []
       end
 
+      # eligible
+      define_method "eligible_grand#{parent}s" do
+        if parent
+          case parent
+          when :father
+            self.class.males
+          when :mother
+            self.class.females
+          end - descendants - siblings(:half => :include) - [self] - parents
+        else
+          []
+        end
+      end
+
     end
 
-    # get all
     def grandparents
       result = []
       [:father, :mother].each do |parent|
@@ -41,6 +62,7 @@ module Genealogy
       result
     end
 
+    # offspring
     def offspring(options = {})
 
       if spouse = options[:spouse]
@@ -62,6 +84,7 @@ module Genealogy
       end
     end
 
+    # siblings
     def siblings(options = {})
       result = case options[:half]
       when nil # exluding half siblings
@@ -93,6 +116,7 @@ module Genealogy
       siblings(:half => :mother)
     end
 
+    # ancestors
     def ancestors
       result = []
       remaining = parents.to_a.compact
@@ -103,6 +127,7 @@ module Genealogy
       result.uniq
     end
 
+    # descendants
     def descendants
       result = []
       remaining = offspring.to_a.compact
@@ -123,6 +148,12 @@ module Genealogy
     end
 
     module ClassMethods
+      def males
+        where(sex_column => sex_male_value)
+      end
+      def females
+        where(sex_column => sex_female_value)
+      end
     end
 
   end

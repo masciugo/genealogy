@@ -112,10 +112,16 @@ module Genealogy
       end
     end
 
-    def remove_siblings(options = {})
-      options.delete_if{ |key,value| key == :half and ![:father,:mother].include?(value) }
+    def remove_siblings(*args)
+      options = args.extract_options!
+      
+      raise WrongOptionException.new("Unknown option value: :half => #{options[:half]}.") if (options[:half] and ![:father,:mother].include?(options[:half]))
 
-      resulting_indivs = siblings(options)
+      resulting_indivs = if args.blank?
+        siblings(options)
+      else
+        args & siblings(options)
+      end
 
       transaction do
 
@@ -130,11 +136,32 @@ module Genealogy
           when nil
             sib.remove_parents
           end  
-
         end
+
       end
 
+      !resulting_indivs.empty? #returned value must be true if self has at least a siblings to affect
+
     end
+
+    [:father, :mother].each do |parent|
+      
+      # add paternal/maternal half_siblings
+      define_method "add_#{Genealogy::LINEAGE_NAME[parent]}_half_siblings" do | *args |
+        options = args.extract_options!
+        options[:half] = parent
+        args << options
+        send("add_siblings",*args)
+      end
+      # remove paternal/maternal half_siblings
+      define_method "remove_#{Genealogy::LINEAGE_NAME[parent]}_half_siblings" do | *args |
+        options = args.extract_options!
+        options[:half] = parent
+        args << options
+        send("remove_siblings",*args)
+      end
+    end
+
 
     # offspring
     def add_offspring(*args)
