@@ -51,8 +51,10 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso,irene]}
       its(:half_siblings) {should =~ [mary,julian,beatrix]}
       its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
-      its(:possible_fathers) {should == M}
-      its(:possible_mothers) {should == F}
+      its(:possible_fathers) {should_not =~ [F] and should_not =~ [steve,julian]}
+      its(:possible_mothers) {should_not =~ [M] and should_not =~ [mary,beatrix]}
+      its(:possible_grandfathers) {should_not =~ [F] and should_not =~ [steve,julian,paul]}
+      its(:possible_grandmothers) {should_not =~ [M] and should_not =~ [mary,beatrix,titty]}
     end
 
     describe "mary" do
@@ -103,6 +105,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should be_nil}
       its(:maternal_grandparents) {should =~ [marcel,nil]}
       its(:grandparents) {should =~ [nil,nil,marcel,nil]}
+      its(:possible_offsping) {should_not =~ [michelle,titty,barbara,ned,naomi,terry,manuel,irene,paso,john,maggie,marcel,emily,tommy,jack,alison,luis,rosa,larry,louise,bob]} 
     end
 
     describe "terry" do
@@ -138,6 +141,10 @@ module QueryMethodsSpec
       its(:parents){should be_empty}
     end
 
+    describe "jack" do
+      subject {jack}
+      its(:possible_siblings) {should_not =~ [bob,louise,larry,rosa,luis,alison,john,barbara,mary]}
+    end
   end
 
 end
