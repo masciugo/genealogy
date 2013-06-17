@@ -12,7 +12,7 @@ module Genealogy
     end
 
     # eligible
-    [:father, :mother].each do |parent|
+    [:father, :mother].each do |parent| #TO IMPROVE!!
       define_method "eligible_#{parent}s" do
         if send(parent)
           []
@@ -39,7 +39,7 @@ module Genealogy
       end
 
       # eligible
-      define_method "eligible_grand#{parent}s" do
+      define_method "eligible_grand#{parent}s" do #TO IMPROVE!!
         if send(parent) and (send("paternal_grand#{parent}").nil? or send("maternal_grand#{parent}").nil?)
           self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - family(:half => :include )
         else
@@ -82,8 +82,8 @@ module Genealogy
       end
     end
 
-    def eligible_offspring
-      self.class.all - family(:half => :include)
+    def eligible_offspring #TO IMPROVE!!
+      self.class.all - family(:half => :include) 
     end
 
     # siblings
@@ -105,7 +105,7 @@ module Genealogy
       result.uniq - [self]
     end
 
-    def eligible_siblings
+    def eligible_siblings #TO IMPROVE!!
       eligible_offspring 
     end
 

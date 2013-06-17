@@ -149,32 +149,29 @@ module QueryMethodsSpec
     context "when removing some genealogy branches to test eligibility", :wip => true do
 
       before(:each) do
-        peter.remove_father
-        mary.remove_father
-        john.remove_father
         irene.remove_father
+        irene.remove_mother
       end
  
-      describe "peter" do
-        subject {peter}
-        its(:eligible_fathers) {should =~ [paul,ned,manuel,julian,john,marcel,tommy,jack,larry,bob]}
-        its(:eligible_mothers) {should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,mary]}
-        its(:eligible_grandfathers) {should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
-        its(:eligible_grandmothers) {should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,barbara,michelle,mary]}
-        its(:eligible_siblings) {should =~ [larry, louise, tommy,mary,barbara,michelle,ned,naomi,john,maggie,alison,jack,debby,bob]}
-      end
-
-      describe "paul" do
-        subject {paul}
-        its(:eligible_offspring) {should =~ [mary,barbara,titty,michelle,ned,naomi,irene,paso,john,maggie,emily,tommy,debby,jack,alison,luis,rosa,larry,louise,bob
-          ]} 
-      end
-
       describe "irene" do
         subject {irene}
         its(:eligible_fathers) {should =~ [larry, tommy,julian,paul,ned,manuel,paso,john,marcel,jack,luis,bob]}
-        its(:eligible_grandfathers) {should =~ [paso, tommy,julian,paul,ned,manuel,john,jack,marcel,bob,larry,luis]}
-        its(:eligible_grandmothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,rosa,louise]}      
+        its(:eligible_mothers) {should =~ [emily,rosa,louise,debby,alison,maggie,barbara,mary,terry,naomi,michelle,beatrix]}
+        context "when she has parents but no grandparents" do
+          before(:each) do
+            irene.add_father(tommy)
+            irene.add_mother(emily)
+            irene.remove_grandparents
+          end
+          its(:eligible_grandfathers) {should =~ [paso,julian,paul,ned,manuel,john,jack,marcel,bob,larry,luis]}
+          its(:eligible_grandmothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,rosa,louise]}
+          context "when she also has grandparents" do
+            before(:each) do
+              irene.add_grandparents(larry,louise,luis,rosa)
+            end
+            its(:eligible_siblings) {should =~ [bob,debby,jack,alison,john,maggie,barbara,paso,mary,paul,michelle,julian,beatrix,naomi,ned,manuel,terry,marcel]}
+          end    
+        end
       end
 
 
