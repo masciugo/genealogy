@@ -58,6 +58,14 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 * `paul.offspring` will return all individuals that have paul as father (mother can be any)
 * `paul.offspring(:spouse => :titty)` will return all individuals that have paul as father and titty as mother
 
+There are also some other miscellaneous query methods like:
+
+* `peter.family` will return peter's folks: descendants, ancestors, siblings 
+* `peter.family(:half => :include)` will also consider half_siblings 
+
+Others methods called *eligible_ methods* can be used to pre-filter role-compatible genealogy individuals. For example:
+
+* `peter.eligible_fathers` will return all genealogy male individuals that not are peter's familiars (descendants, ancestors, siblings). It will return an empty array if peter has already a father.
 
 ### Alter methods
 
@@ -110,6 +118,11 @@ Removing methods examples are:
 * `peter.remove_siblings(:half => :father)` will nullify only father of all records that have same peter's father as father
 * `peter.remove_siblings(:half => :father, :affect_spouse => true)` will nullify also mother of all records that have same peter's father as father
 
+### Class methods
+
+* `YourModel.males` will return all males individuals
+* `YourModel.females` will return all females individuals
+
 
 ## *has_parents* options
 
@@ -158,4 +171,3 @@ To best understand genealogy features, I recommend to read first the query metho
 ## Acknowledgement
 
 I'd like to thank all people from Dr. Toniolo's laboratory at San Raffaele Hospital in Milan, especially Dr. Cinzia Sala for her direct help.
-

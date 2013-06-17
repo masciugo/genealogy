@@ -14,7 +14,11 @@ module Genealogy
     # eligible
     [:father, :mother].each do |parent|
       define_method "eligible_#{parent}s" do
-        self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - descendants - siblings(:half => :include) - [self]
+        if send(parent)
+          []
+        else
+          self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - family(:half => :include )
+        end
       end
     end
 
@@ -36,13 +40,8 @@ module Genealogy
 
       # eligible
       define_method "eligible_grand#{parent}s" do
-        if parent
-          case parent
-          when :father
-            self.class.males
-          when :mother
-            self.class.females
-          end - descendants - siblings(:half => :include) - [self] - parents
+        if send(parent) and (send("paternal_grand#{parent}").nil? or send("maternal_grand#{parent}").nil?)
+          self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - family(:half => :include )
         else
           []
         end
@@ -84,7 +83,7 @@ module Genealogy
     end
 
     def eligible_offspring
-      self.class.all - siblings(:half => :include) - ancestors - descendants - [self]
+      self.class.all - family(:half => :include)
     end
 
     # siblings
@@ -145,6 +144,23 @@ module Genealogy
       result.uniq
     end
 
+    # misc
+    def family(options = {}) 
+      siblings + 
+      case options[:half]
+        when nil
+          []
+        when :include
+          half_siblings
+        when :father
+          paternal_half_siblings
+        when :mother
+          maternal_half_siblings
+        else
+          raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, :include, nil"
+      end + 
+      ancestors + descendants + [self]
+    end
 
     def is_female?
       sex == sex_female_value

@@ -28,7 +28,6 @@ module GenealogyTestModel
       attr_accessible :name, :sex, :isinvalid
 
       validate :check_invalid
-      validates_uniqueness_of :name
       
       def inspect
         # "[#{id}]-#{name }"

@@ -149,6 +149,7 @@ module QueryMethodsSpec
     context "when removing some genealogy branches to test eligibility", :wip => true do
 
       before(:each) do
+        peter.remove_father
         mary.remove_father
         john.remove_father
         irene.remove_father
@@ -156,7 +157,7 @@ module QueryMethodsSpec
  
       describe "peter" do
         subject {peter}
-        its(:eligible_fathers) {should =~ [paul,ned,manuel,paso,john,marcel,tommy,jack,luis,larry,bob]}
+        its(:eligible_fathers) {should =~ [paul,ned,manuel,julian,john,marcel,tommy,jack,larry,bob]}
         its(:eligible_mothers) {should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,mary]}
         its(:eligible_grandfathers) {should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
         its(:eligible_grandmothers) {should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,barbara,michelle,mary]}
@@ -168,8 +169,6 @@ module QueryMethodsSpec
         its(:eligible_offspring) {should =~ [mary,barbara,titty,michelle,ned,naomi,irene,paso,john,maggie,emily,tommy,debby,jack,alison,luis,rosa,larry,louise,bob
           ]} 
       end
-
-      
 
       describe "irene" do
         subject {irene}
