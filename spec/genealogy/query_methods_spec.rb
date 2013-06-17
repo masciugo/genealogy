@@ -51,10 +51,11 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso,irene]}
       its(:half_siblings) {should =~ [mary,julian,beatrix]}
       its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
-      its(:possible_fathers) {should_not =~ [F] and should_not =~ [steve,julian]}
-      its(:possible_mothers) {should_not =~ [M] and should_not =~ [mary,beatrix]}
-      its(:possible_grandfathers) {should_not =~ [F] and should_not =~ [steve,julian,paul]}
-      its(:possible_grandmothers) {should_not =~ [M] and should_not =~ [mary,beatrix,titty]}
+      its(:eligible_fathers) {should =~ [M] and should =~ [paul,ned,manuel,paso,john,marcel,tommy,jack,luis,larry,bob]}
+      its(:eligible_mothers) {should =~ [F] and should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa, louise]}
+      its(:eligible_grandfathers) {should_not =~ [F] and should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
+      its(:eligible_grandmothers) {should_not =~ [M] and should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise]}
+      ist(:eligible_half_siblings) {should =~ [julian,beatrix,mary,ned,naomi,irene,paso,john,maggie,emily,tommy,debby,jack,alison,bob,louise,larry,rosa,luis]}
     end
 
     describe "mary" do
@@ -105,7 +106,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should be_nil}
       its(:maternal_grandparents) {should =~ [marcel,nil]}
       its(:grandparents) {should =~ [nil,nil,marcel,nil]}
-      its(:possible_offsping) {should_not =~ [michelle,titty,barbara,ned,naomi,terry,manuel,irene,paso,john,maggie,marcel,emily,tommy,jack,alison,luis,rosa,larry,louise,bob]} 
+      its(:eligible_offsping) {should =~ [julian,beatrix,peter,steve,mary,naomi,ned,irene,paso,john,maggie,marcel,emily,tommy,debby,jack,alison,luis,rosa,larry,louise,bob]} 
     end
 
     describe "terry" do
@@ -143,7 +144,7 @@ module QueryMethodsSpec
 
     describe "jack" do
       subject {jack}
-      its(:possible_siblings) {should_not =~ [bob,louise,larry,rosa,luis,alison,john,barbara,mary]}
+      its(:eligible_siblings) {should =~ [larry,rosa,luis,marcel,emily,tommy,debby,maggie,paso,irene,manuel,terry,naomi,ned,michelle,paul,titty,julian,beatrix,peter,steve]}
     end
   end
 
