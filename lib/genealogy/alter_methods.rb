@@ -45,13 +45,13 @@ module Genealogy
     [:father, :mother].each do |parent|
       [:father, :mother].each do |grandparent|
         # add one 
-        define_method "add_#{Genealogy::LINEAGE_NAME[parent]}_grand#{grandparent}" do |relative|
+        define_method "add_#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}" do |relative|
           raise IncompatibleRelationshipException, "#{self} can't be grand#{grandparent} of itself" if relative == self
           raise_if_gap_on(parent)
           send(parent).send("add_#{grandparent}",relative)
         end
         # remove one
-        define_method "remove_#{Genealogy::LINEAGE_NAME[parent]}_grand#{grandparent}" do
+        define_method "remove_#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}" do
           raise_if_gap_on(parent)
           send(parent).send("remove_#{grandparent}")
         end
@@ -60,12 +60,12 @@ module Genealogy
 
     [:father, :mother].each do |parent|
       # add two by lineage
-      define_method "add_#{Genealogy::LINEAGE_NAME[parent]}_grandparents" do |grandfather,grandmother|
+      define_method "add_#{Genealogy::PARENT2LINEAGE[parent]}_grandparents" do |grandfather,grandmother|
         raise_if_gap_on(parent)
         send(parent).send("add_parents",grandfather,grandmother)
       end
       # remove two by lineage
-      define_method "remove_#{Genealogy::LINEAGE_NAME[parent]}_grandparents" do
+      define_method "remove_#{Genealogy::PARENT2LINEAGE[parent]}_grandparents" do
         raise_if_gap_on(parent)
         send(parent).send("remove_parents")
       end
@@ -147,14 +147,14 @@ module Genealogy
     [:father, :mother].each do |parent|
       
       # add paternal/maternal half_siblings
-      define_method "add_#{Genealogy::LINEAGE_NAME[parent]}_half_siblings" do | *args |
+      define_method "add_#{Genealogy::PARENT2LINEAGE[parent]}_half_siblings" do | *args |
         options = args.extract_options!
         options[:half] = parent
         args << options
         send("add_siblings",*args)
       end
       # remove paternal/maternal half_siblings
-      define_method "remove_#{Genealogy::LINEAGE_NAME[parent]}_half_siblings" do | *args |
+      define_method "remove_#{Genealogy::PARENT2LINEAGE[parent]}_half_siblings" do | *args |
         options = args.extract_options!
         options[:half] = parent
         args << options

@@ -3,7 +3,7 @@ require 'spec_helper'
 module QueryMethodsSpec
   extend GenealogyTestModel
   
-  describe "*** Query methods ***", :wip => true do
+  describe "*** Query methods ***" do
 
     before(:all) do
       QueryMethodsSpec.define_test_model_class({:spouse => true })
@@ -61,11 +61,7 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso,irene]}
       its(:half_siblings) {should =~ [mary,julian,beatrix]}
       its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
-      its(:eligible_fathers) {should =~ [paul,ned,manuel,paso,john,marcel,tommy,jack,luis,larry,bob]}
-      its(:eligible_mothers) {should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa, louise]}
-      its(:eligible_grandfathers) {should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
-      its(:eligible_grandmothers) {should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,barbara,michelle]}
-          end
+    end
 
     describe "mary" do
       subject {mary}
@@ -115,7 +111,6 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should be_nil}
       its(:maternal_grandparents) {should =~ [marcel,nil]}
       its(:grandparents) {should =~ [nil,nil,marcel,nil]}
-      its(:eligible_offsping) {should =~ [julian,beatrix,peter,steve,mary,naomi,ned,irene,paso,john,maggie,marcel,emily,tommy,debby,jack,alison,luis,rosa,larry,louise,bob]} 
     end
 
     describe "terry" do
@@ -151,17 +146,39 @@ module QueryMethodsSpec
       its(:parents){should be_empty}
     end
 
-    describe "jack" do
-      subject {jack}
-      its(:eligible_siblings) {should =~ [larry,rosa,luis,marcel,emily,tommy,debby,maggie,paso,irene,manuel,terry,naomi,ned,michelle,paul,titty,julian,beatrix,peter,steve]}
-    end
+    context "when removing some genealogy branches to test eligibility", :wip => true do
 
-    describe "irene" do
-      subject {irene}
-      its(:eligible_fathers) {should =~ [julian,paul,ned,manuel,paso,john,marcel,jack,luis,bob]}
-      its(:eligible_mothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,louise]}
-      its(:eligible_grandfathers) {should =~ [julian,paul,ned,manuel,john,jack,marcel,bob,larry,luis]}
-      its(:eligible_grandmothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,rosa,louise]}      
+      before(:each) do
+        mary.remove_father
+      end
+ 
+      describe "peter" do
+        subject {peter}
+        its(:eligible_fathers) {should =~ [paul,ned,manuel,paso,john,marcel,tommy,jack,luis,larry,bob]}
+        its(:eligible_mothers) {should =~ [michelle,titty,barbara,naomi,terry,irene,maggie,emily,debby,alison,rosa, louise]}
+        its(:eligible_grandfathers) {should =~ [ned,manuel,paso,john,jack,tommy,marcel,bob,larry,luis]}
+        its(:eligible_grandmothers) {should =~ [naomi,terry,irene,maggie,emily,debby,alison,rosa,louise,barbara,michelle]}
+      end
+
+      describe "paul" do
+        subject {paul}
+        its(:eligible_offspring) {should =~ [mary,julian,beatrix,peter,steve,mary,naomi,ned,irene,paso,john,maggie,marcel,emily,tommy,debby,jack,alison,luis,rosa,larry,louise,bob]} 
+      end
+
+      describe "jack" do
+        subject {jack}
+        its(:eligible_siblings) {should =~ [larry,rosa,luis,marcel,emily,tommy,debby,maggie,paso,irene,manuel,terry,naomi,ned,michelle,paul,titty,julian,beatrix,peter,steve]}
+      end
+
+      describe "irene" do
+        subject {irene}
+        its(:eligible_fathers) {should =~ [julian,paul,ned,manuel,paso,john,marcel,jack,luis,bob]}
+        its(:eligible_mothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,louise]}
+        its(:eligible_grandfathers) {should =~ [julian,paul,ned,manuel,john,jack,marcel,bob,larry,luis]}
+        its(:eligible_grandmothers) {should =~ [beatrix,mary,michelle,barbara,naomi,terry,maggie,debby,alison,rosa,louise]}      
+      end
+
+
     end
   end
 

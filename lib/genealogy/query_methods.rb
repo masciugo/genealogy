@@ -11,12 +11,11 @@ module Genealogy
       end
     end
 
-    def eligible_fathers
-      self.class.males - descendants - siblings(:half => :include) - [self]
-    end
-
-    def eligible_mothers
-      self.class.females - descendants - siblings(:half => :include) - [self]
+    # eligible
+    [:father, :mother].each do |parent|
+      define_method "eligible_#{parent}s" do
+        self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - descendants - siblings(:half => :include) - [self]
+      end
     end
 
     # grandparents
@@ -24,14 +23,14 @@ module Genealogy
       [:father, :mother].each do |grandparent|
 
         # get one
-        define_method "#{Genealogy::LINEAGE_NAME[parent]}_grand#{grandparent}" do
+        define_method "#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}" do
           send(parent) && send(parent).send(grandparent)
         end
 
       end
 
       # get two by lineage
-      define_method "#{Genealogy::LINEAGE_NAME[parent]}_grandparents" do
+      define_method "#{Genealogy::PARENT2LINEAGE[parent]}_grandparents" do
         (send(parent) && send(parent).parents) || []
       end
 
@@ -55,7 +54,7 @@ module Genealogy
       result = []
       [:father, :mother].each do |parent|
         [:father, :mother].each do |grandparent|
-          result << send("#{Genealogy::LINEAGE_NAME[parent]}_grand#{grandparent}")
+          result << send("#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}")
         end
       end
       result.compact! if result.all?{|gp| gp.nil? }
@@ -84,6 +83,10 @@ module Genealogy
       end
     end
 
+    def eligible_offspring
+      self.class.all - siblings(:half => :include) - ancestors - descendants - [self]
+    end
+
     # siblings
     def siblings(options = {})
       result = case options[:half]
@@ -101,6 +104,10 @@ module Genealogy
         raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, false, true or nil"
       end
       result.uniq - [self]
+    end
+
+    def eligible_siblings
+      eligible_offspring 
     end
 
     def half_siblings
