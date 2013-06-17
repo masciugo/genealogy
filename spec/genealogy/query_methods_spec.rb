@@ -38,7 +38,7 @@ module QueryMethodsSpec
     let!(:beatrix) {TestModel.create!(:name => "beatrix", :sex => "F", :father_id => paul.id, :mother_id => michelle.id)}
     let!(:julian) {TestModel.create!(:name => "julian", :sex => "M", :father_id => paul.id, :mother_id => michelle.id)}
 
-    describe "peter" do
+    describe "peter", :wip => true do
       subject {peter}
       its(:parents) {should =~ [paul,titty]}
       its(:paternal_grandfather) {should == manuel}
@@ -51,6 +51,8 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso,irene]}
       its(:half_siblings) {should =~ [mary,julian,beatrix]}
       its(:ancestors) {should =~ [paul,titty,manuel,terry,paso,irene,tommy,emily,larry,louise,luis,rosa,marcel]}
+      its(:possible_fathers) {should == M}
+      its(:possible_mothers) {should == F}
     end
 
     describe "mary" do
