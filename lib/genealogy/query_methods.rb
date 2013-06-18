@@ -12,12 +12,12 @@ module Genealogy
     end
 
     # eligible
-    [:father, :mother].each do |parent| #TO IMPROVE!!
+    [:father, :mother].each do |parent|
       define_method "eligible_#{parent}s" do
         if send(parent)
           []
         else
-          self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - family(:half => :include )
+          self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - descendants - [self]
         end
       end
     end
@@ -31,20 +31,20 @@ module Genealogy
           send(parent) && send(parent).send(grandparent)
         end
 
+        # eligible
+        define_method "eligible_#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}s" do 
+          if send(parent) and send("#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}").nil?
+            send(parent).send("eligible_#{grandparent}s") - [self]
+          else
+            []
+          end
+        end
+
       end
 
       # get two by lineage
       define_method "#{Genealogy::PARENT2LINEAGE[parent]}_grandparents" do
         (send(parent) && send(parent).parents) || []
-      end
-
-      # eligible
-      define_method "eligible_grand#{parent}s" do #TO IMPROVE!!
-        if send(parent) and (send("paternal_grand#{parent}").nil? or send("maternal_grand#{parent}").nil?)
-          self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - family(:half => :include )
-        else
-          []
-        end
       end
 
     end
@@ -82,8 +82,8 @@ module Genealogy
       end
     end
 
-    def eligible_offspring #TO IMPROVE!!
-      self.class.all - family(:half => :include) 
+    def eligible_offspring
+      self.class.all - ancestors - offspring - siblings - [self]
     end
 
     # siblings
@@ -105,8 +105,8 @@ module Genealogy
       result.uniq - [self]
     end
 
-    def eligible_siblings #TO IMPROVE!!
-      eligible_offspring 
+    def eligible_siblings
+      self.class.all - ancestors - siblings(:half => :include) - [self]
     end
 
     def half_siblings

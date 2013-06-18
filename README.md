@@ -60,12 +60,21 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 
 There are also some other miscellaneous query methods like:
 
-* `peter.family` will return peter's folks: descendants, ancestors, siblings 
+* `peter.grandchildren`
+* `peter.uncles_and_aunts` 
+* `peter.nieces_and_nephews` will consider only full-siblings
+* `peter.family` will return peter's folks: offspring, parents and all spouses (that are the union of all children's parents) 
 * `peter.family(:half => :include)` will also consider half_siblings 
+* `peter.extended_family` will also consider grandparents, grandchildren, uncles, aunts, nieces, nephews
 
-Others methods called *eligible_ methods* can be used to pre-filter role-compatible genealogy individuals. For example:
+Others methods called *eligible_ methods* can be used to pre-filter role-compatible (technically speaking) genealogy individuals. For example:
 
-* `peter.eligible_fathers` will return all genealogy male individuals that not are peter's familiars (descendants, ancestors, siblings). It will return an empty array if peter has already a father.
+* `peter.eligible_fathers` will return all genealogy male individuals excluding peter's descendants. It will return an empty array if peter has already a father.
+
+* `peter.eligible_paternal_grandfathers` will be the same as `peter.father.eligible_fathers`
+
+* `peter.eligible_siblings` will return all genealogy individuals excluding ancestors, all kind of  siblings and himself
+* `peter.eligible_offspring` will return all genealogy individuals excluding ancestors, offspring, full siblings and himself
 
 ### Alter methods
 

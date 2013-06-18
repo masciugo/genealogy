@@ -161,39 +161,61 @@ module QueryMethodsSpec
 
     describe "titty" do
       subject { titty }
-      its(:uncles_and_aunts) { should =~ [john,maggie] }
+      its(:uncles_and_aunts) { should =~ [john] }
       its(:nieces_and_nephews) {should =~ [sam,charlie]}
-      its(:family) {should =~ [paul,peter,steve,rud,mark,irene,paso]}
-      its(:extended_family) {should =~ [paul,peter,steve,rud,mark,irene,paso,sam,charlie,emily,tommy,jack,alison]}
+      its(:family) {should =~ [paul,peter,steve,rud,mark,irene,paso,titty]}
+      its(:extended_family) {should =~ [paul,peter,steve,rud,mark,irene,paso,sam,charlie,emily,tommy,jack,alison,titty,john]}
     end
 
-    # context "when come up walter, a new individual", :wip => true do
+    context "when come up walter, a new individual", :wip => true do
 
-    #   let!(:walter) {TestModel.find_or_create_by_name(:name => "walter", :sex => "M")}
+      let!(:walter) {TestModel.find_or_create_by_name(:name => "walter", :sex => "M")}
       
-    #   describe "walter" do
-    #     subject {walter}
-    #     its(:eligible_fathers) {should =~ TestModel.males - [walter]}
-    #     its(:eligible_mothers) {should =~ TestModel.females}
-    #     context "when he has parents tommy and emily" do
-    #       before(:each) do
-    #         walter.add_father(tommy)
-    #         walter.add_mother(emily)
-    #         walter.remove_grandparents
-    #       end
-    #       its(:eligible_grandfathers) {should =~ [paso, julian, paul, ned, manuel, john, jack, marcel, bob, larry, luis]}
-    #       its(:eligible_grandmothers) {should =~ [beatrix, mary, michelle, barbara, naomi, terry, maggie, debby, alison, rosa, louise]}
-    #       context "when she also has grandparents" do
-    #         before(:each) do
-    #           walter.add_grandparents(larry, louise, luis, rosa)
-    #         end
-    #         its(:eligible_siblings) {should =~ [bob, debby, jack, alison, john, maggie, barbara, paso, mary, paul, michelle, julian, beatrix, naomi, ned, manuel, terry, marcel]}
-    #       end    
-    #     end
-    #   end
+      describe "walter" do
+        subject {walter}
+        its(:eligible_fathers) {should =~ TestModel.males - [walter]}
+        its(:eligible_mothers) {should =~ TestModel.females}
+        its(:eligible_offspring) {should =~ TestModel.all - [walter]}
+        context "and he has nick as child" do
+          let!(:nick) {TestModel.find_or_create_by_name(:name => "nick", :sex => "M", :father_id => walter.id )}
+          its(:eligible_fathers) {should =~ TestModel.males - [walter,nick]}
+          its(:eligible_offspring) {should =~ TestModel.all - [walter,nick]}
+          its(:eligible_mothers) {should =~ TestModel.females}
+          context "and he has parents tommy and emily and larry, louise, luis, rosa as grandparents" do
+            before(:each) do
+              walter.add_father(tommy)
+              walter.add_mother(emily)
+              walter.add_grandparents(larry, louise, luis, rosa)
+            end
+            context "and he has no paternal grandparents" do
+              before(:each) do
+                walter.remove_paternal_grandparents
+              end
+              its(:eligible_paternal_grandfathers) {should =~ [larry,bob,jack,marcel,ned,manuel,paso,john,paul,julian,luis]}
+              its(:eligible_paternal_grandmothers) {should =~ [emily,terry, louise, alison, rosa, maggie, barbara, mary, mia, debby, naomi, michelle, beatrix]}
+              its(:eligible_maternal_grandfathers) {should =~ []}
+              its(:eligible_maternal_grandmothers) {should =~ []}
+            end
+            context "and he has no maternal grandparents" do
+              before(:each) do
+                walter.remove_maternal_grandparents
+              end
+              its(:eligible_paternal_grandfathers) {should =~ []}
+              its(:eligible_paternal_grandmothers) {should =~ []}
+              its(:eligible_maternal_grandfathers) {should =~ TestModel.males - [walter,nick,rud,mark,peter,steve,sam,charlie]}
+              its(:eligible_maternal_grandmothers) {should =~ TestModel.females - [emily,irene,titty]}
+            end
+            its(:eligible_siblings) {should =~ TestModel.all - [walter,luis,rosa,larry,louise,emily,tommy,irene]}
+            its(:eligible_offspring) {should =~ TestModel.all - [walter,luis,rosa,larry,louise,emily,tommy,irene,nick]}
+          end
+
+        end
 
 
-    # end
+      end
+
+
+    end
   end
 
 end
