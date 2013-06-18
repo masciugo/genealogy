@@ -144,10 +144,21 @@ module Genealogy
       result.uniq
     end
 
-    # misc
+    def grandchildren
+      offspring.inject([]){|memo,child| memo |= child.offspring}
+    end
+
+    def uncles_and_aunts
+      parents.compact.inject([]){|memo,parent| memo |= parent.siblings}
+    end
+
+    def nieces_and_nephews
+      siblings.inject([]){|memo,sib| memo |= sib.offspring}
+    end
+
     def family(options = {}) 
-      siblings + 
-      case options[:half]
+      res = [self] | siblings | parents | offspring
+      res |= case options[:half]
         when nil
           []
         when :include
@@ -158,8 +169,12 @@ module Genealogy
           maternal_half_siblings
         else
           raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, :include, nil"
-      end + 
-      ancestors + descendants + [self]
+      end
+      offspring.inject(res){|memo,child| memo |= child.parents}.compact
+    end
+
+    def extended_family(options = {}) 
+      (family(options) + grandparents + grandchildren + uncles_and_aunts + nieces_and_nephews).compact
     end
 
     def is_female?
