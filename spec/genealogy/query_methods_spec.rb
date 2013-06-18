@@ -124,6 +124,7 @@ module QueryMethodsSpec
       its(:mother) {should be_nil}
       its(:parents) {should =~ [marcel, nil]}
       its(:ancestors) {should =~ [marcel]}
+      its(:grandchildren) {should =~ [julian,beatrix,peter,steve,mary]}
     end
 
     describe "barbara" do
@@ -158,6 +159,13 @@ module QueryMethodsSpec
       its(:family) { should =~ [michelle,naomi,julian,beatrix,paul,ned] }
     end
 
+    describe "titty" do
+      subject { titty }
+      its(:uncles_and_aunts) { should =~ [john,maggie] }
+      its(:nieces_and_nephews) {should =~ [sam,charlie]}
+      its(:family) {should =~ [paul,peter,steve,rud,mark,irene,paso]}
+      its(:extended_family) {should =~ [paul,peter,steve,rud,mark,irene,paso,sam,charlie,emily,tommy,jack,alison]}
+    end
 
     # context "when come up walter, a new individual", :wip => true do
 
