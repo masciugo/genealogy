@@ -146,7 +146,7 @@ module QueryMethodsSpec
       its(:descendants) {should =~ [titty, peter, steve, rud, mark, sam, charlie]}
       its(:family) { should =~ [irene,paso,jack,alison,john,titty,rud,mark] }
       its(:extended_family) { should =~ [irene,paso,jack,alison,john,titty,rud,mark,louise,bob,debby,barbara,charlie,sam,peter,steve] }
-      its(:eligible_siblings) {should =~ TestModel.all - [paso,john,irene,alison,jack,louise,bob]}
+      its(:eligible_siblings) {should =~ TestModel.all - [paso,john,alison,jack,louise,bob]}
     end
 
     describe "louise" do
@@ -166,7 +166,7 @@ module QueryMethodsSpec
     describe "manuel" do
       subject { manuel }
       its(:eligible_fathers) { should =~ [ned,paso,john,rud,mark,sam,charlie,tommy,jack,luis,larry,bob,marcel] }
-      its(:eligible_mothers) { should =~ [naomi,michelle,titty,mia,barbara,maggie,irene,emily,debby,alison,louise,rosa] }
+      its(:eligible_mothers) { should =~ [terry,naomi,michelle,titty,mia,barbara,maggie,irene,emily,debby,alison,louise,rosa] }
     end
 
     describe "titty" do
@@ -177,7 +177,7 @@ module QueryMethodsSpec
       its(:extended_family) {should =~ [paul,peter,steve,rud,mark,irene,paso,sam,charlie,emily,tommy,jack,alison,titty,john]}
     end
 
-    context "when come up walter, a new individual", :wip => true do
+    context "when come up walter, a new individual" do
 
       let!(:walter) {TestModel.find_or_create_by_name(:name => "walter", :sex => "M")}
       
