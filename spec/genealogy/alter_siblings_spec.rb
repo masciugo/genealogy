@@ -22,12 +22,13 @@ module AlterSiblingsSpec
     let(:michelle) {TestModel.create!(:name => "michelle", :sex => "F")}
     let(:agata) {TestModel.create!(:name => "agata", :sex => "F")}
     
-    before(:each) do
-      peter.add_father(paul)
-      peter.add_mother(titty)
-    end
-
     describe "peter son of paul and titty" do
+
+      before(:each) do
+        peter.add_father(paul)
+        peter.add_mother(titty)
+      end
+
       subject { peter.reload }
 
       describe "#add_sibling(steve)" do
@@ -110,6 +111,14 @@ module AlterSiblingsSpec
 
       describe "#add_paternal_half_siblings(julian)" do
         before(:each) {peter.add_paternal_half_siblings(julian)}
+        it_should_behave_like "adding julian to peter as paternal half sibling"
+      end
+
+      context "when he has no mother" do
+        before(:each) do
+          peter.remove_mother
+          peter.add_paternal_half_siblings(julian)
+        end
         it_should_behave_like "adding julian to peter as paternal half sibling"
       end
 

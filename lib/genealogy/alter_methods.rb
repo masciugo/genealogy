@@ -91,18 +91,20 @@ module Genealogy
     ## siblings
     def add_siblings(*args)
       options = args.extract_options!
-      raise LineageGapException, "Can't add siblings if both parents are nil" unless father and mother
       raise IncompatibleRelationshipException, "Can't add an ancestor as sibling" unless (ancestors.to_a & args).empty?
       transaction do
         args.each do |sib|
           case options[:half]
           when :father
+            raise LineageGapException, "Can't add paternal halfsiblings without a father" unless father
             sib.add_father(self.father)
             sib.add_mother(options[:spouse]) if options[:spouse]
           when :mother
+            raise LineageGapException, "Can't add maternal halfsiblings without a mother" unless mother
             sib.add_father(options[:spouse]) if options[:spouse]
             sib.add_mother(self.mother)
           when nil
+            raise LineageGapException, "Can't add siblings without parents" unless father and mother
             sib.add_father(self.father)
             sib.add_mother(self.mother)
           else

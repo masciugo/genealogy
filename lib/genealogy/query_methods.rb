@@ -89,8 +89,12 @@ module Genealogy
     # siblings
     def siblings(options = {})
       result = case options[:half]
-      when nil # exluding half siblings
-        father.try(:offspring, :spouse => mother ).to_a
+      when nil # only full siblings
+        unless parents.include?(nil)
+          father.try(:offspring, :spouse => mother ).to_a
+        else
+          []
+        end
       when :father # common father
         father.try(:offspring, :spouse => options[:spouse]).to_a - mother.try(:offspring).to_a
       when :mother # common mother
