@@ -198,8 +198,8 @@ module AlterSiblingsSpec
           before(:each) do
             peter.remove_sibling(steve)
             peter.remove_sibling(manuel)
-            it_should_behave_like "removing all siblings"
           end
+          it_should_behave_like "removing all siblings"
         end
 
         describe "#remove_siblings returned value" do

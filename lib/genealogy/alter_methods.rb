@@ -114,8 +114,8 @@ module Genealogy
       end
     end
 
-    def add_sibling(sib,opts={})
-      add_siblings(sib,opts)
+    def add_sibling(sib,options={})
+      add_siblings(sib,options)
     end
 
     def remove_siblings(*args)
@@ -148,6 +148,10 @@ module Genealogy
 
       !resulting_indivs.empty? #returned value must be true if self has at least a siblings to affect
 
+    end
+
+    def remove_sibling(sib,options={})
+      remove_siblings(sib,options)
     end
 
     [:father, :mother].each do |parent|
