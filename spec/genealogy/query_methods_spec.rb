@@ -66,6 +66,7 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [paso, irene]}
       its(:half_siblings) {should =~ [mary, julian, beatrix]}
       its(:ancestors) {should =~ [paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison]}
+      its(:eligible_fathers) {should =~ []}
     end
 
     describe "mary" do
@@ -116,6 +117,7 @@ module QueryMethodsSpec
       its(:maternal_grandmother) {should be_nil}
       its(:maternal_grandparents) {should =~ [marcel, nil]}
       its(:grandparents) {should =~ [nil, nil, marcel, nil]}
+      its(:eligible_paternal_grandfathers) {should =~ [sam,charlie,mark,rud,john,paso,ned,marcel,tommy,jack,luis,larry,bob]}
     end
 
     describe "terry" do
@@ -135,6 +137,7 @@ module QueryMethodsSpec
       end
       its(:descendants) {should =~ [mary]}
       its(:grandparents) {should =~ [jack, alison, nil, nil]}
+      its(:eligible_offspring) {should =~ TestModel.all - [mary,barbara,john,maggie,jack,alison,louise,bob]}
     end
     
     describe "paso" do
@@ -143,6 +146,7 @@ module QueryMethodsSpec
       its(:descendants) {should =~ [titty, peter, steve, rud, mark, sam, charlie]}
       its(:family) { should =~ [irene,paso,jack,alison,john,titty,rud,mark] }
       its(:extended_family) { should =~ [irene,paso,jack,alison,john,titty,rud,mark,louise,bob,debby,barbara,charlie,sam,peter,steve] }
+      its(:eligible_siblings) {should =~ TestModel.all - [paso,john,irene,alison,jack,louise,bob]}
     end
 
     describe "louise" do
@@ -157,6 +161,12 @@ module QueryMethodsSpec
     describe "michelle" do
       subject { michelle }
       its(:family) { should =~ [michelle,naomi,julian,beatrix,paul,ned] }
+    end
+
+    describe "manuel" do
+      subject { manuel }
+      its(:eligible_fathers) { should =~ [ned,paso,john,rud,mark,sam,charlie,tommy,jack,luis,larry,bob,marcel] }
+      its(:eligible_mothers) { should =~ [naomi,michelle,titty,mia,barbara,maggie,irene,emily,debby,alison,louise,rosa] }
     end
 
     describe "titty" do
