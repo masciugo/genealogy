@@ -126,6 +126,10 @@ module Genealogy
       siblings(:half => :mother)
     end
 
+    alias_method :eligible_half_siblings, :eligible_siblings
+    alias_method :eligible_paternal_half_siblings, :eligible_siblings
+    alias_method :eligible_maternal_half_siblings, :eligible_siblings
+
     # ancestors
     def ancestors
       result = []

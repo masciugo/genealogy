@@ -147,6 +147,9 @@ module QueryMethodsSpec
       its(:family) { should =~ [irene,paso,jack,alison,john,titty,rud,mark] }
       its(:extended_family) { should =~ [irene,paso,jack,alison,john,titty,rud,mark,louise,bob,debby,barbara,charlie,sam,peter,steve] }
       its(:eligible_siblings) {should =~ TestModel.all - [paso,john,alison,jack,louise,bob]}
+      its(:eligible_half_siblings) {should =~ TestModel.all - [paso,john,alison,jack,louise,bob]}
+      its(:eligible_paternal_half_siblings) {should =~ TestModel.all - [paso,john,alison,jack,louise,bob]}
+      its(:eligible_maternal_half_siblings) {should =~ TestModel.all - [paso,john,alison,jack,louise,bob]}
     end
 
     describe "louise" do
