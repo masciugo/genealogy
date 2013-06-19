@@ -17,7 +17,7 @@ module Genealogy
         if send(parent)
           []
         else
-          self.class.send("#{Genealogy::PARENT2SEX[parent]}s") - descendants - [self]
+          self.genealogy_class.send("#{Genealogy::PARENT2SEX[parent]}s") - descendants - [self]
         end
       end
     end
@@ -69,21 +69,21 @@ module Genealogy
       case sex
       when sex_male_value
         if spouse
-          self.class.find_all_by_father_id_and_mother_id(id,spouse.id)
+          self.genealogy_class.find_all_by_father_id_and_mother_id(id,spouse.id)
         else
-          self.class.find_all_by_father_id(id)
+          self.genealogy_class.find_all_by_father_id(id)
         end
       when sex_female_value
         if spouse
-          self.class.find_all_by_mother_id_and_father_id(id,spouse.id)
+          self.genealogy_class.find_all_by_mother_id_and_father_id(id,spouse.id)
         else
-          self.class.find_all_by_mother_id(id)
+          self.genealogy_class.find_all_by_mother_id(id)
         end
       end
     end
 
     def eligible_offspring
-      self.class.all - ancestors - offspring - siblings - [self]
+      self.genealogy_class.all - ancestors - offspring - siblings - [self]
     end
 
     # siblings
@@ -106,7 +106,7 @@ module Genealogy
     end
 
     def eligible_siblings
-      self.class.all - ancestors - siblings(:half => :include) - [self]
+      self.genealogy_class.all - ancestors - siblings(:half => :include) - [self]
     end
 
     def half_siblings

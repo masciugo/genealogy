@@ -26,9 +26,11 @@ module Genealogy
       end
     end
     
-    class_attribute :genealogy_enabled, :spouse_enabled
+    class_attribute :genealogy_enabled, :spouse_enabled, :genealogy_class
     self.genealogy_enabled = true
     self.spouse_enabled = options[:spouse].try(:==,true) || false
+    self.genealogy_class = self #keep track of the original extend class to prevent wrong scopes in query method in case of STI
+    
     tracked_parents = [:father, :mother]
     tracked_parents << :spouse if spouse_enabled
 

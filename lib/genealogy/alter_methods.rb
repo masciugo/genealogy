@@ -8,7 +8,7 @@ module Genealogy
       # add method
       define_method "add_#{parent}" do |relative|
         unless relative.nil?
-          raise IncompatibleObjectException, "Both linked objects must be instances of class with genealogy enabled. Got classes #{relative.class} and #{self.class}" unless relative.class.respond_to?(:genealogy_enabled)
+          raise IncompatibleObjectException, "Both linked objects must be instances of class with genealogy enabled. Got classes #{relative.class} and #{self.genealogy_class}" unless relative.class.respond_to?(:genealogy_enabled)
           incompatible_parents = self.offspring | self.siblings.to_a | [self] 
           raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
           raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
