@@ -114,6 +114,10 @@ module Genealogy
       end
     end
 
+    def add_sibling(sib,opts={})
+      add_siblings(sib,opts)
+    end
+
     def remove_siblings(*args)
       options = args.extract_options!
       
@@ -155,12 +159,25 @@ module Genealogy
         args << options
         send("add_siblings",*args)
       end
+      
+      # add paternal/maternal half_sibling
+      define_method "add_#{Genealogy::PARENT2LINEAGE[parent]}_half_sibling" do | sib,options={} |
+        options[:half] = parent
+        send("add_sibling",sib,options)
+      end
+
       # remove paternal/maternal half_siblings
       define_method "remove_#{Genealogy::PARENT2LINEAGE[parent]}_half_siblings" do | *args |
         options = args.extract_options!
         options[:half] = parent
         args << options
         send("remove_siblings",*args)
+      end
+
+      # remove paternal/maternal half_sibling
+      define_method "remove_#{Genealogy::PARENT2LINEAGE[parent]}_half_sibling" do | sib,options={} |
+        options[:half] = parent
+        send("remove_sibling",sib,options)
       end
     end
 
