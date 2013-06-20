@@ -210,11 +210,17 @@ module Genealogy
       add_offspring(child,options)
     end
 
-    def remove_offspring(options = {})
+    def remove_offspring(*args)
+      options = args.extract_options!
       
       raise_if_sex_undefined
 
-      resulting_indivs = offspring(options)
+      resulting_indivs = if args.blank?
+        offspring(options)
+      else
+        args & offspring(options)
+      end
+
       transaction do
         resulting_indivs.each do |child|
           if options[:affect_spouse] == true
@@ -229,7 +235,7 @@ module Genealogy
           end
         end
       end
-      resulting_indivs.empty? ? false : true
+      !resulting_indivs.empty? #returned value must be true if self has at least a siblings to affect
     end
 
     def remove_child(child,options={})

@@ -107,19 +107,39 @@ module AlterOffspringSpec
           paul.add_offspring(dylan)
         end
 
+        shared_examples "removing all children" do
+          its(:offspring) { should be_empty }
+          describe "titty" do
+            subject {titty}
+            its(:offspring) { should include steve,peter }
+          end
+        end
+
         describe "#remove_offspring returned value" do
           specify { paul.remove_offspring.should be_true }
         end
 
         describe "#remove_offspring" do
           context "when offspring are all valid" do
-            before(:each) { paul.remove_offspring }
-            its(:offspring) { should be_empty }
-            describe "titty" do
-              subject {titty}
-              its(:offspring) { should include steve,peter }
+            context "and removed all together" do
+              before(:each) { paul.remove_offspring }
+              it_should_behave_like "removing all children"
+            end
+            context "and removed one by one" do
+              before(:each) do
+                paul.remove_child(steve)
+                paul.remove_child(peter)
+                paul.remove_child(julian)
+                paul.remove_child(dylan)
+              end
+              it_should_behave_like "removing all children"
             end
           end
+          context "when offspring are all valid" do
+            before(:each) { paul.remove_offspring }
+            it_should_behave_like "removing all children"
+          end
+
           context "steve is invalid" do
             before(:each) { steve.mark_invalid! }
             specify { expect { paul.remove_offspring }.to raise_error }
