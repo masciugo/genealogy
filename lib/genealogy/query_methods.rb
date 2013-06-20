@@ -157,6 +157,7 @@ module Genealogy
       until remaining.empty?
         result << remaining.shift
         remaining += result.last.offspring.to_a.compact
+        # break if (remaining - result).empty? can be necessary in case of loop. Idem for ancestors method
       end
       result.uniq
     end

@@ -57,6 +57,7 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 * `peter.siblings(:half => :include)` will return all kind of siblings: full and half
 * `paul.offspring` will return all individuals that have paul as father (mother can be any)
 * `paul.offspring(:spouse => :titty)` will return all individuals that have paul as father and titty as mother
+* `paul.spouses` will return all individuals that have had children with paul
 
 There are also some other miscellaneous query methods like:
 
@@ -75,6 +76,7 @@ Others methods called *eligible_ methods* can be used to pre-filter role-compati
 
 * `peter.eligible_siblings` will return all genealogy individuals excluding ancestors, all kind of  siblings and himself
 * `peter.eligible_offspring` will return all genealogy individuals excluding ancestors, offspring, full siblings and himself
+* `peter.eligible_spouses` will return all opposite sex genealogy individuals excluding spouses
 
 ### Alter methods
 

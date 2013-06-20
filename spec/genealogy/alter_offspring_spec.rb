@@ -25,13 +25,26 @@ module AlterOffspringSpec
       describe "#add_offspring(peter)" do
         
         context "when all is ok" do
-          before(:each) { paul.add_offspring(peter) }
-          its(:offspring) { should =~ [peter] }
-          describe "peter" do
-            subject { peter.reload }
-            its('mother') { should be_nil }
-            its('father') { should == paul }
+
+          shared_examples "adding peter to paul as child" do
+            its(:offspring) { should =~ [peter] }
+            describe "peter" do
+              subject { peter.reload }
+              its('mother') { should be_nil }
+              its('father') { should == paul }
+            end
           end
+
+          describe "#add_offspring(peter)" do
+            before(:each) { paul.add_offspring(peter) }
+            it_should_behave_like "adding peter to paul as child"
+          end
+
+          describe "#add_child(peter)" do
+            before(:each) { paul.add_child(peter) }
+            it_should_behave_like "adding peter to paul as child"
+          end
+
         end
 
         context "when peter is an ancestor" do

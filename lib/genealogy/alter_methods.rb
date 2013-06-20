@@ -206,6 +206,10 @@ module Genealogy
       end
     end
 
+    def add_child(child,options={})
+      add_offspring(child,options)
+    end
+
     def remove_offspring(options = {})
       
       raise_if_sex_undefined
@@ -226,6 +230,10 @@ module Genealogy
         end
       end
       resulting_indivs.empty? ? false : true
+    end
+
+    def remove_child(child,options={})
+      remove_offspring(child,options)
     end
 
     private
