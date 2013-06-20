@@ -118,6 +118,8 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [marcel, nil]}
       its(:grandparents) {should =~ [nil, nil, marcel, nil]}
       its(:eligible_paternal_grandfathers) {should =~ [sam,charlie,mark,rud,john,paso,ned,marcel,tommy,jack,luis,larry,bob]}
+      its(:spouses) {should =~ [michelle,titty,barbara]}
+      its(:eligible_spouses) {should =~ TestModel.females - [michelle,titty,barbara]}
     end
 
     describe "terry" do
@@ -159,6 +161,8 @@ module QueryMethodsSpec
       its(:ancestors) {should be_empty}
       its(:father){should be_nil}
       its(:parents){should be_empty}
+      its(:spouses) {should =~ [larry,bob]}
+      its(:eligible_spouses) {should =~ TestModel.males - [larry,bob]}
     end
 
     describe "michelle" do

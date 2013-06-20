@@ -62,7 +62,6 @@ module Genealogy
 
     # offspring
     def offspring(options = {})
-
       if spouse = options[:spouse]
         raise WrongSexException, "Something wrong with spouse #{spouse} gender." if spouse.sex == sex 
       end
@@ -84,6 +83,16 @@ module Genealogy
 
     def eligible_offspring
       self.genealogy_class.all - ancestors - offspring - siblings - [self]
+    end
+
+    # spouses
+    def spouses
+      parent_method = Genealogy::SEX2PARENT[Genealogy::OPPOSITESEX[sex_to_s.to_sym]]
+      offspring.collect{|child| child.send(parent_method)}.uniq
+    end
+
+    def eligible_spouses
+      self.genealogy_class.send("#{Genealogy::OPPOSITESEX[sex_to_s.to_sym]}s") - spouses
     end
 
     # siblings
@@ -183,6 +192,17 @@ module Genealogy
 
     def extended_family(options = {}) 
       (family(options) + grandparents + grandchildren + uncles_and_aunts + nieces_and_nephews).compact
+    end
+
+    def sex_to_s
+      case sex
+      when sex_male_value
+        'male'
+      when sex_female_value
+        'female'
+      else 
+        raise "undefined sex for #{self}"
+      end
     end
 
     def is_female?

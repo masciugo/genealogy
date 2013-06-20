@@ -3,4 +3,5 @@ module Genealogy
   LINEAGE2PARENT = PARENT2LINEAGE.invert
   PARENT2SEX = { :father => :male, :mother => :female }
   SEX2PARENT = PARENT2SEX.invert
+  OPPOSITESEX = {:male => :female, :female => :male}
 end
