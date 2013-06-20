@@ -44,7 +44,7 @@ module AlterParentsSpec
           its(:parents) do
             peter.add_parents(paul,titty) rescue true
             peter.reload
-            should be_empty
+            should =~ [nil,nil]
           end
         end
 
@@ -74,7 +74,7 @@ module AlterParentsSpec
           describe "#remove_parents" do
             its(:parents) do
               peter.remove_parents
-              should be_empty
+              should =~ [nil,nil]
             end
           end
 
@@ -93,7 +93,7 @@ module AlterParentsSpec
           
           its(:parents) do
             peter.add_parents(nil,nil)
-            should be_empty
+            should =~ [nil,nil]
           end
 
         end

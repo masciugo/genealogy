@@ -166,7 +166,7 @@ module AlterSiblingsSpec
         specify { expect { peter.add_siblings(mary, :half => :father, :spouse => paso ) }.to raise_error Genealogy::WrongSexException }
         describe "mary" do
           subject { mary }
-          its(:parents) { should be_empty }
+          its(:parents) { should =~ [nil,nil] }
         end
       end
 
@@ -259,7 +259,7 @@ module AlterSiblingsSpec
           before(:each) { peter.remove_siblings(:half => :father, :affect_spouse => true  ) }
           describe "julian" do
             subject {julian.reload}
-            its(:parents) { should be_empty }
+            its(:parents) { should =~ [nil,nil] }
           end
         end
 
@@ -268,7 +268,7 @@ module AlterSiblingsSpec
           its(:siblings) { should =~ [manuel] }
           describe "steve" do
             subject {steve.reload}
-            its(:parents) { should be_empty }
+            its(:parents) { should =~ [nil,nil] }
           end
         end
 

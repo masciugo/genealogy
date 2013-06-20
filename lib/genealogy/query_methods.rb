@@ -4,11 +4,7 @@ module Genealogy
 
     # parents
     def parents
-      if father or mother
-        [father,mother]
-      else
-        []
-      end
+      [father,mother]
     end
 
     # eligible
@@ -44,7 +40,7 @@ module Genealogy
 
       # get two by lineage
       define_method "#{Genealogy::PARENT2LINEAGE[parent]}_grandparents" do
-        (send(parent) && send(parent).parents) || []
+        (send(parent) && send(parent).parents) || [nil,nil]
       end
 
     end
@@ -56,7 +52,7 @@ module Genealogy
           result << send("#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}")
         end
       end
-      result.compact! if result.all?{|gp| gp.nil? }
+      # result.compact! if result.all?{|gp| gp.nil? }
       result
     end
 

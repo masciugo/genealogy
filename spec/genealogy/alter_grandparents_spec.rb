@@ -130,7 +130,7 @@ module AlterGrandparentsSpec
           describe "#remove_grandparents" do
             its(:grandparents) do
               peter.remove_grandparents
-              should be_empty
+              should =~ [nil,nil,nil,nil]
             end
           end
 

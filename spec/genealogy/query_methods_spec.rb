@@ -160,7 +160,7 @@ module QueryMethodsSpec
       its(:descendants) {should =~ [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie]}
       its(:ancestors) {should be_empty}
       its(:father){should be_nil}
-      its(:parents){should be_empty}
+      its(:parents){should =~ [nil,nil]}
       its(:spouses) {should =~ [larry,bob]}
       its(:eligible_spouses) {should =~ TestModel.males - [larry,bob]}
     end
