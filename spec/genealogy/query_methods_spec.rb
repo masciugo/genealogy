@@ -122,7 +122,7 @@ module QueryMethodsSpec
       its(:maternal_grandparents) {should =~ [marcel, nil]}
       its(:grandparents) {should =~ [nil, nil, marcel, nil]}
       its(:eligible_paternal_grandfathers) {should =~ [sam,charlie,mark,rud,john,paso,ned,marcel,tommy,jack,luis,larry,bob]}
-      its(:spouses) {should =~ [michelle,titty,barbara]}
+      its(:spouses) {should =~ [michelle,titty,barbara,nil]}
       its(:eligible_spouses) {should =~ TestModel.females - [michelle,titty,barbara]}
     end
 
