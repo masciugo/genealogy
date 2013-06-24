@@ -9,11 +9,11 @@ module ModelSettingsSpec
       ModelSettingsSpec.define_test_model_class(has_parents_opts)
     end
 
-    describe 'model with options :father_column => "padre", :mother_column => "madre", :spouse => true, :spouse_column => "partner", :sex_column => "gender"' do
+    describe 'model with options :father_column => "padre", :mother_column => "madre", :current_spouse => true, :current_spouse_column => "partner", :sex_column => "gender"' do
 
-      let(:has_parents_opts) { {:father_column => "padre", :mother_column => "madre", :spouse => true, :spouse_column => "partner", :sex_column => "gender"} }
+      let(:has_parents_opts) { {:father_column => "padre", :mother_column => "madre", :current_spouse => true, :current_spouse_column => "partner", :sex_column => "gender"} }
 
-      {:father_column => "padre", :mother_column => "madre", :spouse_column => "partner", :sex_column => "gender"} .each do |attr,col_name|
+      {:father_column => "padre", :mother_column => "madre", :current_spouse_column => "partner", :sex_column => "gender"} .each do |attr,col_name|
 
         it "should have #{col_name} as #{attr} attribute" do
           TestModel.send(attr).should == col_name
@@ -35,16 +35,16 @@ module ModelSettingsSpec
 
     end
 
-    describe 'model with options: :spouse => true' do
+    describe 'model with options: :current_spouse => true' do
 
-      let(:has_parents_opts) { {:spouse => true} }
+      let(:has_parents_opts) { {:current_spouse => true} }
 
-      it "should have spouse_column class attribute" do
-        TestModel.spouse_column.should == 'spouse_id'
+      it "should have current_spouse_column class attribute" do
+        TestModel.current_spouse_column.should == 'current_spouse_id'
       end
 
       it "should have db column named spouse_id" do
-        TestModel.column_names.should include("spouse_id")
+        TestModel.column_names.should include("current_spouse_id")
       end
 
     end
@@ -64,11 +64,11 @@ module ModelSettingsSpec
       end
 
       it "should not have db column named spouse_id" do
-        TestModel.column_names.should_not include("spouse_id")
+        TestModel.column_names.should_not include("current_spouse_id")
       end
       
-      it "should not have a spouse_column class attribute" do
-        expect { TestModel.spouse_column }.to raise_error(NoMethodError)
+      it "should not have a current_spouse_column class attribute" do
+        expect { TestModel.current_spouse_column }.to raise_error(NoMethodError)
       end
 
     end

@@ -3,11 +3,11 @@ module Genealogy
     extend ActiveSupport::Concern
 
     # add method
-    def add_spouse(obj)
+    def add_current_spouse(obj)
       raise IncompatibleObjectException, "Linked objects must be instances of the same class" unless obj.is_a? self.genealogy_class
-      raise WrongSexException, "Can't add spouse with same sex" if self.sex == obj.sex
-      self.spouse = obj
-      obj.spouse = self
+      raise WrongSexException, "Can't add current_spouse with same sex" if self.sex == obj.sex
+      self.current_spouse = obj
+      obj.current_spouse = self
       transaction do
         obj.save!
         save!
@@ -15,12 +15,12 @@ module Genealogy
     end
 
     # remove method
-    def remove_spouse
+    def remove_current_spouse
       transaction do
-        ex_spouse = spouse
-        spouse.spouse = nil
-        self.spouse = nil
-        ex_spouse.save!
+        ex_current_spouse = current_spouse
+        current_spouse.current_spouse = nil
+        self.current_spouse = nil
+        ex_current_spouse.save!
         save!
       end
     end

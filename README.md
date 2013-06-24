@@ -18,7 +18,7 @@ To apply Genealogy in its simplest form to any ActiveRecord model, follow these 
     2. Install required gems: bundle install    
 
 2. Add the foreign key parents columns to your table     
-    1. Create migration: `rails g migration add_parents_to_<table> father_id:integer mother_id:integer [spouse_id:integer]`. A **sex column is also required**, add it if not exists. Read [here](https://github.com/masciugo/genealogy#spouse-option) for spouse column explanation.
+    1. Create migration: `rails g migration add_parents_to_<table> father_id:integer mother_id:integer [current_spouse_id:integer]`. A **sex column is also required**, add it if not exists. Read [here](https://github.com/masciugo/genealogy#current-spouse-option) for spouse column explanation.
     2. Add index separately and in combination to parents columns   
     3. Migrate your database: `rake db:migrate`
 
@@ -144,15 +144,15 @@ Some options are available to suit your existing table:
       has_parents :father_column => "padre", :mother_column => "madre", :sex_column => "gender", :sex_values => [1,2]
     end
 
-### spouse option
+### current spouse option
 
-You can also consider individual's consort providing the option `:spouse => true` which will make genealogy to keep track of the current spouse through the extra spouse association. The term 'spouse' here is really different from the spouse mentioned so far, which was intended to refer the individual with whom someone bred someone else. Spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future spouse association can be used to add/remove siblings/offspring in a more concise way.
+You can also consider current individual's consort providing the option `:current_spouse => true` which will make genealogy to keep track of the current spouse through the extra current_spouse association. The term 'spouse' here is really different from the spouse mentioned so far, which was intended to refer the individual with whom someone bred someone else. current_spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future current_spouse association can be used to add/remove siblings/offspring in a more concise way.
 
 ### defaults
 
     father_column: 'father_id'   
     mother_column: 'mother_id'   
-    spouse_column: 'spouse_id'   
+    current_spouse_column: 'current_spouse_id'   
     sex_column: 'sex'   
     sex_values: ['M','F']   
 

@@ -6,7 +6,7 @@ module QueryMethodsSpec
   describe "*** Query methods ***" do
 
     before(:all) do
-      QueryMethodsSpec.define_test_model_class({:spouse => true })
+      QueryMethodsSpec.define_test_model_class({:current_spouse => true })
     end
 
     let!(:paul) {TestModel.find_or_create_by_name(:name => "paul", :sex => "M", :father_id => manuel.id, :mother_id => terry.id)}

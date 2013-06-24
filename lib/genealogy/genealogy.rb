@@ -19,20 +19,20 @@ module Genealogy
 
   def has_parents options = {}
 
-    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :spouse_column, :spouse]
+    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse]
     check_options(options, admitted_keys) do |key, value|
       if key == :sex_values
         raise WrongOptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
       end
     end
     
-    class_attribute :genealogy_enabled, :spouse_enabled, :genealogy_class
+    class_attribute :genealogy_enabled, :current_spouse_enabled, :genealogy_class
     self.genealogy_enabled = true
-    self.spouse_enabled = options[:spouse].try(:==,true) || false
+    self.current_spouse_enabled = options[:current_spouse].try(:==,true) || false
     self.genealogy_class = self #keep track of the original extend class to prevent wrong scopes in query method in case of STI
     
-    tracked_parents = [:father, :mother]
-    tracked_parents << :spouse if spouse_enabled
+    tracked_relatives = [:father, :mother]
+    tracked_relatives << :current_spouse if current_spouse_enabled
 
     ## sex
     # class attributes
@@ -48,7 +48,7 @@ module Genealogy
     validates_format_of sex_column, :with => /[#{sex_values.join}]/ 
 
     ## relatives associations
-    tracked_parents.each do |key|
+    tracked_relatives.each do |key|
       # class attribute where is stored the correspondig foreign_key column name
       class_attribute_name = "#{key}_column"
       foreign_key = "#{key}_id"
@@ -64,7 +64,7 @@ module Genealogy
     # Include instance methods and class methods
     include Genealogy::QueryMethods
     include Genealogy::AlterMethods
-    include Genealogy::SpouseMethods if spouse_enabled
+    include Genealogy::SpouseMethods if current_spouse_enabled
 
   end
   

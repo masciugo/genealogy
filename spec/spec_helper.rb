@@ -58,7 +58,7 @@ module GenealogyTestModel
       table.string self::TestModel.sex_column, :size=>1
       table.integer self::TestModel.father_column
       table.integer self::TestModel.mother_column
-      table.integer self::TestModel.spouse_column if self::TestModel.spouse_enabled?
+      table.integer self::TestModel.current_spouse_column if self::TestModel.current_spouse_enabled?
       table.boolean 'isinvalid'
     end
 
