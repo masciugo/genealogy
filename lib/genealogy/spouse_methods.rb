@@ -25,6 +25,11 @@ module Genealogy
       end
     end
 
+    # query methods
+    def eligible_current_spouses
+      self.genealogy_class.send("#{Genealogy::OPPOSITESEX[sex_to_s.to_sym]}s") - spouses
+    end
+
     module ClassMethods
     end
 
