@@ -63,14 +63,14 @@ module Genealogy
       end
       case sex
       when sex_male_value
-        if spouse
-          self.genealogy_class.find_all_by_father_id_and_mother_id(id,spouse.id)
+        if options.keys.include?(:spouse)
+          self.genealogy_class.find_all_by_father_id_and_mother_id(id,spouse.try(:id))
         else
           self.genealogy_class.find_all_by_father_id(id)
         end
       when sex_female_value
-        if spouse
-          self.genealogy_class.find_all_by_mother_id_and_father_id(id,spouse.id)
+        if options.keys.include?(:spouse)
+          self.genealogy_class.find_all_by_mother_id_and_father_id(id,spouse.try(:id))
         else
           self.genealogy_class.find_all_by_mother_id(id)
         end
@@ -86,7 +86,7 @@ module Genealogy
     # spouses
     def spouses
       parent_method = Genealogy::SEX2PARENT[Genealogy::OPPOSITESEX[sex_to_s.to_sym]]
-      offspring.collect{|child| child.send(parent_method)}.uniq
+      offspring.collect{|child| child.send(parent_method)}.compact.uniq
     end
 
     def eligible_spouses
@@ -103,9 +103,9 @@ module Genealogy
           []
         end
       when :father # common father
-        father.try(:offspring, :spouse => options[:spouse]).to_a - mother.try(:offspring).to_a
+        father.try(:offspring, options.keys.include?(:spouse) ? {:spouse => options[:spouse]} : {}).to_a - mother.try(:offspring).to_a
       when :mother # common mother
-        mother.try(:offspring, :spouse => options[:spouse]).to_a - father.try(:offspring).to_a
+        mother.try(:offspring, options.keys.include?(:spouse) ? {:spouse => options[:spouse]} : {}).to_a - father.try(:offspring).to_a
       when :only # only half siblings
         siblings(:half => :include) - siblings
       when :include # including half siblings

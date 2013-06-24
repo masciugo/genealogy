@@ -57,6 +57,7 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 * `peter.siblings(:half => :include)` will return all kind of siblings: full and half
 * `paul.offspring` will return all individuals that have paul as father (mother can be any)
 * `paul.offspring(:spouse => :titty)` will return all individuals that have paul as father and titty as mother
+* `paul.offspring(:spouse => nil)` will return all individuals that have paul as father and an unknown mother
 * `paul.spouses` will return all individuals that have had children with paul
 
 There are also some other miscellaneous query methods like:
