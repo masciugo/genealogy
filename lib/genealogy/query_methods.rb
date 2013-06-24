@@ -86,7 +86,7 @@ module Genealogy
     # spouses
     def spouses
       parent_method = Genealogy::SEX2PARENT[Genealogy::OPPOSITESEX[sex_to_s.to_sym]]
-      offspring.collect{|child| child.send(parent_method)}.compact.uniq
+      offspring.collect{|child| child.send(parent_method)}.uniq
     end
 
     def eligible_spouses
