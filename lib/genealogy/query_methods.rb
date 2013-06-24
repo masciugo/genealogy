@@ -76,10 +76,12 @@ module Genealogy
         end
       end
     end
+    alias_method :children, :offspring
 
     def eligible_offspring
       self.genealogy_class.all - ancestors - offspring - siblings - [self]
     end
+    alias_method :eligible_children, :eligible_offspring
 
     # spouses
     def spouses
