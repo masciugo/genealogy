@@ -68,6 +68,37 @@ module QueryMethodsSpec
       its(:half_siblings) {should =~ [ruben, mary, julian, beatrix]}
       its(:ancestors) {should =~ [paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison]}
       its(:eligible_fathers) {should =~ []}
+      its(:family_hash) { should be_a(Hash) }
+      
+      describe "#family_hash" do
+        subject {peter.family_hash}
+        specify { should include(
+          :father => paul,
+          :mother => titty,
+          :children => [],
+          :siblings => [steve]
+        ) } 
+      end
+
+      describe "#family_hash(:half => :include)[:half_siblings] " do
+        subject {peter.family_hash(:half => :include)[:half_siblings]}
+        specify { should =~ [ruben, mary, julian, beatrix] } 
+      end
+
+      describe "#extended_family_hash" do
+        subject {peter.extended_family_hash}
+        specify { should include(
+          :paternal_grandfather => manuel, 
+          :paternal_grandmother => terry, 
+          :maternal_grandfather => paso, 
+          :maternal_grandmother => irene,
+          :grandchildren => [],
+          :uncles_and_aunts => [rud, mark],
+          :nieces_and_nephews => []
+        ) } 
+      end
+
+
     end
 
     describe "mary" do

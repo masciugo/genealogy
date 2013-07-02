@@ -189,8 +189,33 @@ module Genealogy
       offspring.inject(res){|memo,child| memo |= child.parents}.compact
     end
 
+    def family_hash(options = {}) 
+      roles = [:father, :mother, :children, :siblings]
+      roles += case options[:half]
+        when nil
+          []
+        when :include
+          [:half_siblings]
+        when :father
+          [:paternal_half_siblings]
+        when :mother
+          [:maternal_half_siblings]
+        else
+          raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, :include, nil"
+      end
+      h = {}
+      roles.each{|role| h[role] = self.send(role)}
+      h
+    end
+
     def extended_family(options = {}) 
       (family(options) + grandparents + grandchildren + uncles_and_aunts + nieces_and_nephews).compact
+    end
+
+    def extended_family_hash(options = {}) 
+      h = family_hash(options)
+      [:paternal_grandfather, :paternal_grandmother, :maternal_grandfather, :maternal_grandmother, :grandchildren, :uncles_and_aunts, :nieces_and_nephews].each{|role| h[role] = self.send(role)}
+      h
     end
 
     def sex_to_s
