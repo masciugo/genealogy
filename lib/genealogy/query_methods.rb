@@ -186,7 +186,11 @@ module Genealogy
         else
           raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, :include, nil"
       end
-      offspring.inject(res){|memo,child| memo |= child.parents}.compact
+      res = offspring.inject(res){|memo,child| memo |= child.parents} #add spouses
+      
+      res += [grandparents + grandchildren + uncles_and_aunts + nieces_and_nephews].flatten if options[:extended]
+
+      res.compact
     end
 
     def family_hash(options = {}) 
@@ -203,19 +207,18 @@ module Genealogy
         else
           raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, :include, nil"
       end
+      roles += [:paternal_grandfather, :paternal_grandmother, :maternal_grandfather, :maternal_grandmother, :grandchildren, :uncles_and_aunts, :nieces_and_nephews] if options[:extended]
       h = {}
       roles.each{|role| h[role] = self.send(role)}
       h
     end
 
     def extended_family(options = {}) 
-      (family(options) + grandparents + grandchildren + uncles_and_aunts + nieces_and_nephews).compact
+      family(options.merge(:extended => true))
     end
 
     def extended_family_hash(options = {}) 
-      h = family_hash(options)
-      [:paternal_grandfather, :paternal_grandmother, :maternal_grandfather, :maternal_grandmother, :grandchildren, :uncles_and_aunts, :nieces_and_nephews].each{|role| h[role] = self.send(role)}
-      h
+      family_hash(options.merge(:extended => true))
     end
 
     def sex_to_s
