@@ -174,6 +174,7 @@ module Genealogy
 
     def family(options = {}) 
       res = [self] | siblings | parents | offspring
+      res |= [current_spouse] if self.class.current_spouse_enabled
       res |= case options[:half]
         when nil
           []
@@ -195,6 +196,7 @@ module Genealogy
 
     def family_hash(options = {}) 
       roles = [:father, :mother, :children, :siblings]
+      roles += [:current_spouse] if self.class.current_spouse_enabled
       roles += case options[:half]
         when nil
           []

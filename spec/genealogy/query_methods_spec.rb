@@ -19,7 +19,7 @@ module QueryMethodsSpec
     let!(:sam) {TestModel.find_or_create_by_name(:name => "sam", :sex => "M", :father_id => mark.id, :mother_id => mia.id)}
     let!(:charlie) {TestModel.find_or_create_by_name(:name => "charlie", :sex => "M", :father_id => mark.id, :mother_id => mia.id)}
     let!(:barbara) {TestModel.find_or_create_by_name(:name => "barbara", :sex => "F", :father_id => john.id, :mother_id => maggie.id)}
-    let!(:paso) {TestModel.find_or_create_by_name(:name => "paso", :sex => "M", :father_id => jack.id, :mother_id => alison.id)}
+    let!(:paso) {TestModel.find_or_create_by_name(:name => "paso", :sex => "M", :father_id => jack.id, :mother_id => alison.id, :current_spouse_id => irene.id )}
     let!(:irene) {TestModel.find_or_create_by_name(:name => "irene", :sex => "F", :father_id => tommy.id, :mother_id => emily.id)}
     let!(:manuel) {TestModel.find_or_create_by_name(:name => "manuel", :sex => "M")}
     let!(:terry) {TestModel.find_or_create_by_name(:name => "terry", :sex => "F", :father_id => marcel.id)}
