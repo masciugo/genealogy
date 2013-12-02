@@ -59,7 +59,7 @@ module Genealogy
     # offspring
     def offspring(options = {})
       if spouse = options[:spouse]
-        raise WrongSexException, "Something wrong with spouse #{spouse} gender." if spouse.sex == sex 
+        raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
       end
       case sex
       when sex_male_value
