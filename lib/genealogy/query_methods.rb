@@ -64,15 +64,15 @@ module Genealogy
       case sex
       when sex_male_value
         if options.keys.include?(:spouse)
-          self.genealogy_class.find_all_by_father_id_and_mother_id(id,spouse.try(:id))
+          self.genealogy_class.where(father_id: id, mother_id: spouse.try(:id))
         else
-          self.genealogy_class.find_all_by_father_id(id)
+          self.genealogy_class.where(father_id: id)
         end
       when sex_female_value
         if options.keys.include?(:spouse)
-          self.genealogy_class.find_all_by_mother_id_and_father_id(id,spouse.try(:id))
+          self.genealogy_class.where(mother_id: id, father_id: spouse.try(:id))
         else
-          self.genealogy_class.find_all_by_mother_id(id)
+          self.genealogy_class.where(mother_id: id)
         end
       end
     end

@@ -75,7 +75,7 @@ module AlterGrandparentsSpec
           
           its(:grandparents) do
             peter.add_grandparents(manuel,terry,paso,irene)
-            should =~ [manuel,terry,paso,irene]
+            should match_array [manuel,terry,paso,irene]
           end
         
         end
@@ -84,7 +84,7 @@ module AlterGrandparentsSpec
           
           its(:grandparents) do
             peter.add_grandparents(manuel,nil,paso,nil)
-            should =~ [manuel,nil,paso,nil]
+            should match_array [manuel,nil,paso,nil]
           end
 
         end
@@ -93,7 +93,7 @@ module AlterGrandparentsSpec
           
           its(:grandparents) do
             peter.add_paternal_grandparents(manuel,terry)
-            should =~ [manuel,terry,nil,nil]
+            should match_array [manuel,terry,nil,nil]
           end
 
         end
@@ -102,7 +102,7 @@ module AlterGrandparentsSpec
           
           its(:grandparents) do
             peter.add_maternal_grandparents(manuel,terry)
-            should =~ [nil,nil,manuel,terry]
+            should match_array [nil,nil,manuel,terry]
           end
 
         end
@@ -130,7 +130,7 @@ module AlterGrandparentsSpec
           describe "#remove_grandparents" do
             its(:grandparents) do
               peter.remove_grandparents
-              should =~ [nil,nil,nil,nil]
+              should match_array [nil,nil,nil,nil]
             end
           end
 

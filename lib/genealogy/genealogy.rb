@@ -56,7 +56,6 @@ module Genealogy
       self.send("#{class_attribute_name}=", options[class_attribute_name.to_sym] || foreign_key)
       
       # self join association
-      attr_accessible foreign_key
       belongs_to key, class_name: self, foreign_key: foreign_key
     
     end

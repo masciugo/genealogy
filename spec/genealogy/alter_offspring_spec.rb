@@ -27,7 +27,7 @@ module AlterOffspringSpec
         context "when all is ok" do
 
           shared_examples "adding peter to paul as child" do
-            its(:offspring) { should =~ [peter] }
+            its(:offspring) { should match_array [peter] }
             describe "peter" do
               subject { peter.reload }
               its('mother') { should be_nil }
@@ -63,7 +63,7 @@ module AlterOffspringSpec
         
         context "when peter and steve are valid" do
           before(:each) { paul.add_offspring(peter,steve) }
-          its(:offspring) { should =~ [peter,steve] }
+          its(:offspring) { should match_array [peter,steve] }
           describe "peter" do
             subject { peter }
             its(:father) { should be(paul) }
@@ -89,10 +89,10 @@ module AlterOffspringSpec
 
       describe "#add_offspring(julian, :spouse => michelle)" do
         before(:each) { paul.add_offspring(julian, :spouse => michelle) }
-        its(:offspring) { should =~ [julian] }
+        its(:offspring) { should match_array [julian] }
         describe "michelle" do
           subject { michelle }
-          its(:offspring) { should =~ [julian] }
+          its(:offspring) { should match_array [julian] }
         end
       end
 
@@ -145,7 +145,7 @@ module AlterOffspringSpec
             specify { expect { paul.remove_offspring }.to raise_error }
             its(:offspring) do
               paul.remove_offspring rescue true
-              should =~ [steve,peter,julian,dylan]
+              should match_array [steve,peter,julian,dylan]
             end
           end
         end
@@ -188,7 +188,7 @@ module AlterOffspringSpec
         describe "#remove_offspring(:spouse => maggie)" do
           its(:offspring) do
             paul.remove_offspring(:spouse => maggie)
-            should =~ [steve,peter,julian,dylan]
+            should match_array [steve,peter,julian,dylan]
           end
           describe "result" do
             specify { paul.remove_offspring(:spouse => maggie).should be_false }

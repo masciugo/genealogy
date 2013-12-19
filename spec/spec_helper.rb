@@ -25,8 +25,6 @@ module GenealogyTestModel
 
       has_parents has_parents_opts
 
-      attr_accessible :name, :sex, :isinvalid
-
       validate :check_invalid
       
       def inspect

@@ -33,7 +33,7 @@ module AlterParentsSpec
         its(:parents) do
           peter.add_parents(paul,titty)
           peter.reload
-          should =~ [paul,titty]
+          should match_array [paul,titty]
         end
 
         context "when peter is invalid" do
@@ -44,7 +44,7 @@ module AlterParentsSpec
           its(:parents) do
             peter.add_parents(paul,titty) rescue true
             peter.reload
-            should =~ [nil,nil]
+            should match_array [nil,nil]
           end
         end
 
@@ -74,7 +74,7 @@ module AlterParentsSpec
           describe "#remove_parents" do
             its(:parents) do
               peter.remove_parents
-              should =~ [nil,nil]
+              should match_array [nil,nil]
             end
           end
 
@@ -93,7 +93,7 @@ module AlterParentsSpec
           
           its(:parents) do
             peter.add_parents(nil,nil)
-            should =~ [nil,nil]
+            should match_array [nil,nil]
           end
 
         end
