@@ -6,43 +6,44 @@ module ModelLifecycleSpec
   describe "*** Model lifecycle ***" do
     
     before(:all) do
-      ModelLifecycleSpec.define_test_model_class({})
+      ModelLifecycleSpec.define_test_model_class({:current_spouse => true})
     end
 
-    let!(:paul) {TestModel.create_with(:sex => "M", :father_id => manuel.id, :mother_id => terry.id).find_or_create_by(:name => "paul")}
-    let!(:titty) {TestModel.create_with(:sex => "F", :father_id => paso.id, :mother_id => irene.id).find_or_create_by(:name => "titty")}
-    let!(:rud) {TestModel.create_with(:sex => "M", :father_id => paso.id, :mother_id => irene.id).find_or_create_by(:name => "rud")}
-    let!(:mark) {TestModel.create_with(:sex => "M", :father_id => paso.id, :mother_id => irene.id).find_or_create_by(:name => "mark")}
-    let!(:peter) {TestModel.create_with(:sex => "M", :father_id => paul.id, :mother_id => titty.id).find_or_create_by(:name => "peter")}
-    let!(:mary) {TestModel.create_with(:sex => "F", :father_id => paul.id, :mother_id => barbara.id).find_or_create_by(:name => "mary")}
-    let!(:mia) {TestModel.create_with(:sex => "F").find_or_create_by(:name => "mia")}
-    let!(:sam) {TestModel.create_with(:sex => "M", :father_id => mark.id, :mother_id => mia.id).find_or_create_by(:name => "sam")}
-    let!(:charlie) {TestModel.create_with(:sex => "M", :father_id => mark.id, :mother_id => mia.id).find_or_create_by(:name => "charlie")}
-    let!(:barbara) {TestModel.create_with(:sex => "F", :father_id => john.id, :mother_id => maggie.id).find_or_create_by(:name => "barbara")}
-    let!(:paso) {TestModel.create_with(:sex => "M", :father_id => jack.id, :mother_id => alison.id, :current_spouse_id => irene.id ).find_or_create_by(:name => "paso")}
-    let!(:irene) {TestModel.create_with(:sex => "F", :father_id => tommy.id, :mother_id => emily.id).find_or_create_by(:name => "irene")}
-    let!(:manuel) {TestModel.create_with(:sex => "M").find_or_create_by(:name => "manuel")}
-    let!(:terry) {TestModel.create_with(:sex => "F", :father_id => marcel.id).find_or_create_by(:name => "terry")}
-    let!(:john) {TestModel.create_with(:sex => "M", :father_id => jack.id, :mother_id => alison.id).find_or_create_by(:name => "john")}
-    let!(:jack) {TestModel.create_with(:sex => "M", :father_id => bob.id, :mother_id => louise.id).find_or_create_by(:name => "jack")}
-    let!(:bob) {TestModel.create_with(:sex => "M").find_or_create_by(:name => "bob")}
-    let!(:debby) {TestModel.create_with(:sex => "F", :father_id => bob.id, :mother_id => louise.id).find_or_create_by(:name => "debby")}
-    let!(:alison) {TestModel.create_with(:sex => "F").find_or_create_by(:name => "alison")}
-    let!(:maggie) {TestModel.create_with(:sex => "F").find_or_create_by(:name => "maggie")}
-    let!(:emily) {TestModel.create_with(:sex => "F", :father_id => luis.id, :mother_id => rosa.id).find_or_create_by(:name => "emily")}
-    let!(:tommy) {TestModel.create_with(:sex => "M", :father_id => larry.id, :mother_id => louise.id).find_or_create_by(:name => "tommy")}
-    let!(:luis) {TestModel.create_with(:sex => "M").find_or_create_by(:name => "luis")}
-    let!(:rosa) {TestModel.create_with(:sex => "F").find_or_create_by(:name => "rosa")}
-    let!(:larry) {TestModel.create_with(:sex => "M").find_or_create_by(:name => "larry")}
-    let!(:louise) {TestModel.create_with(:sex => "F").find_or_create_by(:name => "louise")}
-    let!(:ned) {TestModel.create_with(:sex => "M").find_or_create_by(:name => "ned")}
-    let!(:steve) {TestModel.create_with(:sex => "M", :father_id => paul.id, :mother_id => titty.id).find_or_create_by(:name => "steve")}
-    let!(:naomi) {TestModel.create_with(:sex => "F").find_or_create_by(:name => "naomi")}
-    let!(:michelle) {TestModel.create_with(:sex => "F", :father_id => ned.id, :mother_id => naomi.id).find_or_create_by(:name => "michelle")}
-    let!(:marcel) {TestModel.create_with(:sex => "M").find_or_create_by(:name => "marcel")}
-    let!(:beatrix) {TestModel.create_with(:sex => "F", :father_id => paul.id, :mother_id => michelle.id).find_or_create_by(:name => "beatrix")}
-    let!(:julian) {TestModel.create_with(:sex => "M", :father_id => paul.id, :mother_id => michelle.id).find_or_create_by(:name => "julian")}
-    let!(:ruben) {TestModel.create_with(:sex => "M", :father_id => paul.id).find_or_create_by(:name => "ruben")}
+    let(:paul) {TestModel.my_find_or_create_by({:sex => "M", :father_id => manuel.id, :mother_id => terry.id},{:name => "paul"})}
+    let(:paul) {TestModel.my_find_or_create_by({:sex => "M", :father_id => manuel.id, :mother_id => terry.id},{:name => "paul"})}
+    let(:titty) {TestModel.my_find_or_create_by({:sex => "F", :father_id => paso.id, :mother_id => irene.id},{:name => "titty"})}
+    let(:rud) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paso.id, :mother_id => irene.id},{:name => "rud"})}
+    let(:mark) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paso.id, :mother_id => irene.id},{:name => "mark"})}
+    let(:peter) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id, :mother_id => titty.id},{:name => "peter"})}
+    let(:mary) {TestModel.my_find_or_create_by({:sex => "F", :father_id => paul.id, :mother_id => barbara.id},{:name => "mary"})}
+    let(:mia) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "mia"})}
+    let(:sam) {TestModel.my_find_or_create_by({:sex => "M", :father_id => mark.id, :mother_id => mia.id},{:name => "sam"})}
+    let(:charlie) {TestModel.my_find_or_create_by({:sex => "M", :father_id => mark.id, :mother_id => mia.id},{:name => "charlie"})}
+    let(:barbara) {TestModel.my_find_or_create_by({:sex => "F", :father_id => john.id, :mother_id => maggie.id},{:name => "barbara"})}
+    let(:paso) {TestModel.my_find_or_create_by({:sex => "M", :father_id => jack.id, :mother_id => alison.id, :current_spouse_id => irene.id },{:name => "paso"})}
+    let(:irene) {TestModel.my_find_or_create_by({:sex => "F", :father_id => tommy.id, :mother_id => emily.id},{:name => "irene"})}
+    let(:manuel) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "manuel"})}
+    let(:terry) {TestModel.my_find_or_create_by({:sex => "F", :father_id => marcel.id},{:name => "terry"})}
+    let(:john) {TestModel.my_find_or_create_by({:sex => "M", :father_id => jack.id, :mother_id => alison.id},{:name => "john"})}
+    let(:jack) {TestModel.my_find_or_create_by({:sex => "M", :father_id => bob.id, :mother_id => louise.id},{:name => "jack"})}
+    let(:bob) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "bob"})}
+    let(:debby) {TestModel.my_find_or_create_by({:sex => "F", :father_id => bob.id, :mother_id => louise.id},{:name => "debby"})}
+    let(:alison) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "alison"})}
+    let(:maggie) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "maggie"})}
+    let(:emily) {TestModel.my_find_or_create_by({:sex => "F", :father_id => luis.id, :mother_id => rosa.id},{:name => "emily"})}
+    let(:tommy) {TestModel.my_find_or_create_by({:sex => "M", :father_id => larry.id, :mother_id => louise.id},{:name => "tommy"})}
+    let(:luis) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "luis"})}
+    let(:rosa) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "rosa"})}
+    let(:larry) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "larry"})}
+    let(:louise) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "louise"})}
+    let(:ned) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "ned"})}
+    let(:steve) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id, :mother_id => titty.id},{:name => "steve"})}
+    let(:naomi) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "naomi"})}
+    let(:michelle) {TestModel.my_find_or_create_by({:sex => "F", :father_id => ned.id, :mother_id => naomi.id},{:name => "michelle"})}
+    let(:marcel) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "marcel"})}
+    let(:beatrix) {TestModel.my_find_or_create_by({:sex => "F", :father_id => paul.id, :mother_id => michelle.id},{:name => "beatrix"})}
+    let(:julian) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id, :mother_id => michelle.id},{:name => "julian"})}
+    let(:ruben) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id},{:name => "ruben"})}
 
     describe "#destroy", :wip do
       context "when destroying paul" do
