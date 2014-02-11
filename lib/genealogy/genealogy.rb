@@ -47,18 +47,18 @@ module Genealogy
     validates_presence_of sex_column
     validates_format_of sex_column, :with => /[#{sex_values.join}]/ 
 
-    ## relatives associations
     tracked_relatives.each do |key|
       # class attribute where is stored the correspondig foreign_key column name
       class_attribute_name = "#{key}_column"
       foreign_key = "#{key}_id"
       class_attribute class_attribute_name
       self.send("#{class_attribute_name}=", options[class_attribute_name.to_sym] || foreign_key)
-      
-      # self join association
+      # self join associations
       belongs_to key, class_name: self, foreign_key: foreign_key
-    
     end
+
+    has_many :children_as_father, :class_name => self, :foreign_key => self.father_column, :dependent => :nullify, :extend => FatherAssociationExtension
+    has_many :children_as_mother, :class_name => self, :foreign_key => self.mother_column, :dependent => :nullify, :extend => MotherAssociationExtension
 
     # Include instance methods and class methods
     include Genealogy::QueryMethods
@@ -67,4 +67,14 @@ module Genealogy
 
   end
   
+  module MotherAssociationExtension
+    def with(father_id)
+      where(father_id: father_id)
+    end
+  end
+  module FatherAssociationExtension
+    def with(mother_id)
+      where(mother_id: mother_id)
+    end
+  end
 end

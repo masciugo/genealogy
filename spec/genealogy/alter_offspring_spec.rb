@@ -20,7 +20,7 @@ module AlterOffspringSpec
     let(:dylan) {TestModel.create!(:name => "dylan", :sex => "M")}
 
     describe "paul" do
-      subject { paul }
+      subject { paul.reload }
 
       describe "#add_offspring(peter)" do
         

@@ -64,19 +64,41 @@ module Genealogy
       case sex
       when sex_male_value
         if options.keys.include?(:spouse)
-          self.genealogy_class.where(father_id: id, mother_id: spouse.try(:id))
+          children_as_father.with(spouse.try(:id))
         else
-          self.genealogy_class.where(father_id: id)
+          children_as_father
         end
       when sex_female_value
         if options.keys.include?(:spouse)
-          self.genealogy_class.where(mother_id: id, father_id: spouse.try(:id))
+          children_as_mother.with(spouse.try(:id))
         else
-          self.genealogy_class.where(mother_id: id)
+          children_as_mother
         end
       end
     end
     alias_method :children, :offspring
+
+    # # offspring
+    # def offspring(options = {})
+    #   if spouse = options[:spouse]
+    #     raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
+    #   end
+    #   case sex
+    #   when sex_male_value
+    #     if options.keys.include?(:spouse)
+    #       self.genealogy_class.where(father_id: id, mother_id: spouse.try(:id))
+    #     else
+    #       self.genealogy_class.where(father_id: id)
+    #     end
+    #   when sex_female_value
+    #     if options.keys.include?(:spouse)
+    #       self.genealogy_class.where(mother_id: id, father_id: spouse.try(:id))
+    #     else
+    #       self.genealogy_class.where(mother_id: id)
+    #     end
+    #   end
+    # end
+    # alias_method :children, :offspring
 
     def eligible_offspring
       self.genealogy_class.all - ancestors - offspring - siblings - [self]

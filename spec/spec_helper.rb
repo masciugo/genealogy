@@ -10,6 +10,10 @@ require File.expand_path('../../lib/genealogy', __FILE__)
 # requiring supporting files like shared examples
 Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 
+RSpec.configure do |c|
+  c.treat_symbols_as_metadata_keys_with_true_values = true
+end
+
 module GenealogyTestModel
   def self.connect_to_database
     config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))

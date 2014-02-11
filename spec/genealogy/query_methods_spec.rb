@@ -10,7 +10,6 @@ module QueryMethodsSpec
     end
 
     let!(:paul) {TestModel.create_with(:sex => "M", :father_id => manuel.id, :mother_id => terry.id).find_or_create_by(:name => "paul")}
-    let!(:paul) {TestModel.create_with(:sex => "M", :father_id => manuel.id, :mother_id => terry.id).find_or_create_by(:name => "paul")}
     let!(:titty) {TestModel.create_with(:sex => "F", :father_id => paso.id, :mother_id => irene.id).find_or_create_by(:name => "titty")}
     let!(:rud) {TestModel.create_with(:sex => "M", :father_id => paso.id, :mother_id => irene.id).find_or_create_by(:name => "rud")}
     let!(:mark) {TestModel.create_with(:sex => "M", :father_id => paso.id, :mother_id => irene.id).find_or_create_by(:name => "mark")}
@@ -46,11 +45,11 @@ module QueryMethodsSpec
     let!(:ruben) {TestModel.create_with(:sex => "M", :father_id => paul.id).find_or_create_by(:name => "ruben")}
 
     describe "class methods" do
-      describe "#males" do
+      describe ".males" do
         specify { TestModel.males.all.should match_array [ruben, paul, peter, paso, manuel, john, jack, bob, tommy, luis, larry, ned, steve, marcel, julian, rud, mark, sam, charlie] }
       end
 
-      describe "#females" do
+      describe ".females" do
         specify { TestModel.females.all.should match_array [titty, mary, barbara, irene, terry, debby, alison, maggie, emily, rosa, louise, naomi, michelle, beatrix, mia] }
       end
     end
