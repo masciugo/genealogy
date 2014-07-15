@@ -47,6 +47,20 @@ module ModelSettingsSpec
         TestModel.column_names.should include("current_spouse_id")
       end
 
+      it "has current_spouse_enabled class attribute true" do
+        TestModel.current_spouse_enabled.should be true
+      end
+
+    end
+
+    describe 'model with options: :perform_validation => false' do
+
+      let(:has_parents_opts) { {:perform_validation => false} }
+
+      it "has perform_validation class attribute false" do
+        TestModel.perform_validation.should be false
+      end
+
     end
 
     describe 'model without options: defaults' do
@@ -63,10 +77,18 @@ module ModelSettingsSpec
         end
       end
 
+      it "has perform_validation class attribute true" do
+        TestModel.perform_validation.should be true
+      end
+
       it "should not have db column named spouse_id" do
         TestModel.column_names.should_not include("current_spouse_id")
       end
       
+      it "has current_spouse_enabled class attribute false" do
+        TestModel.current_spouse_enabled.should be false
+      end
+
       it "should not have a current_spouse_column class attribute" do
         expect { TestModel.current_spouse_column }.to raise_error(NoMethodError)
       end

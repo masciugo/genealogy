@@ -148,6 +148,10 @@ Some options are available to suit your existing table:
 
 You can also consider current individual's consort providing the option `:current_spouse => true` which will make genealogy to keep track of the current spouse through the extra current_spouse association. The term 'spouse' here is really different from the spouse mentioned so far, which was intended to refer the individual with whom someone bred someone else. current_spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future current_spouse association can be used to add/remove siblings/offspring in a more concise way.
 
+### perform_validation option
+
+perform_validation option let you specify if child record, while altering its parents, has to perform validation or not. Default is true but sometimes the record could be affected by other validation errors not depending on genealogy gem
+
 ### defaults
 
     father_column: 'father_id'   
@@ -155,7 +159,7 @@ You can also consider current individual's consort providing the option `:curren
     current_spouse_column: 'current_spouse_id'   
     sex_column: 'sex'   
     sex_values: ['M','F']   
-
+    perform_validation: true
 
 ## Test as documentation
 

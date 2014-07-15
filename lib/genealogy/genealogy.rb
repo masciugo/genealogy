@@ -19,17 +19,18 @@ module Genealogy
 
   def has_parents options = {}
 
-    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse]
+    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :perform_validation]
     check_options(options, admitted_keys) do |key, value|
       if key == :sex_values
         raise WrongOptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
       end
     end
     
-    class_attribute :genealogy_enabled, :current_spouse_enabled, :genealogy_class
+    class_attribute :genealogy_enabled, :current_spouse_enabled, :genealogy_class, :perform_validation
     self.genealogy_enabled = true
-    self.current_spouse_enabled = options[:current_spouse].try(:==,true) || false
-    self.genealogy_class = self #keep track of the original extend class to prevent wrong scopes in query method in case of STI
+    self.current_spouse_enabled = options[:current_spouse].try(:==,true) || false           # default false
+    self.genealogy_class = self                                                             # keep track of the original extend class to prevent wrong scopes in query method in case of STI
+    self.perform_validation = options[:perform_validation].try(:==,false) ? false : true    # default true
     
     tracked_relatives = [:father, :mother]
     tracked_relatives << :current_spouse if current_spouse_enabled

@@ -13,14 +13,22 @@ module Genealogy
           raise IncompatibleRelationshipException, "#{relative} can't be #{parent} of #{self}" if incompatible_parents.include? relative
           raise WrongSexException, "Can't add a #{relative.sex} #{parent}" unless (parent == :father and relative.is_male?) or (parent == :mother and relative.is_female?)
         end
-        self.send("#{parent}=",relative)
-        save!
+        if perform_validation
+          self.send("#{parent}=",relative)
+          save!
+        else
+          self.update_attribute(parent,relative)
+        end
       end
       
       # remove method
       define_method "remove_#{parent}" do
-        self.send("#{parent}=",nil)
-        save!
+        if perform_validation
+          self.send("#{parent}=",nil)
+          save!
+        else
+          self.update_attribute(parent,nil)
+        end
       end
 
     end

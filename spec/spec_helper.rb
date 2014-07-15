@@ -24,7 +24,7 @@ module GenealogyTestModel
   # method to define TestModel class in the scope of the including module.
   def define_test_model_class has_parents_opts = {}
 
-    puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
+    # puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
 
     model = Class.new(ActiveRecord::Base) do
       self.table_name = 'test_records'
