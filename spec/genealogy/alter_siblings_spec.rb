@@ -49,9 +49,9 @@ module AlterSiblingsSpec
         it_should_behave_like "adding steve to peter as sibling"
       end
 
-      describe "#add_siblings(steve) returned value" do
+      describe "#add_siblings(steve) returned value", :wip do
         
-        specify { expect(peter.add_siblings(steve)).to be_true }
+        specify { expect(peter.add_siblings(steve)).to be true }
       
       end
 
@@ -203,7 +203,7 @@ module AlterSiblingsSpec
         end
 
         describe "#remove_siblings returned value" do
-          specify { expect(peter.remove_siblings).to be_true }
+          specify { expect(peter.remove_siblings).to be true }
         end
 
         shared_examples "removing all paternal half siblings" do
@@ -233,7 +233,7 @@ module AlterSiblingsSpec
         end
 
         describe "#remove_paternal_half_siblings(manuel) returned value" do
-          specify { expect(peter.remove_paternal_half_siblings(manuel)).to be_false }
+          specify { expect(peter.remove_paternal_half_siblings(manuel)).to be false }
         end
 
         describe "#remove_maternal_half_siblings" do

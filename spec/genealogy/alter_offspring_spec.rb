@@ -116,7 +116,7 @@ module AlterOffspringSpec
         end
 
         describe "#remove_offspring returned value" do
-          specify { paul.remove_offspring.should be_true }
+          specify { paul.remove_offspring.should be true }
         end
 
         describe "#remove_offspring" do
@@ -191,7 +191,7 @@ module AlterOffspringSpec
             should match_array [steve,peter,julian,dylan]
           end
           describe "result" do
-            specify { paul.remove_offspring(:spouse => maggie).should be_false }
+            specify { paul.remove_offspring(:spouse => maggie).should be false }
           end
         end
 

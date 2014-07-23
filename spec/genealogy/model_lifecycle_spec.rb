@@ -45,7 +45,7 @@ module ModelLifecycleSpec
     let(:julian) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id, :mother_id => michelle.id},{:name => "julian"})}
     let(:ruben) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id},{:name => "ruben"})}
 
-    describe "#destroy", :wip do
+    describe "#destroy" do
       context "when destroying paul" do
         before(:each) do
           paul.destroy
