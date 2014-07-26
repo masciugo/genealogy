@@ -57,7 +57,7 @@ module Genealogy
     end
 
     def great_grandparents
-      parents.compact.inject([]){|memo, parent| memo |= parent.grandparents}.map(&:name)
+      parents.compact.inject([]){|memo, parent| memo |= parent.grandparents}
     end
 
     # offspring
