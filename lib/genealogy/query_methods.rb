@@ -190,6 +190,10 @@ module Genealogy
       parents.compact.inject([]){|memo,parent| memo |= parent.siblings}
     end
 
+    def cousins
+      uncles_and_aunts.map(&:offspring).flatten.map(&:name)
+    end
+
     def nieces_and_nephews
       siblings.inject([]){|memo,sib| memo |= sib.offspring}
     end
