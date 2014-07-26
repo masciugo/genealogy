@@ -56,6 +56,10 @@ module Genealogy
       result
     end
 
+    def great_grandparents
+      parents.compact.inject([]){|memo, parent| memo |= parent.grandparents}.map(&:name)
+    end
+
     # offspring
     def offspring(options = {})
       if spouse = options[:spouse]
