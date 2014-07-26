@@ -186,6 +186,10 @@ module Genealogy
       offspring.inject([]){|memo,child| memo |= child.offspring}
     end
 
+    def great_grandchildren
+      grandchildren.compact.inject([]){|memo,grandchild| memo |= grandchild.offspring}
+    end
+
     def uncles_and_aunts
       parents.compact.inject([]){|memo,parent| memo |= parent.siblings}
     end
