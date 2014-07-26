@@ -76,7 +76,9 @@ module QueryMethodsSpec
       its(:ancestors) {should match_array [paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison]}
       its(:eligible_fathers) {should match_array []}
       its(:family_hash) { should be_a(Hash) }
-      
+      its(:cousins) {should match_array [sam, charlie]}
+      its(:great_grandparents) {should match_array [nil, marcel, jack, alison, tommy, emily]}
+
       describe "#family_hash" do
         subject {peter.family_hash}
         specify { should include(
@@ -201,6 +203,7 @@ module QueryMethodsSpec
       its(:offspring) {should match_array [tommy, jack, debby]}
       its(:descendants) {should match_array [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie]}
       its(:ancestors) {should be_empty}
+      its(:great_grandchildren) {should match_array [titty, rud, mark, barbara]}
       its(:father){should be_nil}
       its(:parents){should match_array [nil,nil]}
       its(:spouses) {should match_array [larry,bob]}
