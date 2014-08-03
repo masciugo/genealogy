@@ -257,11 +257,13 @@ module Genealogy
     end
 
     def is_female?
+      return female? if respond_to?(:female?)
       sex == sex_female_value
     end
 
     def is_male?
-      sex == sex_male_value  
+      return male? if respond_to?(:male?)
+      sex == sex_male_value
     end
 
     module ClassMethods
