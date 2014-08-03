@@ -1,7 +1,7 @@
 require "active_record"
 require "active_support"
 require "logger"
-require "debugger"
+require 'rspec/its'
 
 # this is to make absolutely sure we test this one, not the one
 # installed on the system.
@@ -32,7 +32,7 @@ module GenealogyTestModel
       has_parents has_parents_opts
 
       validate :check_invalid
-      
+
       case  Gem::Specification.find_by_name('activerecord').version.to_s
       when /^3/
         def self.my_find_or_create_by(build_attrs,find_attrs)
@@ -65,7 +65,7 @@ module GenealogyTestModel
 
     remove_const(:TestModel) if defined?(self::TestModel)
     self.const_set 'TestModel', model
-    
+
     cn = ActiveRecord::Base.connection
     cn.drop_table 'test_records' if cn.table_exists?('test_records')
 
