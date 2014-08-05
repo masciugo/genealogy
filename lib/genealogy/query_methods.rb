@@ -74,6 +74,8 @@ module Genealogy
         else
           children_as_mother
         end
+      else
+        raise WrongSexException, "Sex value not valid for #{self}"
       end
       result.to_a
     end
@@ -231,15 +233,17 @@ module Genealogy
       when sex_female_value
         'female'
       else 
-        raise "undefined sex for #{self}"
+        raise WrongSexException, "Sex value not valid for #{self}"
       end
     end
 
     def is_female?
+      return female? if respond_to?(:female?)
       sex == sex_female_value
     end
 
     def is_male?
+      return male? if respond_to?(:male?)
       sex == sex_male_value  
     end
 

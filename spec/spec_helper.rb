@@ -24,7 +24,7 @@ module GenealogyTestModel
   # method to define TestModel class in the scope of the including module.
   def define_test_model_class has_parents_opts = {}
 
-    # puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
+    puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
 
     model = Class.new(ActiveRecord::Base) do
       self.table_name = 'test_records'
@@ -71,7 +71,11 @@ module GenealogyTestModel
 
     cn.create_table 'test_records' do |table|
       table.string :name
-      table.string self::TestModel.sex_column, :size=>1
+      if self::TestModel.sex_male_value.is_a? Integer
+        table.integer self::TestModel.sex_column
+      else
+        table.string self::TestModel.sex_column
+      end
       table.integer self::TestModel.father_column
       table.integer self::TestModel.mother_column
       table.integer self::TestModel.current_spouse_column if self::TestModel.current_spouse_enabled?

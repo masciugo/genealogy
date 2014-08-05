@@ -3,14 +3,13 @@ require 'spec_helper'
 module ModelSettingsSpec
   extend GenealogyTestModel
 
-  describe "*** Model and table settings ***" do
+  describe 'TestModel' do
 
-    before(:each) do
-      ModelSettingsSpec.define_test_model_class(has_parents_opts)
-    end
+    before(:each) { ModelSettingsSpec.define_test_model_class(has_parents_opts) }
 
-    describe 'model with options :father_column => "padre", :mother_column => "madre", :current_spouse => true, :current_spouse_column => "partner", :sex_column => "gender"' do
+    subject { TestModel }
 
+    context 'initialized with options :father_column => "padre", :mother_column => "madre", :current_spouse => true, :current_spouse_column => "partner", :sex_column => "gender"' do
       let(:has_parents_opts) { {:father_column => "padre", :mother_column => "madre", :current_spouse => true, :current_spouse_column => "partner", :sex_column => "gender"} }
 
       {:father_column => "padre", :mother_column => "madre", :current_spouse_column => "partner", :sex_column => "gender"} .each do |attr,col_name|
@@ -25,46 +24,62 @@ module ModelSettingsSpec
 
       end
 
-      it "should have 'M' as sex_male_value" do
-        TestModel.sex_male_value.should == 'M'
-      end
+      its(:sex_male_value) { should == 'M' }
+      its(:sex_female_value) { should == 'F' }
+      
+    end
 
-      it "should have 'F' as sex_female_value" do
-        TestModel.sex_female_value.should == 'F'
-      end
+    context 'initialized with options: :sex_column => "gender", :sex_values => [1,2]'  do
+
+      let(:has_parents_opts) { {:sex_column => "gender", :sex_values => [1,2]} }
+
+      its(:sex_column) { should == 'gender'}
+      its(:sex_values) { should be_a_kind_of(Array)}
+      its(:sex_male_value) { should == 1}
+      its(:sex_female_value) { should == 2}
 
     end
 
-    describe 'model with options: :current_spouse => true' do
+    context 'initialized with options: :sex_values => [:male,:female]'  do
+
+      let(:has_parents_opts) { {:sex_values => [:male,:female]} }
+
+      its(:sex_column) { should == 'sex'}
+      its(:sex_values) { should be_a_kind_of(Array)}
+      its(:sex_male_value) { should == :male}
+      its(:sex_female_value) { should == :female}
+
+    end
+
+    context "initialized with options: :sex_values => ['male','female']"  do
+
+      let(:has_parents_opts) { {:sex_values => ['male','female']} }
+
+      its(:sex_column) { should == 'sex'}
+      its(:sex_values) { should be_a_kind_of(Array)}
+      its(:sex_male_value) { should == 'male'}
+      its(:sex_female_value) { should == 'female'}
+
+    end
+
+    context 'initialized with options: :current_spouse => true' do
 
       let(:has_parents_opts) { {:current_spouse => true} }
 
-      it "should have current_spouse_column class attribute" do
-        TestModel.current_spouse_column.should == 'current_spouse_id'
-      end
-
-      it "should have db column named spouse_id" do
-        TestModel.column_names.should include("current_spouse_id")
-      end
-
-      it "has current_spouse_enabled class attribute true" do
-        TestModel.current_spouse_enabled.should be true
-      end
+      its(:current_spouse_column) { should == 'current_spouse_id' }
+      its(:column_names) { should include("current_spouse_id") }
+      its(:current_spouse_enabled) { should be true }
 
     end
 
-    describe 'model with options: :perform_validation => false' do
-
+    context "initialized with options: :perform_validation => false" do
+      
       let(:has_parents_opts) { {:perform_validation => false} }
 
-      it "has perform_validation class attribute false" do
-        TestModel.perform_validation.should be false
-      end
-
+      its(:perform_validation) { should be false }
     end
 
-    describe 'model without options: defaults' do
-
+    context "initialized with default options" do
       let(:has_parents_opts) { {} }
 
       [:father, :mother].each do |parent|
@@ -77,46 +92,19 @@ module ModelSettingsSpec
         end
       end
 
-      it "has perform_validation class attribute true" do
-        TestModel.perform_validation.should be true
-      end
-
-      it "should not have db column named spouse_id" do
-        TestModel.column_names.should_not include("current_spouse_id")
-      end
-      
-      it "has current_spouse_enabled class attribute false" do
-        TestModel.current_spouse_enabled.should be false
-      end
+      its(:perform_validation) { should be true }
+      its(:column_names) { should_not include("current_spouse_id") }
+      its(:current_spouse_enabled) { should be false }
 
       it "should not have a current_spouse_column class attribute" do
         expect { TestModel.current_spouse_column }.to raise_error(NoMethodError)
       end
 
     end
-
-    describe 'model with options: :sex_column => "gender", :sex_values => [1,2]' do
-
-      let(:has_parents_opts) { {:sex_column => "gender", :sex_values => [1,2]} }
-
-      it "has gender as sex column" do
-        TestModel.sex_column.should == 'gender'
-      end
-      it "has an array as sex values" do
-        TestModel.sex_values.should be_a_kind_of(Array)
-      end
-      it "has 1 as male sex value" do
-        TestModel.sex_male_value == 1
-      end
-      it "has 2 as female sex value" do
-        TestModel.sex_female_value == 1
-      end
-
-    end
-  
   end
 
-  describe "model and table settings with wrong options" do
+
+  describe "TestModel initialized with wrong options" do
 
     context "has_parents_opts: {:foo => 'bar' }" do
 

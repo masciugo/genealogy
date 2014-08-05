@@ -208,6 +208,8 @@ module Genealogy
           when sex_female_value
             child.add_father(options[:spouse]) if options[:spouse]
             child.add_mother(self)
+          else 
+            raise WrongSexException, "Sex value not valid for #{self}"
           end
         end
       end
@@ -238,6 +240,8 @@ module Genealogy
               child.remove_father
             when sex_female_value
               child.remove_mother
+            else 
+              raise WrongSexException, "Sex value not valid for #{self}"
             end  
           end
         end

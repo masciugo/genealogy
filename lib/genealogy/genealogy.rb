@@ -22,7 +22,7 @@ module Genealogy
     admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :perform_validation]
     check_options(options, admitted_keys) do |key, value|
       if key == :sex_values
-        raise WrongOptionException, ":sex_values option must be an array with two char: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2 and value.first.to_s.size == 1 and value.last.to_s.size == 1
+        raise WrongOptionException, ":sex_values option must be an array of length 2: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2
       end
     end
     
@@ -38,12 +38,12 @@ module Genealogy
     ## sex
     # class attributes
     class_attribute :sex_column, :sex_values, :sex_male_value, :sex_female_value
-    self.sex_column = options[:sex_column] || :sex
-    self.sex_values = (options[:sex_values] and options[:sex_values].to_a.map(&:to_s)) || ['M','F']
+    self.sex_column = options[:sex_column] || 'sex'
+    self.sex_values = options[:sex_values] || ['M','F']
     self.sex_male_value = self.sex_values.first
     self.sex_female_value = self.sex_values.last
     # instance attribute
-    alias_attribute :sex, sex_column if self.sex_column != :sex
+    alias_attribute :sex, sex_column if self.sex_column != 'sex'
     # validation
     validates_presence_of sex_column
     validates_format_of sex_column, :with => /[#{sex_values.join}]/ 
