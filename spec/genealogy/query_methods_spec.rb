@@ -95,12 +95,12 @@ module QueryMethodsSpec
 
       describe "#family_hash(:half => :include)[:half_siblings] " do
         subject {peter.family_hash(:half => :include)[:half_siblings]}
-        specify { should match_array [ruben, mary, julian, beatrix] } 
+        specify { should match_array [ruben, mary, julian, beatrix] }
       end
 
       describe "#cousins(:lineage => :paternal) " do
         subject {peter.cousins(:lineage => :paternal)}
-        specify { should match_array [sam,charlie,sue] } 
+        specify { should match_array [sam,charlie,sue] }
       end
 
         describe "#cousins(:lineage => :maternal) " do
