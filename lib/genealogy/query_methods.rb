@@ -221,6 +221,21 @@ module Genealogy
     def aunts(options={})
       uncles_and_aunts(sex: 'female', lineage: options[:lineage], half: options[:half])
     end
+    def paternal_uncles(options = {})
+      uncles(sex: 'male', lineage: 'paternal', half: options[:half])
+    end
+
+    def maternal_uncles(options = {})
+      uncles(sex: 'male', lineage: 'maternal', half: options[:half])
+    end
+
+    def paternal_aunts(options = {})
+      aunts(lineage: 'paternal', half: options[:half])
+    end
+
+    def maternal_aunts(options = {})
+      aunts(sex: 'female', lineage: 'maternal', half: options[:half])
+    end
 
     def nieces_and_nephews(options = {}, sibling_options = {})
       case options[:sex]
