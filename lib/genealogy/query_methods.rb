@@ -214,6 +214,14 @@ module Genealogy
       end
     end
 
+    def uncles(options = {})
+      uncles_and_aunts(sex: 'male', lineage: options[:lineage], half: options[:half])
+    end
+
+    def aunts(options={})
+      uncles_and_aunts(sex: 'female', lineage: options[:lineage], half: options[:half])
+    end
+
     def nieces_and_nephews(options = {}, sibling_options = {})
       case options[:sex]
       when 'male'
