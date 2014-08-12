@@ -237,6 +237,14 @@ module Genealogy
       aunts(sex: 'female', lineage: 'maternal', half: options[:half])
     end
 
+    def nephews(options = {}, sibling_options = {})
+      nieces_and_nephews(options.merge({sex: 'male'}), sibling_options)
+    end
+
+    def nieces(options = {}, sibling_options = {})
+      nieces_and_nephews(options.merge({sex: 'female'}), sibling_options)
+    end
+
     def nieces_and_nephews(options = {}, sibling_options = {})
       case options[:sex]
       when 'male'
