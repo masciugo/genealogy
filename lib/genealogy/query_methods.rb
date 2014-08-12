@@ -237,6 +237,14 @@ module Genealogy
       end
     end
 
+    def nephews(options = {}, sibling_options = {})
+      nieces_and_nephews(options.merge({sex: 'male'}), sibling_options)
+    end
+
+    def nieces(options = {}, sibling_options = {})
+      nieces_and_nephews(options.merge({sex: 'female'}), sibling_options)
+    end
+
     def family(options = {}) 
       res = [self] | siblings | parents | offspring
       res |= [current_spouse] if self.class.current_spouse_enabled
