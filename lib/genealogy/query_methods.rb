@@ -245,6 +245,10 @@ module Genealogy
       nieces_and_nephews(options.merge({sex: 'female'}), sibling_options)
     end
 
+    def cousins(options = {}, uncle_aunt_options = {})
+      uncles_and_aunts(uncle_aunt_options).compact.inject([]){|memo,parent_sibling| memo |= parent_sibling.offspring}
+    end
+
     def nieces_and_nephews(options = {}, sibling_options = {})
       case options[:sex]
       when 'male'
