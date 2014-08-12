@@ -1,5 +1,4 @@
 require 'rspec/core/rake_task'
-require "debugger"
 # RSpec::Core::RakeTask.new(:spec) do |spec|
 #   spec.pattern = FileList['spec/**/*_spec.rb']
 # end
@@ -15,4 +14,3 @@ RSpec::Core::RakeTask.new(:specfile, :pattern) do |t, task_args|
 end
 
 task :default => :spec
-

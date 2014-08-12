@@ -65,7 +65,7 @@ module Genealogy
       if spouse = options[:spouse]
         raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
       end
-      case sex
+      result = case sex
       when sex_male_value
         if options.keys.include?(:spouse)
           children_as_father.with(spouse.try(:id))
@@ -78,31 +78,12 @@ module Genealogy
         else
           children_as_mother
         end
+      else
+        raise WrongSexException, "Sex value not valid for #{self}"
       end
+      result.to_a
     end
     alias_method :children, :offspring
-
-    # # offspring
-    # def offspring(options = {})
-    #   if spouse = options[:spouse]
-    #     raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
-    #   end
-    #   case sex
-    #   when sex_male_value
-    #     if options.keys.include?(:spouse)
-    #       self.genealogy_class.where(father_id: id, mother_id: spouse.try(:id))
-    #     else
-    #       self.genealogy_class.where(father_id: id)
-    #     end
-    #   when sex_female_value
-    #     if options.keys.include?(:spouse)
-    #       self.genealogy_class.where(mother_id: id, father_id: spouse.try(:id))
-    #     else
-    #       self.genealogy_class.where(mother_id: id)
-    #     end
-    #   end
-    # end
-    # alias_method :children, :offspring
 
     def eligible_offspring
       self.genealogy_class.all - ancestors - offspring - siblings - [self]
@@ -166,10 +147,10 @@ module Genealogy
     # ancestors
     def ancestors
       result = []
-      remaining = parents.to_a.compact
+      remaining = parents.compact
       until remaining.empty?
         result << remaining.shift
-        remaining += result.last.parents.to_a.compact
+        remaining += result.last.parents.compact
       end
       result.uniq
     end
@@ -264,15 +245,17 @@ module Genealogy
       when sex_female_value
         'female'
       else 
-        raise "undefined sex for #{self}"
+        raise WrongSexException, "Sex value not valid for #{self}"
       end
     end
 
     def is_female?
+      return female? if respond_to?(:female?)
       sex == sex_female_value
     end
 
     def is_male?
+      return male? if respond_to?(:male?)
       sex == sex_male_value  
     end
 

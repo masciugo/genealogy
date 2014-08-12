@@ -1,7 +1,7 @@
 require "active_record"
 require "active_support"
 require "logger"
-require "debugger"
+require 'rspec/its'
 
 # this is to make absolutely sure we test this one, not the one
 # installed on the system.
@@ -24,7 +24,7 @@ module GenealogyTestModel
   # method to define TestModel class in the scope of the including module.
   def define_test_model_class has_parents_opts = {}
 
-    # puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
+    puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
 
     model = Class.new(ActiveRecord::Base) do
       self.table_name = 'test_records'
@@ -32,7 +32,7 @@ module GenealogyTestModel
       has_parents has_parents_opts
 
       validate :check_invalid
-      
+
       case  Gem::Specification.find_by_name('activerecord').version.to_s
       when /^3/
         def self.my_find_or_create_by(build_attrs,find_attrs)
@@ -65,13 +65,17 @@ module GenealogyTestModel
 
     remove_const(:TestModel) if defined?(self::TestModel)
     self.const_set 'TestModel', model
-    
+
     cn = ActiveRecord::Base.connection
     cn.drop_table 'test_records' if cn.table_exists?('test_records')
 
     cn.create_table 'test_records' do |table|
       table.string :name
-      table.string self::TestModel.sex_column, :size=>1
+      if self::TestModel.sex_male_value.is_a? Integer
+        table.integer self::TestModel.sex_column
+      else
+        table.string self::TestModel.sex_column
+      end
       table.integer self::TestModel.father_column
       table.integer self::TestModel.mother_column
       table.integer self::TestModel.current_spouse_column if self::TestModel.current_spouse_enabled?

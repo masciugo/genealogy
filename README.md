@@ -22,7 +22,7 @@ To apply Genealogy in its simplest form to any ActiveRecord model, follow these 
     2. Add index separately and in combination to parents columns   
     3. Migrate your database: `rake db:migrate`
 
-3. Add `has_parents` to your model
+3. Add `has_parents` to your model (to put after a possible enum for sex attribute values)
 
 ## Usage
 
