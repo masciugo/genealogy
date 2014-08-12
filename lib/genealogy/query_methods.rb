@@ -214,6 +214,14 @@ module Genealogy
       end
     end
 
+    def uncles(options = {})
+      uncles_and_aunts(sex: 'male', lineage: options[:lineage], half: options[:half])
+    end
+
+    def aunts(options={})
+      uncles_and_aunts(sex: 'female', lineage: options[:lineage], half: options[:half])
+    end
+
     def cousins
       uncles_and_aunts.compact.inject([]){|memo,parent_sibling| memo |= parent_sibling.offspring}
     end
