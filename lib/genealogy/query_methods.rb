@@ -222,6 +222,22 @@ module Genealogy
       uncles_and_aunts(sex: 'female', lineage: options[:lineage], half: options[:half])
     end
 
+    def paternal_uncles(options = {})
+      uncles(sex: 'male', lineage: 'paternal', half: options[:half])
+    end
+
+    def maternal_uncles(options = {})
+      uncles(sex: 'male', lineage: 'maternal', half: options[:half])
+    end
+
+    def paternal_aunts(options = {})
+      aunts(lineage: 'paternal', half: options[:half])
+    end
+
+    def maternal_aunts(options = {})
+      aunts(sex: 'female', lineage: 'maternal', half: options[:half])
+    end
+
     def cousins
       uncles_and_aunts.compact.inject([]){|memo,parent_sibling| memo |= parent_sibling.offspring}
     end
