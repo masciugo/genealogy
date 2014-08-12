@@ -18,6 +18,7 @@ module QueryMethodsSpec
     let(:mary) {TestModel.my_find_or_create_by({:sex => "F", :father_id => paul.id, :mother_id => barbara.id},{:name => "mary"})}
     let(:mia) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "mia"})}
     let(:sam) {TestModel.my_find_or_create_by({:sex => "M", :father_id => mark.id, :mother_id => mia.id},{:name => "sam"})}
+    let(:sue) {TestModel.my_find_or_create_by({:sex => "F", :father_id => mark.id, :mother_id => mia.id},{:name => "sue"})}
     let(:charlie) {TestModel.my_find_or_create_by({:sex => "M", :father_id => mark.id, :mother_id => mia.id},{:name => "charlie"})}
     let(:barbara) {TestModel.my_find_or_create_by({:sex => "F", :father_id => john.id, :mother_id => maggie.id},{:name => "barbara"})}
     let(:paso) {TestModel.my_find_or_create_by({:sex => "M", :father_id => jack.id, :mother_id => alison.id, :current_spouse_id => irene.id },{:name => "paso"})}
@@ -55,7 +56,7 @@ module QueryMethodsSpec
 
       describe ".females" do
         specify do
-          all_females = [titty, mary, barbara, irene, terry, debby, alison, maggie, emily, rosa, louise, naomi, michelle, beatrix, mia]
+          all_females = [titty, mary, barbara, irene, terry, debby, alison, maggie, emily, rosa, louise, naomi, michelle, beatrix, mia, sue]
           TestModel.females.all.should match_array all_females
         end
       end
@@ -76,7 +77,10 @@ module QueryMethodsSpec
       its(:ancestors) {should match_array [paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison]}
       its(:eligible_fathers) {should match_array []}
       its(:family_hash) { should be_a(Hash) }
-      its(:cousins) {should match_array [sam, charlie]}
+      its(:cousins) {should match_array [sam, charlie, sue]}
+      its(:uncles) {should match_array [mark, rud]}
+      its(:maternal_uncles) {should match_array [mark, rud]}
+      its(:paternal_uncles) {should match_array []}
       its(:great_grandparents) {should match_array [nil, marcel, jack, alison, tommy, emily]}
 
       describe "#family_hash" do
@@ -92,6 +96,16 @@ module QueryMethodsSpec
       describe "#family_hash(:half => :include)[:half_siblings] " do
         subject {peter.family_hash(:half => :include)[:half_siblings]}
         specify { should match_array [ruben, mary, julian, beatrix] } 
+      end
+
+      describe "#cousins(:lineage => :paternal) " do
+        subject {peter.cousins(:lineage => :paternal)}
+        specify { should match_array [sam,charlie,sue] } 
+      end
+
+        describe "#cousins(:lineage => :maternal) " do
+        subject {peter.cousins(:lineage => :maternal)}
+        specify { should match_array [] } 
       end
 
       describe "#extended_family_hash" do
@@ -189,9 +203,12 @@ module QueryMethodsSpec
     describe "paso" do
       subject {paso}
       its(:offspring) {should match_array [titty, rud, mark]}
-      its(:descendants) {should match_array [titty, peter, steve, rud, mark, sam, charlie]}
+      its(:descendants) {should match_array [titty, peter, steve, rud, mark, sam, charlie, sue]}
       its(:family) { should match_array [irene,paso,jack,alison,john,titty,rud,mark] }
-      its(:extended_family) { should match_array [irene,paso,jack,alison,john,titty,rud,mark,louise,bob,debby,barbara,charlie,sam,peter,steve] }
+      its(:extended_family) { should match_array [irene,paso,jack,alison,john,titty,rud,mark,louise,bob,debby,barbara,charlie,sam,sue,peter,steve] }
+      its(:aunts) {should match_array [debby]}
+      its(:maternal_aunts) {should match_array []}
+      its(:paternal_aunts) {should match_array [debby]}
       its(:eligible_siblings) {should match_array TestModel.all - [paso,john,alison,jack,louise,bob]}
       its(:eligible_half_siblings) {should match_array TestModel.all - [paso,john,alison,jack,louise,bob]}
       its(:eligible_paternal_half_siblings) {should match_array TestModel.all - [paso,john,alison,jack,louise,bob]}
@@ -201,7 +218,7 @@ module QueryMethodsSpec
     describe "louise" do
       subject {louise}
       its(:offspring) {should match_array [tommy, jack, debby]}
-      its(:descendants) {should match_array [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie]}
+      its(:descendants) {should match_array [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie, sue]}
       its(:ancestors) {should be_empty}
       its(:great_grandchildren) {should match_array [titty, rud, mark, barbara]}
       its(:father){should be_nil}
@@ -218,15 +235,20 @@ module QueryMethodsSpec
     describe "manuel" do
       subject { manuel }
       its(:eligible_fathers) { should match_array [ned,paso,john,rud,mark,sam,charlie,tommy,jack,luis,larry,bob,marcel] }
-      its(:eligible_mothers) { should match_array [terry,naomi,michelle,titty,mia,barbara,maggie,irene,emily,debby,alison,louise,rosa] }
+      its(:eligible_mothers) { should match_array [terry,naomi,michelle,titty,mia,barbara,maggie,irene,emily,debby,alison,louise,rosa,sue] }
     end
 
     describe "titty" do
       subject { titty }
       its(:uncles_and_aunts) { should match_array [john] }
-      its(:nieces_and_nephews) {should match_array [sam,charlie]}
+      its(:uncles) { should match_array [john] }
+      its(:paternal_uncles) { should match_array [john] }
+      its(:maternal_uncles) { should match_array [] }
+      its(:nieces_and_nephews) {should match_array [sam,charlie,sue]}
+      its(:nephews) {should match_array [sam, charlie]}
+      its(:nieces) {should match_array [sue]}
       its(:family) {should match_array [paul,peter,steve,rud,mark,irene,paso,titty]}
-      its(:extended_family) {should match_array [paul,peter,steve,rud,mark,irene,paso,sam,charlie,emily,tommy,jack,alison,titty,john]}
+      its(:extended_family) {should match_array [paul,peter,steve,rud,mark,irene,paso,sam,charlie,emily,sue,tommy,jack,alison,titty,john]}
     end
 
     context "when come up walter, a new individual" do
@@ -265,7 +287,7 @@ module QueryMethodsSpec
               its(:eligible_paternal_grandfathers) {should match_array []}
               its(:eligible_paternal_grandmothers) {should match_array []}
               its(:eligible_maternal_grandfathers) {should match_array TestModel.males - [walter,nick,rud,mark,peter,steve,sam,charlie]}
-              its(:eligible_maternal_grandmothers) {should match_array TestModel.females - [emily,irene,titty]}
+              its(:eligible_maternal_grandmothers) {should match_array TestModel.females - [emily,irene,titty,sue]}
             end
             its(:eligible_siblings) {should match_array TestModel.all - [walter,luis,rosa,larry,louise,emily,tommy,irene]}
             its(:eligible_offspring) {should match_array TestModel.all - [walter,luis,rosa,larry,louise,emily,tommy,irene,nick]}
