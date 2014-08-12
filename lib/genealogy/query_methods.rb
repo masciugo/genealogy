@@ -194,16 +194,39 @@ module Genealogy
       grandchildren.compact.inject([]){|memo,grandchild| memo |= grandchild.offspring}
     end
 
-    def uncles_and_aunts
-      parents.compact.inject([]){|memo,parent| memo |= parent.siblings}
+    def uncles_and_aunts(options= {})
+      relation = case options[:lineage]
+      when 'paternal'
+        [father]
+      when 'maternal'
+        [mother]
+      else
+        parents
+      end
+
+      case options[:sex]
+      when 'male'
+        relation.compact.inject([]){|memo,parent| memo |= parent.siblings(half: options[:half]).select(&:is_male?)}
+      when 'female'
+        relation.compact.inject([]){|memo,parent| memo |= parent.siblings(half: options[:half]).select(&:is_female?)}
+      else
+        relation.compact.inject([]){|memo,parent| memo |= parent.siblings(half: options[:half])}
+      end
     end
 
     def cousins
       uncles_and_aunts.compact.inject([]){|memo,parent_sibling| memo |= parent_sibling.offspring}
     end
 
-    def nieces_and_nephews
-      siblings.inject([]){|memo,sib| memo |= sib.offspring}
+    def nieces_and_nephews(options = {}, sibling_options = {})
+      case options[:sex]
+      when 'male'
+        siblings(sibling_options).inject([]){|memo,sib| memo |= sib.offspring}.select(&:is_male?)
+      when 'female'
+        siblings(sibling_options).inject([]){|memo,sib| memo |= sib.offspring}.select(&:is_female?)
+      else
+        siblings(sibling_options).inject([]){|memo,sib| memo |= sib.offspring}
+      end
     end
 
     def family(options = {}) 
