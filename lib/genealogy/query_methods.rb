@@ -65,7 +65,7 @@ module Genealogy
       if spouse = options[:spouse]
         raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
       end
-      case sex
+      result = case sex
       when sex_male_value
         if options.keys.include?(:spouse)
           children_as_father.with(spouse.try(:id))
@@ -78,31 +78,12 @@ module Genealogy
         else
           children_as_mother
         end
+      else
+        raise WrongSexException, "Sex value not valid for #{self}"
       end
+      result.to_a
     end
     alias_method :children, :offspring
-
-    # # offspring
-    # def offspring(options = {})
-    #   if spouse = options[:spouse]
-    #     raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
-    #   end
-    #   case sex
-    #   when sex_male_value
-    #     if options.keys.include?(:spouse)
-    #       self.genealogy_class.where(father_id: id, mother_id: spouse.try(:id))
-    #     else
-    #       self.genealogy_class.where(father_id: id)
-    #     end
-    #   when sex_female_value
-    #     if options.keys.include?(:spouse)
-    #       self.genealogy_class.where(mother_id: id, father_id: spouse.try(:id))
-    #     else
-    #       self.genealogy_class.where(mother_id: id)
-    #     end
-    #   end
-    # end
-    # alias_method :children, :offspring
 
     def eligible_offspring
       self.genealogy_class.all - ancestors - offspring - siblings - [self]
@@ -166,10 +147,10 @@ module Genealogy
     # ancestors
     def ancestors
       result = []
-      remaining = parents.to_a.compact
+      remaining = parents.compact
       until remaining.empty?
         result << remaining.shift
-        remaining += result.last.parents.to_a.compact
+        remaining += result.last.parents.compact
       end
       result.uniq
     end
@@ -221,6 +202,7 @@ module Genealogy
     def aunts(options={})
       uncles_and_aunts(sex: 'female', lineage: options[:lineage], half: options[:half])
     end
+
     def paternal_uncles(options = {})
       uncles(sex: 'male', lineage: 'paternal', half: options[:half])
     end
@@ -231,6 +213,10 @@ module Genealogy
 
     def paternal_aunts(options = {})
       aunts(lineage: 'paternal', half: options[:half])
+    end
+
+    def maternal_aunts(options = {})
+      aunts(sex: 'female', lineage: 'maternal', half: options[:half])
     end
 
     def maternal_aunts(options = {})
@@ -258,6 +244,14 @@ module Genealogy
       else
         siblings(sibling_options).inject([]){|memo,sib| memo |= sib.offspring}
       end
+    end
+
+    def nephews(options = {}, sibling_options = {})
+      nieces_and_nephews(options.merge({sex: 'male'}), sibling_options)
+    end
+
+    def nieces(options = {}, sibling_options = {})
+      nieces_and_nephews(options.merge({sex: 'female'}), sibling_options)
     end
 
     def family(options = {}) 
@@ -318,15 +312,17 @@ module Genealogy
       when sex_female_value
         'female'
       else 
-        raise "undefined sex for #{self}"
+        raise WrongSexException, "Sex value not valid for #{self}"
       end
     end
 
     def is_female?
+      return female? if respond_to?(:female?)
       sex == sex_female_value
     end
 
     def is_male?
+      return male? if respond_to?(:male?)
       sex == sex_male_value  
     end
 

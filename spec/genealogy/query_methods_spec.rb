@@ -105,20 +105,20 @@ module QueryMethodsSpec
 
         describe "#cousins(:lineage => :maternal) " do
         subject {peter.cousins(:lineage => :maternal)}
-        specify { should match_array [] } 
+        specify { should match_array [sam,charlie,sue] }
       end
 
       describe "#extended_family_hash" do
         subject {peter.extended_family_hash}
         specify { should include(
-          :paternal_grandfather => manuel, 
-          :paternal_grandmother => terry, 
-          :maternal_grandfather => paso, 
+          :paternal_grandfather => manuel,
+          :paternal_grandmother => terry,
+          :maternal_grandfather => paso,
           :maternal_grandmother => irene,
           :grandchildren => [],
           :uncles_and_aunts => [rud, mark],
           :nieces_and_nephews => []
-        ) } 
+        ) }
       end
 
 

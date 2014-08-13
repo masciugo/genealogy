@@ -21,11 +21,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activerecord'
   s.add_dependency 'activesupport'
-  
+
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 2.99.0'
-  s.add_development_dependency 'debugger'
-  s.add_development_dependency 'rspec-its', '~> 0.0.1.pre'
+  s.add_development_dependency 'rspec-its'
   s.add_development_dependency 'gem-release'
 end

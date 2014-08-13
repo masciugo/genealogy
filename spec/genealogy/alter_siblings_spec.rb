@@ -49,7 +49,7 @@ module AlterSiblingsSpec
         it_should_behave_like "adding steve to peter as sibling"
       end
 
-      describe "#add_siblings(steve) returned value", :wip do
+      describe "#add_siblings(steve) returned value" do
         
         specify { expect(peter.add_siblings(steve)).to be true }
       
