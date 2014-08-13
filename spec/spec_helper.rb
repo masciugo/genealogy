@@ -1,7 +1,6 @@
 require "active_record"
 require "active_support"
 require "logger"
-require "debugger"
 require 'rspec/its'
 
 # this is to make absolutely sure we test this one, not the one
