@@ -170,10 +170,15 @@ To best understand genealogy features, I recommend to read first the query metho
 
 ### Guidelines
 
-### Upcoming features
+#### TODO's
 
-* Usage of current spouse for more concise alter methods
-* Date of birth consideration
+* documentation
+* better description of new query method usage: [paternal|maternal] nieces, nephews, aunts, uncles along with their options
+
+#### Highly desirable features
+
+* Optional usage of current spouse (if defined) for more concise alter methods. For example adding a children to an individual will automatically add it to the current spouse of that individual
+* Date of birth introduction along with checks based on it for better eligible methods
 * Other more complex query methods like minimal ancestors
 
 ### Steps
