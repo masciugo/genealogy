@@ -27,5 +27,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 2.99.0'
   s.add_development_dependency 'rspec-its'
   s.add_development_dependency 'gem-release'
-  s.add_development_dependency 'debugger'
 end
