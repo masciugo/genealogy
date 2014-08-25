@@ -1,6 +1,8 @@
 require "active_record"
 require "active_support"
 require "logger"
+# require "debugger" # ruby 1.9
+# require "byebug" # ruby 2
 require 'rspec/its'
 
 # this is to make absolutely sure we test this one, not the one
