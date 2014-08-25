@@ -76,14 +76,14 @@ There are also some other miscellaneous query methods like:
 * `peter.uncles_and_aunts(:sex => female, :lineage => :maternal)` will return only female siblings of mother
 * `peter.maternal_aunts` shortcut for above
 * `peter.grandchildren`
-* `peter.great_grandchildren`
-* `peter.great_grandparents`
+* `peter.great_grandchildren` will return offspring of grandchildren
+* `peter.great_grandparents` will return parents of grandparents
 * `peter.nieces_and_nephews(options={}, sibling_options={})` will consider full-siblings by default, but the second argument hash can modify this if desired
 * `peter.nieces_and_nephews(:sex => male)` will return all male offspring of silbings
 * `peter.nephews` shortcut for above
 * `peter.nieces_and_nephews(:sex => female)` will return all female offspring of silbings
 * `peter.nieces` shortcut for above
-* `cousins` will return offspring of siblings of parents
+* `peter.cousins` will return offspring of siblings of parents
 * `peter.family` will return peter's folks: offspring, parents and all spouses (that are the union of all children's parents) 
 * `peter.family(:half => :include)` will also consider half_siblings 
 * `peter.extended_family` will also consider grandparents, grandchildren, uncles, aunts, nieces, nephews
