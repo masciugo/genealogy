@@ -1,5 +1,7 @@
 # Genealogy
 
+[![Build Status](https://travis-ci.org/masciugo/genealogy.svg?branch=v1.4.0)](https://travis-ci.org/masciugo/genealogy)
+
 ## Premise
 Genealogy is still under development and need to be improved and extended. The developed features so far were the ones I needed for my personal applications where I had to provide data entry facilities to insert, given an individual, relatives' vital records and keep track of their familiar relationships. However, they are the basic features for a genealogy management system and that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense as I am really interested in improving it.
 
