@@ -1,5 +1,7 @@
 # Genealogy
 
+[![Build Status](https://travis-ci.org/masciugo/genealogy.svg?branch=v1.4.0)](https://travis-ci.org/masciugo/genealogy)
+
 ## Premise
 Genealogy is still under development and need to be improved and extended. The developed features so far were the ones I needed for my personal applications where I had to provide data entry facilities to insert, given an individual, relatives' vital records and keep track of their familiar relationships. However, they are the basic features for a genealogy management system and that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense as I am really interested in improving it.
 
@@ -62,9 +64,28 @@ Genealogy strongly considers multiple mates procreation so siblings and offsprin
 
 There are also some other miscellaneous query methods like:
 
+* `peter.uncles_and_aunts` will return siblings of parents
+* `peter.uncles_and_aunts(:sex => male)` will return only male siblings of parents
+* `peter.uncles` shortcut for above
+* `peter.uncles_and_aunts(:sex => male, :lineage => :paternal)` will return only male siblings of father
+* `peter.paternal_uncles` shortcut for above
+* `peter.uncles_and_aunts(:sex => male, :lineage => :maternal)` will return only male siblings of mother
+* `peter.maternal_uncles` shortcut for above
+* `peter.uncles_and_aunts(:sex => female)` will return only female siblings of parents
+* `peter.aunts` shortcut for above
+* `peter.uncles_and_aunts(:sex => female, :lineage => :paternal)` will return only female siblings of father
+* `peter.paternal_aunts` shortcut for above
+* `peter.uncles_and_aunts(:sex => female, :lineage => :maternal)` will return only female siblings of mother
+* `peter.maternal_aunts` shortcut for above
 * `peter.grandchildren`
-* `peter.uncles_and_aunts` 
-* `peter.nieces_and_nephews` will consider only full-siblings
+* `peter.great_grandchildren` will return offspring of grandchildren
+* `peter.great_grandparents` will return parents of grandparents
+* `peter.nieces_and_nephews(options={}, sibling_options={})` will consider full-siblings by default, but the second argument hash can modify this if desired
+* `peter.nieces_and_nephews(:sex => male)` will return all male offspring of silbings
+* `peter.nephews` shortcut for above
+* `peter.nieces_and_nephews(:sex => female)` will return all female offspring of silbings
+* `peter.nieces` shortcut for above
+* `peter.cousins` will return offspring of siblings of parents
 * `peter.family` will return peter's folks: offspring, parents and all spouses (that are the union of all children's parents) 
 * `peter.family(:half => :include)` will also consider half_siblings 
 * `peter.extended_family` will also consider grandparents, grandchildren, uncles, aunts, nieces, nephews
