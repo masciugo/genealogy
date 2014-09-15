@@ -19,7 +19,7 @@ module Genealogy
 
   def has_parents options = {}
 
-    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :perform_validation]
+    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :birth_date_column,:perform_validation]
     check_options(options, admitted_keys) do |key, value|
       if key == :sex_values
         raise WrongOptionException, ":sex_values option must be an array of length 2: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2
@@ -37,11 +37,13 @@ module Genealogy
 
     ## sex
     # class attributes
-    class_attribute :sex_column, :sex_values, :sex_male_value, :sex_female_value
+    class_attribute :sex_column, :sex_values, :sex_male_value, :sex_female_value, :birth_date_column, :death_date_column
     self.sex_column = options[:sex_column] || 'sex'
     self.sex_values = options[:sex_values] || ['M','F']
     self.sex_male_value = self.sex_values.first
     self.sex_female_value = self.sex_values.last
+    self.birth_date_column = options[:birth_date_column] || 'birth_date'
+    self.death_date_column = options[:death_date_column] || 'death_date'
     # instance attribute
     alias_attribute :sex, sex_column if self.sex_column != 'sex'
     # validation

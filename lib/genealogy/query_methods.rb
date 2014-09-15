@@ -311,7 +311,42 @@ module Genealogy
 
     def is_male?
       return male? if respond_to?(:male?)
-      sex == sex_male_value  
+      sex == sex_male_value
+    end
+
+    def age(options={})
+      birth_date = self.send("#{genealogy_class.birth_date_column}")
+      death_date = self.send("#{genealogy_class.death_date_column}")
+
+      return if birth_date.nil?
+
+      current = options[:end_date] || death_date || Time.zone.now
+
+      years = current.year - birth_date.year
+
+      if options[:measurement] == 'year' || !options[:measurement]
+        if options[:string]
+          return "#{years} years"
+        else
+          return years
+        end
+      end
+
+      months = current.month - birth_date.month
+
+      if options[:measurement] == 'months'
+        if options[:string]
+          return "#{years} years and #{months} months"
+        else
+          return (years * 12) + months
+        end
+      end
+
+      days = current.day - birth_date.day
+
+      if options[:measurement] == 'days'
+       return "#{years} years, #{months} months, and #{days} days"
+      end
     end
 
     module ClassMethods
