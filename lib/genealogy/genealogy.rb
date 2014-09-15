@@ -25,13 +25,13 @@ module Genealogy
         raise WrongOptionException, ":sex_values option must be an array of length 2: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2
       end
     end
-    
+
     class_attribute :genealogy_enabled, :current_spouse_enabled, :genealogy_class, :perform_validation
     self.genealogy_enabled = true
     self.current_spouse_enabled = options[:current_spouse].try(:==,true) || false           # default false
     self.genealogy_class = self                                                             # keep track of the original extend class to prevent wrong scopes in query method in case of STI
     self.perform_validation = options[:perform_validation].try(:==,false) ? false : true    # default true
-    
+
     tracked_relatives = [:father, :mother]
     tracked_relatives << :current_spouse if current_spouse_enabled
 
@@ -48,7 +48,7 @@ module Genealogy
     alias_attribute :sex, sex_column if self.sex_column != 'sex'
     # validation
     validates_presence_of sex_column
-    validates_format_of sex_column, :with => /[#{sex_values.join}]/ 
+    validates_format_of sex_column, :with => /[#{sex_values.join}]/
 
     tracked_relatives.each do |key|
       # class attribute where is stored the correspondig foreign_key column name
@@ -69,7 +69,7 @@ module Genealogy
     include Genealogy::SpouseMethods if current_spouse_enabled
 
   end
-  
+
   module MotherAssociationExtension
     def with(father_id)
       where(father_id: father_id)
