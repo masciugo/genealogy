@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module QueryMethodsSpec
   extend GenealogyTestModel
-  
+
   describe "*** Query methods ***" do
 
     before(:all) do
@@ -36,7 +36,7 @@ module QueryMethodsSpec
     let!(:luis) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "luis"})}
     let!(:rosa) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "rosa"})}
     let!(:larry) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "larry"})}
-    let!(:louise) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "louise"})}
+    let!(:louise) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "louise"},{:birth_date_column => '1925-05-10T18:22:59-05:00'}, {:death_date_column =>  '1994-03-10T18:22:59-05:00'})}
     let!(:ned) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "ned"})}
     let!(:steve) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id, :mother_id => titty.id},{:name => "steve"})}
     let!(:naomi) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "naomi"})}
@@ -90,7 +90,7 @@ module QueryMethodsSpec
           :mother => titty,
           :children => [],
           :siblings => [steve]
-        ) } 
+        ) }
       end
 
       describe "#family_hash(:half => :include)[:half_siblings] " do
@@ -148,13 +148,13 @@ module QueryMethodsSpec
       its(:paternal_half_siblings) {should match_array [ruben, peter, steve, mary]}
       describe "all half_siblings and siblings: #siblings(:half => :include)" do
         specify {beatrix.siblings(:half => :include).should match_array [ruben, peter, steve, mary, julian]}
-      end  
+      end
       describe "half_siblings with titty: #siblings(:half => father, :spouse => titty)" do
         specify {beatrix.siblings(:half => :father, :spouse => titty).should match_array [peter, steve]}
       end
       describe "half_siblings with mary: #siblings(:half => father, :spouse => barbara)" do
         specify {beatrix.siblings(:half => :father, :spouse => barbara).should match_array [mary]}
-      end  
+      end
     end
 
     describe "paul" do
@@ -199,7 +199,7 @@ module QueryMethodsSpec
       its(:grandparents) {should match_array [jack, alison, nil, nil]}
       its(:eligible_offspring) {should match_array TestModel.all - [mary,barbara,john,maggie,jack,alison,louise,bob]}
     end
-    
+
     describe "paso" do
       subject {paso}
       its(:offspring) {should match_array [titty, rud, mark]}
@@ -287,7 +287,7 @@ module QueryMethodsSpec
     context "when come up walter, a new individual" do
 
       let!(:walter) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "walter"})}
-    
+
       describe "walter" do
         subject {walter}
         its(:eligible_fathers) {should match_array TestModel.males - [walter]}

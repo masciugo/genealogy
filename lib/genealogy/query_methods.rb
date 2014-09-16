@@ -28,7 +28,7 @@ module Genealogy
         end
 
         # eligible
-        define_method "eligible_#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}s" do 
+        define_method "eligible_#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}s" do
           if send(parent) and send("#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}").nil?
             send(parent).send("eligible_#{grandparent}s") - [self]
           else
@@ -63,7 +63,7 @@ module Genealogy
     # offspring
     def offspring(options = {})
       if spouse = options[:spouse]
-        raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex 
+        raise WrongSexException, "Problems while looking for #{self}'s offspring made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex
       end
       result = case sex
       when sex_male_value
@@ -129,7 +129,7 @@ module Genealogy
 
     def half_siblings
       siblings(:half => :only)
-      # todo: inprove with option :father and :mother 
+      # todo: inprove with option :father and :mother
     end
 
     def paternal_half_siblings
@@ -242,7 +242,7 @@ module Genealogy
       nieces_and_nephews(options.merge({sex: :female}), sibling_options)
     end
 
-    def family(options = {}) 
+    def family(options = {})
       res = [self] | siblings | parents | offspring
       res |= [current_spouse] if self.class.current_spouse_enabled
       res |= case options[:half]
@@ -258,13 +258,13 @@ module Genealogy
           raise WrongOptionValueException, "Admitted values for :half options are: :father, :mother, :include, nil"
       end
       res = offspring.inject(res){|memo,child| memo |= child.parents} #add spouses
-      
+
       res += [grandparents + grandchildren + uncles_and_aunts + nieces_and_nephews].flatten if options[:extended]
 
       res.compact
     end
 
-    def family_hash(options = {}) 
+    def family_hash(options = {})
       roles = [:father, :mother, :children, :siblings]
       roles += [:current_spouse] if self.class.current_spouse_enabled
       roles += case options[:half]
@@ -285,11 +285,11 @@ module Genealogy
       h
     end
 
-    def extended_family(options = {}) 
+    def extended_family(options = {})
       family(options.merge(:extended => true))
     end
 
-    def extended_family_hash(options = {}) 
+    def extended_family_hash(options = {})
       family_hash(options.merge(:extended => true))
     end
 
@@ -299,7 +299,7 @@ module Genealogy
         'male'
       when sex_female_value
         'female'
-      else 
+      else
         raise WrongSexException, "Sex value not valid for #{self}"
       end
     end
@@ -314,9 +314,17 @@ module Genealogy
       sex == sex_male_value
     end
 
+    def birth
+      self.send("#{genealogy_class.birth_date_column}")
+    end
+
+    def death
+      self.send("#{genealogy_class.death_date_column}")
+    end
+
     def age(options={})
-      birth_date = self.send("#{genealogy_class.birth_date_column}")
-      death_date = self.send("#{genealogy_class.death_date_column}")
+      birth_date = birth
+      death_date = death
 
       return if birth_date.nil?
 
@@ -344,7 +352,7 @@ module Genealogy
 
       days = current.day - birth_date.day
 
-      if options[:measurement] == 'days'
+      if options[:measurement] == 'days' && options[:string]
        return "#{years} years, #{months} months, and #{days} days"
       end
     end
