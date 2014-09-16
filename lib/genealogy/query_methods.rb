@@ -341,6 +341,7 @@ module Genealogy
       end
 
       months = current.month - birth_date.month
+      months += 12 if months < 0
 
       if options[:measurement] == 'months'
         if options[:string]
@@ -348,12 +349,6 @@ module Genealogy
         else
           return (years * 12) + months
         end
-      end
-
-      days = current.day - birth_date.day
-
-      if options[:measurement] == 'days' && options[:string]
-       return "#{years} years, #{months} months, and #{days} days"
       end
     end
 

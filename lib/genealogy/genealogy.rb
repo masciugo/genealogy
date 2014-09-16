@@ -19,7 +19,7 @@ module Genealogy
 
   def has_parents options = {}
 
-    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :birth_date_column,:perform_validation]
+    admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :birth_date_column, :death_date_column, :perform_validation]
     check_options(options, admitted_keys) do |key, value|
       if key == :sex_values
         raise WrongOptionException, ":sex_values option must be an array of length 2: first for male sex symbol an last for female" unless value.is_a?(Array) and value.size == 2

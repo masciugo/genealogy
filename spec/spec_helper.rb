@@ -64,7 +64,6 @@ module GenealogyTestModel
       end
 
     end
-
     remove_const(:TestModel) if defined?(self::TestModel)
     self.const_set 'TestModel', model
 
@@ -80,6 +79,8 @@ module GenealogyTestModel
       end
       table.integer self::TestModel.father_column
       table.integer self::TestModel.mother_column
+      table.datetime self::TestModel.birth_date_column
+      table.datetime self::TestModel.death_date_column
       table.integer self::TestModel.current_spouse_column if self::TestModel.current_spouse_enabled?
       table.boolean 'isinvalid'
     end
