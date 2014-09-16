@@ -328,7 +328,12 @@ module Genealogy
 
       return if birth_date.nil?
 
-      current = options[:end_date] || death_date || Time.zone.now
+      if options[:end_date]
+        current = DateTime.parse(options[:end_date])
+      else
+        current = death_date || Time.zone.now
+      end
+
 
       years = current.year - birth_date.year
 
