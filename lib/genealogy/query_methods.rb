@@ -327,32 +327,18 @@ module Genealogy
       death_date = death
 
       return if birth_date.nil?
-
-      if options[:end_date]
-        current = DateTime.parse(options[:end_date])
-      else
-        current = death_date || Time.zone.now
-      end
-
+      current = options[:end_date] ? DateTime.parse(options[:end_date]) : death_date || Time.zone.now
       years = current.year - birth_date.year
 
       if options[:measurement] == :year || !options[:measurement]
-        if options[:string]
-          return "#{years} years"
-        else
-          return years
-        end
+        return  options[:string] ? "#{years} years" : years
       end
 
       months = current.month - birth_date.month
       months += 12 if months < 0
 
       if options[:measurement] == :months
-        if options[:string]
-          return "#{years} years and #{months} months"
-        else
-          return (years * 12) + months
-        end
+        return options[:string] ? "#{years} years and #{months} months" : (years * 12) + months
       end
       return years
     end
