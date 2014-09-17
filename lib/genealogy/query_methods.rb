@@ -334,10 +334,9 @@ module Genealogy
         current = death_date || Time.zone.now
       end
 
-
       years = current.year - birth_date.year
 
-      if options[:measurement] == 'year' || !options[:measurement]
+      if options[:measurement] == :year || !options[:measurement]
         if options[:string]
           return "#{years} years"
         else
@@ -348,13 +347,14 @@ module Genealogy
       months = current.month - birth_date.month
       months += 12 if months < 0
 
-      if options[:measurement] == 'months'
+      if options[:measurement] == :months
         if options[:string]
           return "#{years} years and #{months} months"
         else
           return (years * 12) + months
         end
       end
+      return years
     end
 
     module ClassMethods

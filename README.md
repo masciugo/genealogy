@@ -151,6 +151,16 @@ Removing methods examples are:
 * `peter.remove_siblings(:half => :father)` will nullify only father of all records that have same peter's father as father
 * `peter.remove_siblings(:half => :father, :affect_spouse => true)` will nullify also mother of all records that have same peter's father as father
 
+### Birth and death dates methods
+
+You can additionally save individual's dates of birth and death.
+* `peter.age` with no options passed will return an integer of peter's age in years at the present. If peter has a death date, it will instead return the age in years at death.
+* `peter.age(:measurement=> :years)` is the default and will return the same at if no arguments were passed.
+* `peter.age(:measurement=> :years, :end_date=> '1975-05-12T18:22:59-05:00')` a set end date takes precedence over a death date, so this will be peter's date on the given date and time. The method parses the string into DateTime.
+* `peter.age(:measurement=> :years, :string => true)` will return a sring, "#{years} years".
+* `peter.age(:measurement=> :months)` will return an integer of the age in months.
+* `peter.age(:measurement=> :months, :string => true)` will return a string, "#{years} years #{months} months".
+
 ### Class methods
 
 * `YourModel.males` will return all males individuals
@@ -162,7 +172,7 @@ Removing methods examples are:
 Some options are available to suit your existing table: 
 
     class Individual<ActiveRecord::Base
-      has_parents :father_column => "padre", :mother_column => "madre", :sex_column => "gender", :sex_values => [1,2]
+      has_parents :father_column => "padre", :mother_column => "madre", :sex_column => "gender", :sex_values => [1,2], :birth_date_column => 'birth', :death_date_column => 'death'
     end
 
 ### current spouse option
@@ -180,6 +190,8 @@ perform_validation option let you specify if child record, while altering its pa
     current_spouse_column: 'current_spouse_id'   
     sex_column: 'sex'   
     sex_values: ['M','F']   
+    birth_date_column: 'birth_date'
+    death_date_column: 'death_date'
     perform_validation: true
 
 ## Test as documentation
