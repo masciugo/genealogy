@@ -100,6 +100,17 @@ Others methods called *eligible_ methods* can be used to pre-filter role-compati
 * `peter.eligible_offspring` will return all genealogy individuals excluding ancestors, offspring, full siblings and himself
 * `peter.eligible_spouses` will return all opposite sex genealogy individuals excluding spouses
 
+You can additionally save individual's dates of birth and death, by setting the :birth_date_column and :death_date_column options in has_parents. Default values are 'birth_date' and 'death_date' respectively.
+
+* `peter.age` with no options passed will return an integer of peter's age at the present in years. If peter has a death date, it will instead default to return his age in years at death.
+* `peter.age(:measurement=> :years)` is the default and will return the same as if no arguments were passed.
+* `peter.age(:measurement=> :years, :end_date=> '1975-05-12T18:22:59-05:00')` a set end date takes precedence over a death date, so this will be peter's date on the given date and time. The method parses the string into DateTime.
+* `peter.age(:measurement=> :years, :string => true)` will return a string, "#{years} years".
+* `peter.age(:measurement=> :months)` will return an integer of the age in months.
+* `peter.age(:measurement=> :months, :string => true)` will return a string, "#{years} years #{months} months".
+
+
+
 ### Alter methods
 
 They change the genealogy updating one ore more target individuals (the ones that are actually modified). These methods overwrite old values and call internally *save!* so all validation and callbacks are regularly run. Here are some examples where target individual correspond with method's receiver:
@@ -150,16 +161,6 @@ Removing methods examples are:
 * `peter.remove_siblings` will nullify both full-siblings parents
 * `peter.remove_siblings(:half => :father)` will nullify only father of all records that have same peter's father as father
 * `peter.remove_siblings(:half => :father, :affect_spouse => true)` will nullify also mother of all records that have same peter's father as father
-
-### Birth and death dates methods
-
-You can additionally save individual's dates of birth and death, by setting the :birth_date_column and :death_date_column options in has_parents. Default values are 'birth_date' and 'death_date' respectively.
-* `peter.age` with no options passed will return an integer of peter's age at the present in years. If peter has a death date, it will instead default to return his age in years at death.
-* `peter.age(:measurement=> :years)` is the default and will return the same as if no arguments were passed.
-* `peter.age(:measurement=> :years, :end_date=> '1975-05-12T18:22:59-05:00')` a set end date takes precedence over a death date, so this will be peter's date on the given date and time. The method parses the string into DateTime.
-* `peter.age(:measurement=> :years, :string => true)` will return a string, "#{years} years".
-* `peter.age(:measurement=> :months)` will return an integer of the age in months.
-* `peter.age(:measurement=> :months, :string => true)` will return a string, "#{years} years #{months} months".
 
 ### Class methods
 
