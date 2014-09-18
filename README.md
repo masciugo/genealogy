@@ -153,11 +153,11 @@ Removing methods examples are:
 
 ### Birth and death dates methods
 
-You can additionally save individual's dates of birth and death.
-* `peter.age` with no options passed will return an integer of peter's age in years at the present. If peter has a death date, it will instead return the age in years at death.
-* `peter.age(:measurement=> :years)` is the default and will return the same at if no arguments were passed.
+You can additionally save individual's dates of birth and death, by setting the :birth_date_column and :death_date_column options in has_parents. Default values are 'birth_date' and 'death_date' respectively.
+* `peter.age` with no options passed will return an integer of peter's age at the present in years. If peter has a death date, it will instead default to return his age in years at death.
+* `peter.age(:measurement=> :years)` is the default and will return the same as if no arguments were passed.
 * `peter.age(:measurement=> :years, :end_date=> '1975-05-12T18:22:59-05:00')` a set end date takes precedence over a death date, so this will be peter's date on the given date and time. The method parses the string into DateTime.
-* `peter.age(:measurement=> :years, :string => true)` will return a sring, "#{years} years".
+* `peter.age(:measurement=> :years, :string => true)` will return a string, "#{years} years".
 * `peter.age(:measurement=> :months)` will return an integer of the age in months.
 * `peter.age(:measurement=> :months, :string => true)` will return a string, "#{years} years #{months} months".
 
