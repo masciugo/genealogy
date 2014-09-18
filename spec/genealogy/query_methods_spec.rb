@@ -229,13 +229,13 @@ module QueryMethodsSpec
       its(:death) {should == '1994-03-10T18:22:59-05:00'}
       its(:age) {should == 69}
       describe "#age(:measurement => 'years')" do
-        specify {louise.age(:measurement => 'year').should == 69}
+        specify {louise.age(:measurement => 'years').should == 69}
       end
         describe "#age(:measurement => :years, :end_date=> '1975-05-12T18:22:59-05:00')" do
         specify {louise.age(:measurement => :years, :end_date=> '1975-05-12T18:22:59-05:00').should == 50}
       end
       describe "#age(:measurement => :years, :string => true)" do
-        specify {louise.age({:measurement => :year, :string =>true}).should == '69 years'}
+        specify {louise.age({:measurement => :years, :string =>true}).should == '69 years'}
       end
       describe "#age(:measurement => :months)" do
         specify {louise.age(:measurement => :months).should == 838}

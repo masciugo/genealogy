@@ -330,7 +330,7 @@ module Genealogy
       current = options[:end_date] ? DateTime.parse(options[:end_date]) : death_date || Time.zone.now
       years = current.year - birth_date.year
 
-      if options[:measurement] == :year || !options[:measurement]
+      if options[:measurement] == :years || !options[:measurement]
         return  options[:string] ? "#{years} years" : years
       end
 
@@ -340,6 +340,7 @@ module Genealogy
       if options[:measurement] == :months
         return options[:string] ? "#{years} years and #{months} months" : (years * 12) + months
       end
+      
       return years
     end
 
