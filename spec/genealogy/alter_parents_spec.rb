@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module AlterParentsSpec
   extend GenealogyTestModel
-  
+
   describe "*** Alter parents methods ***" do
 
     before(:all) do
@@ -15,7 +15,7 @@ module AlterParentsSpec
 
     describe "peter" do
       subject{ peter }
-      
+
       describe "#add_father(Object.new)" do
         specify { expect { peter.add_father(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
       end
@@ -29,7 +29,7 @@ module AlterParentsSpec
       end
 
       describe "#add_parents(paul,titty)" do
-        
+
         its(:parents) do
           peter.add_parents(paul,titty)
           peter.reload
@@ -51,7 +51,7 @@ module AlterParentsSpec
       end
 
       context "when has paul as father" do
-        
+
         before(:each) do
           peter.add_father(paul)
         end
@@ -66,7 +66,7 @@ module AlterParentsSpec
         end
 
         context "and has titty as mother" do
-        
+
           before(:each) do
             peter.add_mother(titty)
           end
@@ -81,7 +81,7 @@ module AlterParentsSpec
         end
 
         context "and #add_father(nil)" do
-          
+
           its(:father) do
             peter.add_father(nil)
             should be_nil
@@ -90,7 +90,7 @@ module AlterParentsSpec
         end
 
         context "and #add_parents(nil,nil)" do
-          
+
           its(:parents) do
             peter.add_parents(nil,nil)
             should match_array [nil,nil]

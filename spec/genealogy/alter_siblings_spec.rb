@@ -4,7 +4,7 @@ module AlterSiblingsSpec
   extend GenealogyTestModel
 
   describe "*** Alter siblings methods ***" do
-    
+
     before(:all) do
       AlterSiblingsSpec.define_test_model_class({})
     end
@@ -21,7 +21,7 @@ module AlterSiblingsSpec
     let(:barbara) {TestModel.create!(:name => "barbara", :sex => "F")}
     let(:michelle) {TestModel.create!(:name => "michelle", :sex => "F")}
     let(:agata) {TestModel.create!(:name => "agata", :sex => "F")}
-    
+
     describe "peter son of paul and titty" do
 
       before(:each) do
@@ -50,9 +50,9 @@ module AlterSiblingsSpec
       end
 
       describe "#add_siblings(steve) returned value" do
-        
+
         specify { expect(peter.add_siblings(steve)).to be true }
-      
+
       end
 
       context "steve is invalid" do
@@ -177,7 +177,7 @@ module AlterSiblingsSpec
           peter.add_siblings(julian,paso, :half => :father, :spouse => michelle )
           peter.add_siblings(agata, :half => :mother )
         end
-        
+
         shared_examples "removing all siblings" do
           its(:siblings) { should be_empty }
           its(:half_siblings) { should match_array [julian,agata,paso] }

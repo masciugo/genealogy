@@ -4,7 +4,7 @@ module AlterOffspringSpec
   extend GenealogyTestModel
 
   describe "*** Alter offspring methods ***"  do
-      
+
     before(:all) do
       AlterOffspringSpec.define_test_model_class({})
     end
@@ -23,7 +23,7 @@ module AlterOffspringSpec
       subject { paul.reload }
 
       describe "#add_offspring(peter)" do
-        
+
         context "when all is ok" do
 
           shared_examples "adding peter to paul as child" do
@@ -60,7 +60,7 @@ module AlterOffspringSpec
       end
 
       describe "#add_offspring(peter,steve)" do
-        
+
         context "when peter and steve are valid" do
           before(:each) { paul.add_offspring(peter,steve) }
           its(:offspring) { should match_array [peter,steve] }
@@ -99,7 +99,7 @@ module AlterOffspringSpec
       describe "#add_offspring(peter, :spouse => john)" do
         specify { expect { paul.add_offspring(peter, :spouse => john) }.to raise_error(Genealogy::WrongSexException) }
       end
-      
+
       context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (dylan)" do
         before(:each) do
           paul.add_offspring(peter,steve, :spouse => titty)
@@ -204,7 +204,7 @@ module AlterOffspringSpec
 
       end
 
-          
+
     end
 
   end

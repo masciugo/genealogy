@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module AlterCurrentSpouseSpec
   extend GenealogyTestModel
-  
+
   describe "*** Alter current_spouse methods ***" do
 
     before(:all) do
@@ -15,7 +15,7 @@ module AlterCurrentSpouseSpec
 
     describe "paul" do
       subject {paul.reload}
-      
+
       describe "#add_current_spouse(titty)" do
 
         context "when all is ok" do
@@ -51,7 +51,7 @@ module AlterCurrentSpouseSpec
         before(:each) {paul.add_current_spouse(titty)}
 
         describe "#remove_current_spouse" do
-          
+
           context "when all is ok" do
             before(:each) {paul.remove_current_spouse}
             its(:current_spouse) { should be_nil }

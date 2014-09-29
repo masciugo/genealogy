@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module AlterCurrentSpouseNoValidationSpec
   extend GenealogyTestModel
-  
+
   describe "*** Alter current_spouse methods defining model with option :perform_validation => false  ***" do
 
     before(:all) do
@@ -15,7 +15,7 @@ module AlterCurrentSpouseNoValidationSpec
 
     describe "paul" do
       subject {paul.reload}
-      
+
       describe "#add_current_spouse(titty)" do
 
         context "paul is invalid" do
@@ -42,7 +42,7 @@ module AlterCurrentSpouseNoValidationSpec
         before(:each) {paul.add_current_spouse(titty)}
 
         describe "#remove_current_spouse" do
-          
+
           context "when paul is invalid" do
             before(:each) do
               paul.mark_invalid!

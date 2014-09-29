@@ -1,5 +1,5 @@
 require 'spec_helper'
-  
+
 module ModelSettingsSpec
   extend GenealogyTestModel
 
@@ -26,7 +26,7 @@ module ModelSettingsSpec
 
       its(:sex_male_value) { should == 'M' }
       its(:sex_female_value) { should == 'F' }
-      
+
     end
 
     context 'initialized with options: :sex_column => "gender", :sex_values => [1,2]'  do
@@ -73,7 +73,7 @@ module ModelSettingsSpec
     end
 
     context "initialized with options: :perform_validation => false" do
-      
+
       let(:has_parents_opts) { {:perform_validation => false} }
 
       its(:perform_validation) { should be false }
@@ -110,17 +110,17 @@ module ModelSettingsSpec
 
       let(:has_parents_opts) { {:foo => "bar" } }
       specify { expect { ModelSettingsSpec.define_test_model_class(has_parents_opts) }.to raise_error Genealogy::WrongOptionException }
-      
+
     end
 
     context "has_parents_opts: {:foo => 'bar' }" do
 
       let(:has_parents_opts) { {:sex_column => "gender", :sex_values => [1,2,3]} }
       specify { expect { ModelSettingsSpec.define_test_model_class(has_parents_opts) }.to raise_error Genealogy::WrongOptionException }
-      
+
     end
 
-    
+
   end
 
 end

@@ -20,7 +20,7 @@ module Genealogy
           self.update_attribute(parent,relative)
         end
       end
-      
+
       # remove method
       define_method "remove_#{parent}" do
         if perform_validation
@@ -127,7 +127,7 @@ module Genealogy
 
     def remove_siblings(*args)
       options = args.extract_options!
-      
+
       raise WrongOptionException.new("Unknown option value: :half => #{options[:half]}.") if (options[:half] and ![:father,:mother].include?(options[:half]))
 
       resulting_indivs = if args.blank?
@@ -162,7 +162,7 @@ module Genealogy
     end
 
     [:father, :mother].each do |parent|
-      
+
       # add paternal/maternal half_siblings
       define_method "add_#{Genealogy::PARENT2LINEAGE[parent]}_half_siblings" do | *args |
         options = args.extract_options!
@@ -170,7 +170,7 @@ module Genealogy
         args << options
         send("add_siblings",*args)
       end
-      
+
       # add paternal/maternal half_sibling
       define_method "add_#{Genealogy::PARENT2LINEAGE[parent]}_half_sibling" do | sib,options={} |
         options[:half] = parent
@@ -196,7 +196,7 @@ module Genealogy
     # offspring
     def add_offspring(*args)
       options = args.extract_options!
-      
+
       raise_if_sex_undefined
 
       transaction do
@@ -221,7 +221,7 @@ module Genealogy
 
     def remove_offspring(*args)
       options = args.extract_options!
-      
+
       raise_if_sex_undefined
 
       resulting_indivs = if args.blank?

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module AlterParentsNoValidationSpec
   extend GenealogyTestModel
-  
+
   describe "*** Alter parents methods defining model with options {:perform_validation => false } ***" do
 
     before(:all) do
@@ -15,7 +15,7 @@ module AlterParentsNoValidationSpec
 
     describe "peter" do
       subject{ peter }
-      
+
       describe "#add_father(Object.new)" do
         specify { expect { peter.add_father(Object.new) }.to raise_error(Genealogy::IncompatibleObjectException) }
       end
@@ -29,7 +29,7 @@ module AlterParentsNoValidationSpec
       end
 
       describe "#add_parents(paul,titty)" do
-        
+
         its(:parents) do
           peter.add_parents(paul,titty)
           peter.reload
@@ -52,7 +52,7 @@ module AlterParentsNoValidationSpec
       end
 
       context "when has paul as father and peter is invalid" do
-        
+
         before(:each) do
           peter.add_father(paul)
           peter.mark_invalid!

@@ -4,7 +4,7 @@ module ModelLifecycleSpec
   extend GenealogyTestModel
 
   describe "*** Model lifecycle ***" do
-    
+
     before(:all) do
       ModelLifecycleSpec.define_test_model_class({:current_spouse => true})
     end
@@ -75,6 +75,6 @@ module ModelLifecycleSpec
 
 
 
-  
+
 end
 

@@ -29,23 +29,23 @@ module AlterGrandparentsSpec
       end
 
       context "when has paul and titty as parents and steve as sibling" do
-        
+
         before(:each) do
           peter.add_father(paul)
           peter.add_mother(titty)
           peter.add_siblings(steve)
         end
-        
+
         describe "##add_paternal_grandfather(manuel)" do
 
           before(:each) { peter.add_paternal_grandfather(manuel) }
           its('paternal_grandfather') {should == manuel}
-          
+
           describe "steve" do
             subject {steve}
             its('paternal_grandfather') {should == manuel}
           end
-          
+
         end
 
         describe "#add_paternal_grandfather(terry)" do
@@ -72,16 +72,16 @@ module AlterGrandparentsSpec
         end
 
         describe "#add_grandparents(manuel,terry,paso,irene)" do
-          
+
           its(:grandparents) do
             peter.add_grandparents(manuel,terry,paso,irene)
             should match_array [manuel,terry,paso,irene]
           end
-        
+
         end
 
         describe "#add_grandparents(manuel,nil,paso,nil)" do
-          
+
           its(:grandparents) do
             peter.add_grandparents(manuel,nil,paso,nil)
             should match_array [manuel,nil,paso,nil]
@@ -90,7 +90,7 @@ module AlterGrandparentsSpec
         end
 
         describe "#add_paternal_grandparents(manuel,terry)" do
-          
+
           its(:grandparents) do
             peter.add_paternal_grandparents(manuel,terry)
             should match_array [manuel,terry,nil,nil]
@@ -99,7 +99,7 @@ module AlterGrandparentsSpec
         end
 
         describe "#add_maternal_grandparents(manuel,terry)" do
-          
+
           its(:grandparents) do
             peter.add_maternal_grandparents(manuel,terry)
             should match_array [nil,nil,manuel,terry]
