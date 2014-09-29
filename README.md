@@ -207,8 +207,8 @@ To best understand genealogy features, I recommend to read first the query metho
 
 #### Highly desirable features
 
+* Improve eligible methods taking account individual's ages compatibility. This of course depends on nature of individual, their fertility age range should be provided as options.
 * Optional usage of current spouse (if defined) for more concise alter methods. For example adding a children to an individual will automatically add it to the current spouse of that individual
-* Date of birth introduction along with checks based on it for better eligible methods
 * Other more complex query methods like minimal ancestors
 
 ### Steps
