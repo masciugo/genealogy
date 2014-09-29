@@ -70,11 +70,7 @@ module ModelLifecycleSpec
       end
     end
 
-
   end
-
-
-
 
 end
 

@@ -98,12 +98,9 @@ module AlterParentsSpec
 
         end
 
-
       end
 
     end
-
-
 
   end
 

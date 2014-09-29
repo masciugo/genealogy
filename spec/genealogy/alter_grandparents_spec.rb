@@ -107,7 +107,6 @@ module AlterGrandparentsSpec
 
         end
 
-
         describe "when has manuel and terry as paternal grandparents and paso and irene as maternal grandparents" do
           before(:each) do
             peter.add_grandparents(manuel,terry,paso,irene)
@@ -133,8 +132,6 @@ module AlterGrandparentsSpec
               should match_array [nil,nil,nil,nil]
             end
           end
-
-
 
         end
       end

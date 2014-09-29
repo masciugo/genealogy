@@ -201,9 +201,7 @@ module AlterOffspringSpec
           end
         end
 
-
       end
-
 
     end
 

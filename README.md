@@ -5,7 +5,6 @@
 ## Premise
 Genealogy is still under development and need to be improved and extended. The developed features so far were the ones I needed for my personal applications where I had to provide data entry facilities to insert, given an individual, relatives' vital records and keep track of their familiar relationships. However, they are the basic features for a genealogy management system and that's why I decided to extract it in a gem. So please use with care but, above all, use it with critical and constructive sense as I am really interested in improving it.
 
-
 ## Description
 
 Genealogy is a ruby gem library which extends ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family, just add two columns for the two parents to its table (e.g.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother, from which everything depends on.
@@ -109,8 +108,6 @@ You can additionally save individual's dates of birth and death, by setting the 
 * `peter.age(:measurement=> :months)` will return an integer of the age in months.
 * `peter.age(:measurement=> :months, :string => true)` will return a string, "#{years} years and #{months} months".
 
-
-
 ### Alter methods
 
 They change the genealogy updating one ore more target individuals (the ones that are actually modified). These methods overwrite old values and call internally *save!* so all validation and callbacks are regularly run. Here are some examples where target individual correspond with method's receiver:
@@ -166,7 +163,6 @@ Removing methods examples are:
 
 * `YourModel.males` will return all males individuals
 * `YourModel.females` will return all females individuals
-
 
 ## *has_parents* options
 

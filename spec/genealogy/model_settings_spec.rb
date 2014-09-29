@@ -103,7 +103,6 @@ module ModelSettingsSpec
     end
   end
 
-
   describe "TestModel initialized with wrong options" do
 
     context "has_parents_opts: {:foo => 'bar' }" do
@@ -119,7 +118,6 @@ module ModelSettingsSpec
       specify { expect { ModelSettingsSpec.define_test_model_class(has_parents_opts) }.to raise_error Genealogy::WrongOptionException }
 
     end
-
 
   end
 

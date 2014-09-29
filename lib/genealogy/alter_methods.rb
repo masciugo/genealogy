@@ -192,7 +192,6 @@ module Genealogy
       end
     end
 
-
     # offspring
     def add_offspring(*args)
       options = args.extract_options!

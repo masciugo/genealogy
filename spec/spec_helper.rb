@@ -46,7 +46,6 @@ module GenealogyTestModel
         end
       end
 
-
       def inspect
         # "[#{id}]-#{name }"
         "#{name }"
@@ -88,6 +87,5 @@ module GenealogyTestModel
     self::TestModel.reset_column_information
   end
 end
-
 
 GenealogyTestModel.connect_to_database

@@ -121,7 +121,6 @@ module QueryMethodsSpec
         ) }
       end
 
-
     end
 
     describe "mary" do
@@ -346,9 +345,7 @@ module QueryMethodsSpec
 
         end
 
-
       end
-
 
     end
   end

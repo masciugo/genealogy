@@ -254,7 +254,6 @@ module AlterSiblingsSpec
           specify { expect { peter.remove_siblings(:half => :foo) }.to raise_error Genealogy::WrongOptionException }
         end
 
-
         describe "#remove_siblings(:half => :father, :affect_spouse => true ) " do
           before(:each) { peter.remove_siblings(:half => :father, :affect_spouse => true  ) }
           describe "julian" do
@@ -283,8 +282,5 @@ module AlterSiblingsSpec
 
   end
 
-
-
 end
-
 

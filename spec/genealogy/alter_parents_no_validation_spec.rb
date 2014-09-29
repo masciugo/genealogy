@@ -48,7 +48,6 @@ module AlterParentsNoValidationSpec
           end
         end
 
-
       end
 
       context "when has paul as father and peter is invalid" do
@@ -67,14 +66,10 @@ module AlterParentsNoValidationSpec
 
         end
 
-
       end
 
     end
 
-
-
   end
-
 
 end

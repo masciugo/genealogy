@@ -16,7 +16,6 @@ module Genealogy
 
   end
 
-
   def has_parents options = {}
 
     admitted_keys = [:sex_column, :sex_values, :father_column, :mother_column, :current_spouse_column, :current_spouse, :birth_date_column, :death_date_column, :perform_validation]
