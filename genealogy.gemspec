@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
   s.date        = Time.now
   s.licenses    = ["MIT"]
 
-  s.add_dependency 'activerecord'
-  s.add_dependency 'activesupport'
+  s.add_dependency('activerecord', '>= 3.2')
+  s.add_dependency('activesupport', '>= 3.2')
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rake'
