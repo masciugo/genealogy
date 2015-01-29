@@ -36,7 +36,7 @@ module QueryMethodsSpec
     let!(:luis) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "luis"})}
     let!(:rosa) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "rosa"})}
     let!(:larry) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "larry"})}
-    let!(:louise) {TestModel.my_find_or_create_by({:sex => "F", :birth_date => '1925-05-12T18:22:59-05:00', :death_date =>  '1994-03-10T18:22:59-05:00'},{:name => "louise"})}
+    let!(:louise) {TestModel.my_find_or_create_by({:sex => "F", :birth_date => '1925-05-12T18:22:59', :death_date =>  '1994-03-10T18:22:59'},{:name => "louise"})}
     let!(:ned) {TestModel.my_find_or_create_by({:sex => "M"},{:name => "ned"})}
     let!(:steve) {TestModel.my_find_or_create_by({:sex => "M", :father_id => paul.id, :mother_id => titty.id},{:name => "steve"})}
     let!(:naomi) {TestModel.my_find_or_create_by({:sex => "F"},{:name => "naomi"})}
@@ -224,14 +224,14 @@ module QueryMethodsSpec
       its(:parents){should match_array [nil,nil]}
       its(:spouses) {should match_array [larry,bob]}
       its(:eligible_spouses) {should match_array TestModel.males - [larry,bob]}
-      its(:birth) {should == '1925-05-12T18:22:59-05:00'}
-      its(:death) {should == '1994-03-10T18:22:59-05:00'}
+      its(:birth) {should == '1925-05-12T18:22:59'}
+      its(:death) {should == '1994-03-10T18:22:59'}
       its(:age) {should == 69}
       describe "#age(:measurement => 'years')" do
         specify {louise.age(:measurement => 'years').should == 69}
       end
-        describe "#age(:measurement => :years, :end_date=> '1975-05-12T18:22:59-05:00')" do
-        specify {louise.age(:measurement => :years, :end_date=> '1975-05-12T18:22:59-05:00').should == 50}
+        describe "#age(:measurement => :years, :end_date=> '1975-05-12T18:22:59')" do
+        specify {louise.age(:measurement => :years, :end_date=> '1975-05-12T18:22:59').should == 50}
       end
       describe "#age(:measurement => :years, :string => true)" do
         specify {louise.age({:measurement => :years, :string =>true}).should == '69 years'}
