@@ -3,7 +3,6 @@
 .bundle
 .config
 .yardoc
-Gemfile.lock
 InstalledFiles
 _yardoc
 coverage
@@ -18,3 +17,4 @@ tmp
 spec/debug.log
 spec/test.sqlite3.db
 logfile
+*.lock
