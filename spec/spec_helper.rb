@@ -1,8 +1,16 @@
 require "active_record"
 require "active_support"
 require "logger"
-# require "debugger" # ruby 1.9
-# require "byebug" # ruby 2
+
+case RUBY_VERSION
+when /^1.9/
+  require "debugger"
+when /^2/
+  require "byebug"
+else
+  raise  
+end
+
 require 'rspec/its'
 
 # this is to make absolutely sure we test this one, not the one
