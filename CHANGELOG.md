@@ -4,7 +4,7 @@
 
 ### new features
 
-* 
+* YARD docs
 
 * 
 
@@ -30,7 +30,9 @@
 
 * family* methods doesn't include receiver
 
-* 
+* eligible methods removed in favor of ineligible ones 
+
+* add/remove_paternal/maternal_half_siblings removed for sake of semplicity/manteinance. use add/remove_siblings with options
 
 ## 1.5.0
 

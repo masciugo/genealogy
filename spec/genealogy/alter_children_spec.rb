@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "*** Alter children methods ***", :done  do
+describe "*** Alter children methods ***", :done, :alter_c  do
 
   context "when taking account validation (default options for has_parents)" do
     before { @model = get_test_model({}) }

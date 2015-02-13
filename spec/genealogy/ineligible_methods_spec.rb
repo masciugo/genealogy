@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "*** Ineligible methods ***", :wip do
+describe "*** Ineligible methods ***", :wip, :ineligible do
 
   before { @model = get_test_model({:current_spouse => true}) }
   include_context "unreleted people exist"

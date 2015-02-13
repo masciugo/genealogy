@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "*** Model lifecycle ***", :done do
+describe "*** Model lifecycle ***", :done, :model do
 
   before { @model = get_test_model({}) }
 

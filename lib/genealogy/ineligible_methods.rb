@@ -2,45 +2,56 @@ module Genealogy
   module IneligibleMethods
     extend ActiveSupport::Concern
 
-    # parents
-    [:father, :mother].each do |parent|
-      define_method "ineligible_#{parent}s" do
-        if send(parent) # already defined
-          genealogy_class.all
-        else
-          descendants | [self] | genealogy_class.send("#{Genealogy::OPPOSITESEX[Genealogy::PARENT2SEX[parent]]}s")
-        end
-      end
+    # list of individual who cannot be father
+    # @return [Array]
+    def ineligible_fathers
+      father ? genealogy_class.all : (descendants | [self] | genealogy_class.females)
     end
 
-    # grandparents
-    [:father, :mother].each do |parent|
-      [:father, :mother].each do |grandparent|
-        relationship = "#{Genealogy::PARENT2LINEAGE[parent]}_grand#{grandparent}"
-        define_method "ineligible_#{relationship}s" do
-          grandparent_sex = Genealogy::PARENT2SEX[grandparent]
-          if send("#{relationship}") # already defined
-            genealogy_class.all
-          else 
-            [send(parent)].compact | descendants | [self] | genealogy_class.send("#{Genealogy::OPPOSITESEX[grandparent_sex]}s")
-          end
-        end
-
-      end
-
+    # list of individual who cannot be mother
+    # @return [Array]
+    def ineligible_mothers
+      mother ? genealogy_class.all : (descendants | [self] | genealogy_class.males)
+    end
+    
+    # list of individual who cannot be grandfather
+    # @return [Array]
+    def ineligible_paternal_grandfathers
+      paternal_grandfather ? genealogy_class.all : ([father].compact | descendants | [self] | genealogy_class.females)
+    end
+    
+    # list of individual who cannot be grandmother
+    # @return [Array]
+    def ineligible_paternal_grandmothers
+      paternal_grandmother ? genealogy_class.all : ([father].compact | descendants | [self] | genealogy_class.males)
+    end
+    
+    # list of individual who cannot be grandfather
+    # @return [Array]
+    def ineligible_maternal_grandfathers
+      maternal_grandfather ? genealogy_class.all : ([mother].compact | descendants | [self] | genealogy_class.females)
+    end
+    
+    # list of individual who cannot be grandmother
+    # @return [Array]
+    def ineligible_maternal_grandmothers
+      maternal_grandmother ? genealogy_class.all : ([mother].compact | descendants | [self] | genealogy_class.males)
     end
 
-    # children
+    # list of individual who cannot be children
+    # @return [Array]
     def ineligible_children
       ancestors | children | siblings | [self]
     end
 
-    # spouses
+    # list of individual who cannot be spouses
+    # @return [Array]
     def ineligible_spouses
       spouses | genealogy_class.send("#{sex_to_s}s")
     end
 
-    # siblings
+    # list of individual who cannot be siblings
+    # @return [Array]
     def ineligible_siblings
       ancestors | descendants | siblings(:half => :include).delete_if{|sib| sib.parents.any?(&:nil?) } | [self]
     end

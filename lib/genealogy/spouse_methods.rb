@@ -2,6 +2,8 @@ module Genealogy
   module SpouseMethods
     extend ActiveSupport::Concern
 
+    include Constants
+
     # add method
     def add_current_spouse(obj)
       raise ArgumentError, "Expected #{self.genealogy_class} object. Got #{obj.class}" unless obj.class.respond_to?(:genealogy_enabled)
@@ -43,10 +45,7 @@ module Genealogy
 
     # query methods
     def eligible_current_spouses
-      self.genealogy_class.send("#{Genealogy::OPPOSITESEX[sex_to_s.to_sym]}s") - spouses
-    end
-
-    module ClassMethods
+      self.genealogy_class.send("#{OPPOSITESEX[sex_to_s.to_sym]}s") - spouses
     end
 
   end

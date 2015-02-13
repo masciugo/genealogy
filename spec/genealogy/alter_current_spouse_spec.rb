@@ -9,7 +9,7 @@ end
 
 
 
-describe "*** Alter current_spouse methods ***", :done do
+describe "*** Alter current_spouse methods ***", :done, :spouse do
 
   context "when taking account validation (options for has_parents: {:current_spouse => true})" do
 

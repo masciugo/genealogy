@@ -7,7 +7,7 @@ shared_context "manuel and terry are paternal grandparents and paso and irene ar
   }
 end
 
-describe "*** Alter grandparents methods ***", :done  do
+describe "*** Alter grandparents methods ***", :done, :alter_gp  do
 
   context "when taking account validation (default options for has_parents)" do
     before { @model = get_test_model({}) }

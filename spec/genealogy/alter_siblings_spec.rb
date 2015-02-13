@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "*** Alter siblings methods ***", :done do
+describe "*** Alter siblings methods ***", :done, :alter_s do
 
   context "when taking account validation (default options for has_parents)" do
     before { @model = get_test_model({}) }
@@ -79,23 +79,6 @@ describe "*** Alter siblings methods ***", :done do
 
       describe "peter.add_siblings(julian,paso, :half => :father)" do
         subject { peter.add_siblings(julian,paso, :half => :father ) }
-        it_behaves_like "a method which add paternal half siblings", :peter, :julian, :paso
-      end
-
-      describe "peter.add_paternal_half_siblings(julian,paso)" do
-        subject {peter.add_paternal_half_siblings(julian,paso)}
-        it_behaves_like "a method which add paternal half siblings", :peter, :julian, :paso
-        context "when peter has no mother" do
-          before { peter.update_attributes(mother_id: nil) }
-          it_behaves_like "a method which add paternal half siblings", :peter, :julian, :paso
-        end
-      end
-
-      describe "peter.add_paternal_half_sibling(julian) and #add_paternal_half_sibling(paso)" do
-        subject do 
-          peter.add_paternal_half_sibling(julian)
-          peter.add_paternal_half_sibling(paso)
-        end
         it_behaves_like "a method which add paternal half siblings", :peter, :julian, :paso
       end
 
@@ -197,37 +180,6 @@ describe "*** Alter siblings methods ***", :done do
           it_behaves_like 'remove paternal half siblings'
         end
 
-        describe "peter.remove_paternal_half_siblings" do
-          subject { peter.remove_paternal_half_siblings }
-          it_behaves_like "remove paternal half siblings"
-        end
-
-        describe "peter.remove_paternal_half_siblings(julian)" do
-          subject { peter.remove_paternal_half_siblings(julian) }
-          it { is_expected.to be true }
-          describe "after removing" do
-            before { subject }
-            it "julian is not paternal half siblings" do
-              expect(julian.reload.father).to eq nil
-            end
-            it "paso and agata are still paternal half siblings" do
-              expect([peter,paso]).to be_paternal_half_siblings 
-            end
-          end
-        end
-
-        describe "peter.remove_paternal_half_siblings(steve)" do
-          subject { peter.remove_paternal_half_siblings(steve) }
-          it { is_expected.to be false }
-          describe "after removing" do
-            before { subject  }
-            it "steve has still his parents" do
-              expect(steve.reload.father).to eq paul and
-              expect(steve.reload.mother).to eq titty
-            end
-          end
-        end
-
 
         shared_examples 'remove maternal half siblings' do
           it { is_expected.to be true }
@@ -251,11 +203,6 @@ describe "*** Alter siblings methods ***", :done do
 
         describe "peter.remove_siblings(:half => :mother)" do
           subject { peter.remove_siblings(:half => :mother) }
-          it_behaves_like 'remove maternal half siblings'
-        end
-
-        describe "peter.remove_maternal_half_siblings" do
-          subject { peter.remove_maternal_half_siblings }
           it_behaves_like 'remove maternal half siblings'
         end
 

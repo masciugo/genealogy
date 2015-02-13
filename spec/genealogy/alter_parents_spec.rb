@@ -5,7 +5,7 @@ shared_context "paul and titty are peter's parents" do
 end
 
 
-describe "*** Alter parents methods ***", :done  do
+describe "*** Alter parents methods ***", :done, :alter_p  do
 
   context "when taking account validation (options for has_parents: {:current_spouse => true})" do
     before { @model = get_test_model({}) }

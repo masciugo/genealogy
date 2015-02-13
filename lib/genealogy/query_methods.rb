@@ -1,6 +1,9 @@
 module Genealogy
   module QueryMethods
     extend ActiveSupport::Concern
+
+    include Constants
+
     # @return [2-elements Array] father and mother 
     def parents
       [father,mother]
@@ -44,7 +47,7 @@ module Genealogy
 
     # @param [Hash] options
     # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    # @option options [Symbol] spouse to filter children by spouse
+    # @option options [Object] spouse to filter children by spouse
     # @return [Array] children
     def children(options = {})
       if spouse = options[:spouse]
@@ -71,7 +74,7 @@ module Genealogy
 
     # @return [Array] list of individuals with whom has had children
     def spouses
-      parent_method = Genealogy::SEX2PARENT[Genealogy::OPPOSITESEX[sex_to_s.to_sym]]
+      parent_method = SEX2PARENT[OPPOSITESEX[sex_to_s.to_sym]]
       children.collect{|child| child.send(parent_method)}.uniq
     end
 
@@ -173,8 +176,7 @@ module Genealogy
     # @param [Hash] options
     # @option options [Symbol] lineage to filter by lineage: :paternal or :maternal
     # @option options [Symbol] sex to filter by sex: :male or :female. In few word to get ancles or aunts
-    # @option options [Symbol] half to filter by half siblings
-    # @see #siblings for :half option
+    # @option options [Symbol] half to filter by half siblings (see #siblings)
     # @return [Array] list of uncles and aunts
     def uncles_and_aunts(options={})
       relation = case options[:lineage]
@@ -227,9 +229,8 @@ module Genealogy
 
     # @param [Hash] options
     # @option options [Symbol] lineage to filter uncles by lineage: :paternal or :maternal
-    # @option options [Symbol] half to filter uncles
+    # @option options [Symbol] half to filter uncles (see #siblings)
     # @option options [Symbol] sex to filter cousins by sex: :male or :female. 
-    # @see #uncles_and_aunts for :half and :lineage options
     # @return [Array] list of uncles and aunts' children
     def cousins(options = {})
       sex = options.delete(:sex)
@@ -238,9 +239,8 @@ module Genealogy
     end
 
     # @param [Hash] options
-    # @option options [Symbol] half to filter siblings
+    # @option options [Symbol] half to filter siblings (see #siblings)
     # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    # @see #siblings for :half option
     # @return [Array] list of nieces and nephews
     def nieces_and_nephews(options = {})
       sex = options.delete(:sex)
@@ -260,6 +260,10 @@ module Genealogy
       nieces_and_nephews(options.merge({sex: :female}))
     end
 
+    # family hash with roles as keys and individuals as values. Defaults roles are :father, :mother, :children, :siblings and current_spouse if enabled
+    # @option options [Symbol] half to filter siblings (see #siblings)
+    # @option options [Boolean] extended to include roles for grandparents, grandchildren, uncles, aunts, nieces, nephews and cousins
+    # @return [Hash] family hash with roles as keys and individuals as values. 
     def family_hash(options = {})
       roles = [:father, :mother, :children, :siblings]
       roles += [:current_spouse] if self.class.current_spouse_enabled
@@ -279,17 +283,24 @@ module Genealogy
       roles.inject({}){|res,role| res.merge!({role => self.send(role)})}
     end
 
+    # family_hash with option extended: :true
+    # @see #family_hash
+    def extended_family_hash(options = {})
+      family_hash(options.merge(:extended => true))
+    end
+
+    # family individuals
+    # @return [Array]
+    # @see #family_hash 
     def family(options = {})
       hash = family_hash(options)
       hash.keys.inject([]){|tot,k| tot << hash[k] }.compact.flatten
     end
 
+    # family with option extended: :true
+    # @see #family
     def extended_family(options = {})
       family(options.merge(:extended => true))
-    end
-
-    def extended_family_hash(options = {})
-      family_hash(options.merge(:extended => true))
     end
 
     private
@@ -307,9 +318,13 @@ module Genealogy
     end
 
     module ClassMethods
+      # all male individuals
+      # @return [ActiveRecord_Relation] 
       def males
         where(sex_column => sex_male_value)
       end
+      # all female individuals
+      # @return [ActiveRecord_Relation] 
       def females
         where(sex_column => sex_female_value)
       end

@@ -2,23 +2,17 @@ module Genealogy
 
   extend ActiveSupport::Concern
 
-  included do
-    DEFAULTS = {
-      column_names: {
-        sex: 'sex',
-        father_id: 'father_id',
-        mother_id: 'mother_id',
-        current_spouse_id: 'current_spouse_id',
-        birth_date: 'birth_date',
-        death_date: 'death_date',
-      },
-      perform_validation: true,
-      current_spouse: false
-    }
-  end
-
   module ClassMethods
     
+    include Genealogy::Constants
+
+    # gives to ActiveRecord model geneaogy capabilities. Modules UtilMethods QueryMethods IneligibleMethods AlterMethods and SpouseMethods are included
+    # @param [Hash] options
+    # @option options [Boolean] current_spouse (false) change to true to track individual's current spouse
+    # @option options [Boolean] perform_validation (true) change to false to update relatives external keys without perform validation
+    # @option options [Hash] column_names (sex: 'sex', father_id: 'father_id', mother_id: 'mother_id', current_spouse_id: 'current_spouse_id', birth_date: 'birth_date', death_date: 'death_date') column names to map database individual table
+    # @option options [Array] sex_values (['M','F']) values used in database sex column 
+    # @return [void] 
     def has_parents options = {}
 
       check_options(options)
@@ -26,8 +20,8 @@ module Genealogy
       class_attribute :genealogy_enabled, :current_spouse_enabled, :genealogy_class, :perform_validation
       self.genealogy_enabled = true
       self.genealogy_class = self # keep track of the original extend class to prevent wrong scopes in query method in case of STI
-      self.current_spouse_enabled = options[:current_spouse].try(:==,true) || false           # default false
-      self.perform_validation = options[:perform_validation].try(:==,false) ? false : true    # default true
+      self.current_spouse_enabled = options[:current_spouse].try(:==,true) || DEFAULTS[:current_spouse] 
+      self.perform_validation = options[:perform_validation].try(:==,false) ? false : DEFAULTS[:perform_validation]
 
       # column names class attributes
       DEFAULTS[:column_names].merge(options[:column_names]).each do |k,v|
@@ -39,7 +33,7 @@ module Genealogy
 
       ## sex
       class_attribute :sex_values, :sex_male_value, :sex_female_value
-      self.sex_values = options[:sex_values] || ['M','F']
+      self.sex_values = options[:sex_values] || DEFAULTS[:sex_values]
       self.sex_male_value = self.sex_values.first
       self.sex_female_value = self.sex_values.last
       
@@ -56,7 +50,6 @@ module Genealogy
       has_many :children_as_father, :class_name => self, :foreign_key => self.father_id_column, :dependent => :nullify, :extend => FatherAssociationExtension
       has_many :children_as_mother, :class_name => self, :foreign_key => self.mother_id_column, :dependent => :nullify, :extend => MotherAssociationExtension
 
-      # Include instance methods and class methods
       include Genealogy::UtilMethods
       include Genealogy::QueryMethods
       include Genealogy::IneligibleMethods
@@ -64,6 +57,8 @@ module Genealogy
       include Genealogy::SpouseMethods if current_spouse_enabled
 
     end
+
+    private
 
     module MotherAssociationExtension
       def with(father_id)
@@ -75,8 +70,6 @@ module Genealogy
         where(mother_id: mother_id)
       end
     end
-
-    private
 
     def check_options(options)
 
