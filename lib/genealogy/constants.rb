@@ -1,11 +1,11 @@
 module Genealogy
-  PARENT2LINEAGE = { :father => :paternal, :mother => :maternal }
-  LINEAGE2PARENT = PARENT2LINEAGE.invert
-  PARENT2SEX = { :father => :male, :mother => :female }
-  SEX2PARENT = PARENT2SEX.invert
-  OPPOSITESEX = {:male => :female, :female => :male}
+  PARENT2LINEAGE = ActiveSupport::HashWithIndifferentAccess.new({ :father => :paternal, :mother => :maternal })
+  LINEAGE2PARENT = ActiveSupport::HashWithIndifferentAccess.new(PARENT2LINEAGE.invert)
+  PARENT2SEX = ActiveSupport::HashWithIndifferentAccess.new({ :father => :male, :mother => :female })
+  SEX2PARENT = ActiveSupport::HashWithIndifferentAccess.new(PARENT2SEX.invert)
+  OPPOSITESEX = ActiveSupport::HashWithIndifferentAccess.new({:male => :female, :female => :male})
 
-  AKA = {
+  AKA = ActiveSupport::HashWithIndifferentAccess.new({
     :father => "F",
     :mother => "M",
     :paternal_grandfather => "PGF", 
@@ -20,5 +20,5 @@ module Genealogy
     :grandchildren => "GC", 
     :uncles_and_aunts => "U&A", 
     :nieces_and_nephews => "N&N"
-  }
+  })
 end

@@ -8,7 +8,7 @@ Genealogy is still under development and need to be improved and extended. The d
 ## Description
 
 Genealogy is a ruby gem library which extends ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies. If records of your model need to be linked and act as they were individuals of a big family, just add two columns for the two parents to its table (e.g.: *father_id* and *mother_id*) and make your model to *:has_parents*. This macro will provide your model with the two fundamental self-join associations, *father* and *mother, from which everything depends on.
-Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represents genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically, the only **primitive** familiar relationships are associations father and mother, all the others relationships, like grandparents, siblings or offspring, are **derived**. This means that all methods in charge of alter the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` applied to the right records.
+Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represents genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically, the only **primitive** familiar relationships are associations father and mother, all the others relationships, like grandparents, siblings or children, are **derived**. This means that all methods in charge of alter the genealogy (adding/removing relatives) will end up to use the fundamental method `add/remove_parent` applied to the right records.
 
 ## Installation
 
@@ -39,74 +39,67 @@ These self explanatory methods simply parse the tree through parents' associatio
 Some methods return a sorted array:
 
 * `peter.parents` will retrieve peter's parents as 2 elements sorted array: [father,mother]
-* `peter.paternal_grandparents` will return a 2 elements sorted array: [paternal_grandfather, paternal_granmother]
-* `peter.grandparents` will return a 4 elements sorted array: [paternal_grandfather, paternal_granmdother, maternal_grandfather, maternal_grandmother]
+* `peter.paternal_grandparents` returns a 2 elements sorted array: [paternal_grandfather, paternal_granmother]
+* `peter.grandparents` returns a 4 elements sorted array: [paternal_grandfather, paternal_granmdother, maternal_grandfather, maternal_grandmother]
 
 Some other return an unsorted array:
 
-* `peter.ancestors` will return an unsorted array
+* `peter.ancestors` returns an unsorted array
 * `peter.descendants` same as above
 
-Genealogy strongly considers multiple mates procreation so siblings and offspring are really featured methods:
+Genealogy strongly considers multiple mates procreation so siblings and children are really featured methods:
 
-* `peter.siblings` will return full-siblings array (same father and mother)
-* `peter.siblings(:half => :mother)` will return maternal half-siblings array (same mother)
+* `peter.siblings` returns full-siblings array (same father and mother)
+* `peter.siblings(:half => :mother)` returns maternal half-siblings array (same mother)
 * `peter.maternal_half_siblings` just a shortcut
-* `peter.siblings(:half => :only)` will return only half-siblings
+* `peter.siblings(:half => :only)` returns only half-siblings
 * `peter.half_siblings` just a shortcut
-* `peter.siblings(:half => :father, :spouse => :titty)` will return paternal half-siblings but the ones he had with titty
-* `peter.siblings(:half => :include)` will return all kind of siblings: full and half
-* `paul.offspring` will return all individuals that have paul as father (mother can be any)
-* `paul.offspring(:spouse => :titty)` will return all individuals that have paul as father and titty as mother
-* `paul.offspring(:spouse => nil)` will return all individuals that have paul as father and an unknown mother
-* `paul.spouses` will return all individuals that have had children with paul. Result will include nil if paul has had children with unknown spouse
+* `peter.siblings(:half => :father, :spouse => :titty)` returns paternal half-siblings but the ones he had with titty
+* `peter.siblings(:half => :include)` returns all kind of siblings: full and half
+* `paul.children` returns all individuals that have paul as father (mother can be any)
+* `paul.children(:spouse => :titty)` returns all individuals that have paul as father and titty as mother
+* `paul.children(:spouse => nil)` returns all individuals that have paul as father and an unknown mother
+* `paul.spouses` returns all individuals that have had children with paul. Result will include nil if paul has had children with unknown spouse
 
 There are also some other miscellaneous query methods like:
 
-* `peter.uncles_and_aunts` will return siblings of parents
-* `peter.uncles_and_aunts(:sex => male)` will return only male siblings of parents
+* `peter.uncles_and_aunts` returns siblings of parents
+* `peter.uncles_and_aunts(:sex => male)` returns only male siblings of parents
 * `peter.uncles` shortcut for above
-* `peter.uncles_and_aunts(:sex => male, :lineage => :paternal)` will return only male siblings of father
+* `peter.uncles_and_aunts(:sex => male, :lineage => :paternal)` returns only male siblings of father
 * `peter.paternal_uncles` shortcut for above
-* `peter.uncles_and_aunts(:sex => male, :lineage => :maternal)` will return only male siblings of mother
+* `peter.uncles_and_aunts(:sex => male, :lineage => :maternal)` returns only male siblings of mother
 * `peter.maternal_uncles` shortcut for above
-* `peter.uncles_and_aunts(:sex => female)` will return only female siblings of parents
+* `peter.uncles_and_aunts(:sex => female)` returns only female siblings of parents
 * `peter.aunts` shortcut for above
-* `peter.uncles_and_aunts(:sex => female, :lineage => :paternal)` will return only female siblings of father
+* `peter.uncles_and_aunts(:sex => female, :lineage => :paternal)` returns only female siblings of father
 * `peter.paternal_aunts` shortcut for above
-* `peter.uncles_and_aunts(:sex => female, :lineage => :maternal)` will return only female siblings of mother
+* `peter.uncles_and_aunts(:sex => female, :lineage => :maternal)` returns only female siblings of mother
 * `peter.maternal_aunts` shortcut for above
 * `peter.grandchildren`
-* `peter.great_grandchildren` will return offspring of grandchildren
-* `peter.great_grandparents` will return parents of grandparents
+* `peter.great_grandchildren` returns children of grandchildren
+* `peter.great_grandparents` returns parents of grandparents
 * `peter.nieces_and_nephews(options={}, sibling_options={})` will consider full-siblings by default, but the second argument hash can modify this if desired
-* `peter.nieces_and_nephews(:sex => male)` will return all male offspring of silbings
+* `peter.nieces_and_nephews(:sex => male)` returns all male children of silbings
 * `peter.nephews` shortcut for above
-* `peter.nieces_and_nephews(:sex => female)` will return all female offspring of silbings
+* `peter.nieces_and_nephews(:sex => female)` returns all female children of silbings
 * `peter.nieces` shortcut for above
-* `peter.cousins` will return offspring of siblings of parents
-* `peter.family` will return peter's folks: offspring, parents and all spouses (that are the union of all children's parents)
+* `peter.cousins` returns children of siblings of parents
+* `peter.family` returns peter's folks: children, parents and current spouse if in use
+* `peter.family_hash` same as #family but returns an hash with roles as keys
 * `peter.family(:half => :include)` will also consider half_siblings
 * `peter.extended_family` will also consider grandparents, grandchildren, uncles, aunts, nieces, nephews
 
 Others methods called *eligible_ methods* can be used to pre-filter role-compatible (technically speaking) genealogy individuals. For example:
 
-* `peter.eligible_fathers` will return all genealogy male individuals excluding peter's descendants. It will return an empty array if peter has already a father.
+* `peter.eligible_fathers` returns all genealogy male individuals excluding peter's descendants. It returns an empty array if peter has already a father.
 
 * `peter.eligible_paternal_grandfathers` will be the same as `peter.father.eligible_fathers`
 
-* `peter.eligible_siblings` will return all genealogy individuals excluding ancestors, all kind of  siblings and himself
-* `peter.eligible_offspring` will return all genealogy individuals excluding ancestors, offspring, full siblings and himself
-* `peter.eligible_spouses` will return all opposite sex genealogy individuals excluding spouses
+* `peter.eligible_siblings` returns all genealogy individuals excluding ancestors, all kind of  siblings and himself
+* `peter.eligible_children` returns all genealogy individuals excluding ancestors, children, full siblings and himself
+* `peter.eligible_spouses` returns all opposite sex genealogy individuals excluding spouses
 
-You can additionally save individual's dates of birth and death, by setting the :birth_date_column and :death_date_column options in has_parents. Default values are 'birth_date' and 'death_date' respectively.
-
-* `peter.age` with no options passed will return an integer of peter's age at the present in years. If peter has a death date, it will instead default to return his age in years at death.
-* `peter.age(:measurement=> :years)` is the default and will return the same as if no arguments were passed.
-* `peter.age(:measurement=> :years, :end_date=> '1975-05-12T18:22:59-05:00')` a set end date takes precedence over a death date, so this will be peter's date on the given date and time. The method parses the string into DateTime.
-* `peter.age(:measurement=> :years, :string => true)` will return a string, "#{years} years".
-* `peter.age(:measurement=> :months)` will return an integer of the age in months.
-* `peter.age(:measurement=> :months, :string => true)` will return a string, "#{years} years and #{months} months".
 
 ### Alter methods
 
@@ -132,8 +125,8 @@ Some methods can take a list of individuals:
 
 Multiple mating are supported so half parent relationships are admitted and can build separately:
 
-* `paul.add_offspring(julian)` will set only one of julian's parent depending on paul's gender. By the way, given paul is a male, this is of course equivalent to `julian.add_father(paul)`
-* `paul.add_offspring(julian, :spouse => michelle)` will also change julian's mother
+* `paul.add_children(julian)` will set only one of julian's parent depending on paul's gender. By the way, given paul is a male, this is of course equivalent to `julian.add_father(paul)`
+* `paul.add_children(julian, :spouse => michelle)` will also change julian's mother
 
 * `julian.add_siblings(peter, :half => :father)` will add peter as a paternal half-sibling, that is only peter's father will be changed to julian's one
 * `julian.add_siblings(peter, :half => :father, :spouse => titty)` will also change peter's mother to titty. This let set a different mother for the sibling
@@ -150,10 +143,10 @@ Removing methods examples are:
 * `peter.remove_paternal_grandparents` will set both peter's parent to nil
 * `peter.remove_grandparents` will set all parents' parents to nil
 *
-* `peter.remove_offspring` will nullify the father of all that records that have peter as father
-* `peter.remove_offspring(:affect_spouse => true)` will also nullify mother of all that records that have peter as father
-* `peter.remove_offspring(:spouse => titty)` will nullify the father of all that records that have peter as father and titty as mother
-* `peter.remove_offspring(:spouse => titty, :affect_spouse => true)` will do both last two actions
+* `peter.remove_children` will nullify the father of all that records that have peter as father
+* `peter.remove_children(:affect_spouse => true)` will also nullify mother of all that records that have peter as father
+* `peter.remove_children(:spouse => titty)` will nullify the father of all that records that have peter as father and titty as mother
+* `peter.remove_children(:spouse => titty, :affect_spouse => true)` will do both last two actions
 
 * `peter.remove_siblings` will nullify both full-siblings parents
 * `peter.remove_siblings(:half => :father)` will nullify only father of all records that have same peter's father as father
@@ -161,20 +154,20 @@ Removing methods examples are:
 
 ### Class methods
 
-* `YourModel.males` will return all males individuals
-* `YourModel.females` will return all females individuals
+* `YourModel.males` returns all males individuals
+* `YourModel.females` returns all females individuals
 
 ## *has_parents* options
 
 Some options are available to suit your existing table:
 
     class Individual<ActiveRecord::Base
-      has_parents :father_column => "padre", :mother_column => "madre", :sex_column => "gender", :sex_values => [1,2], :birth_date_column => 'birth', :death_date_column => 'death'
+      has_parents column_names: {father_id: "padre", mother_id: "madre", sex: "gender", birth_date: 'birth', death_date: 'death'}, sex_values: [1,2]
     end
 
 ### current spouse option
 
-You can also consider current individual's consort providing the option `:current_spouse => true` which will make genealogy to keep track of the current spouse through the extra current_spouse association. The term 'spouse' here is really different from the spouse mentioned so far, which was intended to refer the individual with whom someone bred someone else. current_spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future current_spouse association can be used to add/remove siblings/offspring in a more concise way.
+You can also consider current individual's consort providing the option `:current_spouse => true` which will make genealogy to keep track of the current spouse through the extra current_spouse association. The term 'spouse' here is really different from the spouse mentioned so far, which was intended to refer the individual with whom someone bred someone else. current_spouse association, for the moment, never comes into play while querying or building the genealogy on derived familiar relationships! In the future current_spouse association can be used to add/remove siblings/children in a more concise way.
 
 ### perform_validation option
 
@@ -182,14 +175,17 @@ perform_validation option let you specify if child record, while altering its pa
 
 ### defaults
 
-    father_column: 'father_id'
-    mother_column: 'mother_id'
-    current_spouse_column: 'current_spouse_id'
-    sex_column: 'sex'
-    sex_values: ['M','F']
-    birth_date_column: 'birth_date'
-    death_date_column: 'death_date'
+#### column_names
+    father_id: 'father_id'
+    mother_id: 'mother_id'
+    current_spouse_id: 'current_spouse_id'
+    sex: 'sex'
+    birth_date: 'birth_date'
+    death_date: 'death_date'
+
+#### other    
     perform_validation: true
+    sex_values: ['M','F']
 
 ## Test as documentation
 

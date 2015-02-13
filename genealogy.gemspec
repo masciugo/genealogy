@@ -24,8 +24,12 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '~> 2.99.0'
+  s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rspec-its'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'yard'
+  s.add_development_dependency 'redcarpet'
+  s.add_development_dependency 'github-markup'
 
   s.add_development_dependency case RUBY_VERSION
   when /^1.9/

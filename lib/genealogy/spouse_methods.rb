@@ -4,8 +4,8 @@ module Genealogy
 
     # add method
     def add_current_spouse(obj)
-      raise IncompatibleObjectException, "Linked objects must be instances of the same class" unless obj.is_a? self.genealogy_class
-      raise WrongSexException, "Can't add current_spouse with same sex" if self.sex == obj.sex
+      raise ArgumentError, "Expected #{self.genealogy_class} object. Got #{obj.class}" unless obj.class.respond_to?(:genealogy_enabled)
+      raise IncompatibleRelationshipException, "#{obj} can't be spouse of #{self}" unless eligible_current_spouses.include? obj
 
       if perform_validation
         self.current_spouse = obj

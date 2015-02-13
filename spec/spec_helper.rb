@@ -1,6 +1,9 @@
 require "active_record"
 require "active_support"
 require "logger"
+require "database_cleaner"
+
+DatabaseCleaner.strategy = :truncation
 
 case RUBY_VERSION
 when /^1.9/
@@ -13,6 +16,13 @@ end
 
 require 'rspec/its'
 
+RSpec.configure do |config|
+  config.fail_fast = true
+  # config.order = "random" # examples are are not ready for this
+  config.color = true
+  config.formatter = :documentation
+end
+
 # this is to make absolutely sure we test this one, not the one
 # installed on the system.
 require File.expand_path('../../lib/genealogy', __FILE__)
@@ -20,80 +30,79 @@ require File.expand_path('../../lib/genealogy', __FILE__)
 # requiring supporting files like shared examples
 Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 
-RSpec.configure do |c|
-  c.treat_symbols_as_metadata_keys_with_true_values = true
+def connect_to_database
+  config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
+  ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
+  ActiveRecord::Base.establish_connection(config['sqlite3'])
 end
 
-module GenealogyTestModel
-  def self.connect_to_database
-    config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
-    ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
-    ActiveRecord::Base.establish_connection(config['sqlite3'])
-  end
+def get_test_model has_parents_opts = {}
 
-  # method to define TestModel class in the scope of the including module.
-  def define_test_model_class has_parents_opts = {}
+  klass = Class.new(ActiveRecord::Base) do
+    self.table_name = 'test_records'
 
-    puts "defining TestModel with ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s}"
+    has_parents has_parents_opts
 
-    model = Class.new(ActiveRecord::Base) do
-      self.table_name = 'test_records'
+    validate :check_invalid
 
-      has_parents has_parents_opts
-
-      validate :check_invalid
-
+    def self.my_find_by_name(name)
       case  Gem::Specification.find_by_name('activerecord').version.to_s
       when /^3/
-        def self.my_find_or_create_by(build_attrs,find_attrs)
-          self.find_or_create_by_name(find_attrs.merge(build_attrs))
-        end
+        self.find_by_name(name)
       when /^4/
-        def self.my_find_or_create_by(build_attrs,find_attrs)
-          self.create_with(build_attrs).find_or_create_by(find_attrs)
-        end
-      end
-
-      def inspect
-        # "[#{id}]-#{name }"
-        "#{name }"
-        # "[#{id}-#{object_id}]#{name }"
-      end
-
-      def mark_invalid!
-        update_attribute(:isinvalid,true)
-      end
-
-      private
-
-      def check_invalid
-        errors.add(:base, "This object was flagged to always fail") if isinvalid == true
-      end
-
-    end
-    remove_const(:TestModel) if defined?(self::TestModel)
-    self.const_set 'TestModel', model
-
-    cn = ActiveRecord::Base.connection
-    cn.drop_table 'test_records' if cn.table_exists?('test_records')
-
-    cn.create_table 'test_records' do |table|
-      table.string :name
-      if self::TestModel.sex_male_value.is_a? Integer
-        table.integer self::TestModel.sex_column
+        self.find_by(name: name)
       else
-        table.string self::TestModel.sex_column
+        raise 'unknown activerecord version'
       end
-      table.integer self::TestModel.father_column
-      table.integer self::TestModel.mother_column
-      table.datetime self::TestModel.birth_date_column
-      table.datetime self::TestModel.death_date_column
-      table.integer self::TestModel.current_spouse_column if self::TestModel.current_spouse_enabled?
-      table.boolean 'isinvalid'
     end
 
-    self::TestModel.reset_column_information
+    def inspect
+      # "[#{id}]-#{name }"
+      to_s
+      # "[#{id}-#{object_id}]#{name }"
+    end
+
+    def to_s
+      # "[#{id}] #{name }"
+      name
+    end
+
+    def mark_invalid!
+      update_attribute(:isinvalid,true)
+    end
+
+    private
+
+    def check_invalid
+      errors.add(:base, "This object was flagged to always fail") if isinvalid == true
+    end
+
   end
+
+  cn = ActiveRecord::Base.connection
+  cn.drop_table 'test_records' if cn.table_exists?('test_records')
+
+  cn.create_table 'test_records' do |table|
+    table.string :name
+    if klass.sex_male_value.is_a? Integer
+      table.integer klass.sex_column
+    else
+      table.string klass.sex_column
+    end
+    table.integer klass.father_id_column
+    table.integer klass.mother_id_column
+    table.datetime klass.birth_date_column
+    table.datetime klass.death_date_column 
+    table.integer klass.current_spouse_id_column if klass.current_spouse_enabled?
+    table.boolean 'isinvalid'
+  end
+
+  klass.reset_column_information
+
+  klass_name = "TestModel#{rand(10000000000)}"
+
+  # puts "defining #{klass_name} (with options #{has_parents_opts}) as ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s} "
+  Genealogy.const_set klass_name, klass
 end
 
-GenealogyTestModel.connect_to_database
+connect_to_database
