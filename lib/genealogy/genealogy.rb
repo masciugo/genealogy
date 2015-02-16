@@ -54,7 +54,7 @@ module Genealogy
       include Genealogy::QueryMethods
       include Genealogy::IneligibleMethods
       include Genealogy::AlterMethods
-      include Genealogy::SpouseMethods if current_spouse_enabled
+      include Genealogy::SpouseMethods
 
     end
 

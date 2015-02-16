@@ -1,4 +1,5 @@
 module Genealogy
+  # Module AlterMethods provides methods to alter genealogy. It's included by the genealogy enabled AR model
   module AlterMethods
     extend ActiveSupport::Concern
 
@@ -9,7 +10,7 @@ module Genealogy
     #   Add $1 
     #   @param [Object] parent
     #   @raise [Exception] if perform_validation is enabled and self is invalid
-    #   @return [TrueClass] 
+    #   @return [Boolean] 
     def self.generate_method_add_parent(parent)
       define_method "add_#{parent}" do |relative|
         check_incompatible_relationship(parent,relative) unless relative.nil?
@@ -28,7 +29,7 @@ module Genealogy
     #   @method remove_$1
     #   remove $1. Foreign_key set to nil
     #   @raise [Exception] if perform_validation is enabled and self is invalid
-    #   @return [TrueClass] 
+    #   @return [Boolean] 
     def self.generate_method_remove_parent(parent)
       define_method "remove_#{parent}" do
         if perform_validation
@@ -47,7 +48,7 @@ module Genealogy
     # @param [Object] mother
     # @see #add_father
     # @see #add_mother
-    # @return [TrueClass] 
+    # @return [Boolean] 
     def add_parents(father,mother)
       transaction do
         add_father(father)
@@ -58,7 +59,7 @@ module Genealogy
     # remove both parents calling #remove_father and #remove_mother in a transaction
     # @see #remove_father
     # @see #remove_mother
-    # @return [TrueClass] 
+    # @return [Boolean] 
     def remove_parents
       transaction do
         remove_father
@@ -71,7 +72,7 @@ module Genealogy
     #   Add $1 grand$2 
     #   @param [Object] gp grandparent
     #   @raise [Exception] if perform_validation is enabled and self is invalid
-    #   @return [TrueClass] 
+    #   @return [Boolean] 
     def self.generate_method_add_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "add_#{relationship}" do |gp|
@@ -90,7 +91,7 @@ module Genealogy
     #   @method remove_$1_grand$2
     #   remove $1 grand$2 
     #   @raise [Exception] if perform_validation is enabled and self is invalid
-    #   @return [TrueClass] 
+    #   @return [Boolean] 
     def self.generate_method_remove_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "remove_#{relationship}" do
@@ -110,7 +111,7 @@ module Genealogy
     #   @param [Object] gf grandfather
     #   @param [Object] gm grandmother
     #   @raise [Exception] if perform_validation is enabled and self is invalid
-    #   @return [TrueClass] 
+    #   @return [Boolean] 
     def self.generate_method_add_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
       define_method "add_#{relationship}" do |gf,gm|
@@ -126,7 +127,7 @@ module Genealogy
     #   @method remove_$1_grandparents
     #   remove $1 grandparents 
     #   @raise [Exception] if perform_validation is enabled and self is invalid
-    #   @return [TrueClass] 
+    #   @return [Boolean] 
     def self.generate_method_remove_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
       define_method "remove_#{relationship}" do 
@@ -146,7 +147,7 @@ module Genealogy
     # @param [Object] mgm maternal grandmother
     # @see #add_paternal_grandparents
     # @see #add_maternal_grandparents
-    # @return [TrueClass] 
+    # @return [Boolean] 
     def add_grandparents(pgf,pgm,mgf,mgm)
       transaction do
         add_paternal_grandparents(pgf,pgm)
@@ -157,7 +158,7 @@ module Genealogy
     # remove all grandparents calling #remove_paternal_grandparents and #remove_maternal_grandparents in a transaction
     # @see #remove_paternal_grandparents
     # @see #remove_maternal_grandparents
-    # @return [TrueClass] 
+    # @return [Boolean] 
    def remove_grandparents
       transaction do
         remove_paternal_grandparents
@@ -171,7 +172,7 @@ module Genealogy
     #   @param [Hash] options
     #   @option options [Symbol] half :father for paternal half siblings and :mother for maternal half siblings
     #   @option options [Object] spouse if specified, passed individual will be used as mother in case of half sibling
-    # @return [TrueClass] 
+    # @return [Boolean] 
     def add_siblings(*args)
       options = args.extract_options!
       check_incompatible_relationship(:sibling, *args)
@@ -208,8 +209,8 @@ module Genealogy
     #   @param [Object] siblings list of siblings
     #   @param [Hash] options
     #   @option options [Symbol] half :father for paternal half siblings and :mother for maternal half siblings
-    #   @option options [TrueClass] affect_spouse if specified, passed individuals' mother will also be nullified
-    # @return [TrueClass, FalseClass] true if at least one sibling was affected, false otherwise
+    #   @option options [Boolean] affect_spouse if specified, passed individuals' mother will also be nullified
+    # @return [Boolean] true if at least one sibling was affected, false otherwise
     def remove_siblings(*args)
       options = args.extract_options!
       raise ArgumentError.new("Unknown option value: :half => #{options[:half]}.") if (options[:half] and ![:father,:mother].include?(options[:half]))
@@ -245,7 +246,7 @@ module Genealogy
     #   @param [Object] children list of children
     #   @param [Hash] options
     #   @option options [Object] spouse if specified, children will have that spouse
-    # @return [TrueClass] 
+    # @return [Boolean] 
     def add_children(*args)
       options = args.extract_options!
       raise_if_sex_undefined
@@ -275,8 +276,8 @@ module Genealogy
     # @overload remove_children(*children,options={})
     #   @param [Object] children list of children
     #   @param [Hash] options
-    #   @option options [TrueClass] affect_spouse if specified, passed individuals' mother will also be nullified
-    # @return [TrueClass, FalseClass] true if at least one child was affected, false otherwise
+    #   @option options [Boolean] affect_spouse if specified, passed individuals' mother will also be nullified
+    # @return [Boolean] true if at least one child was affected, false otherwise
     def remove_children(*args)
       options = args.extract_options!
 

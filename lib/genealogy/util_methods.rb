@@ -1,12 +1,15 @@
 module Genealogy
+  # Module UtilMethods provides methods to run utility methods. It's included by the genealogy enabled AR model
   module UtilMethods
     extend ActiveSupport::Concern
 
+    # @return [Boolean] 
     def is_female?
       return female? if respond_to?(:female?)
       sex == sex_female_value
     end
 
+    # @return [Boolean] 
     def is_male?
       return male? if respond_to?(:male?)
       sex == sex_male_value

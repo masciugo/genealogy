@@ -33,12 +33,12 @@ As the original aim was to add relatives concerning a specific individual, all r
 
 These self explanatory methods simply parse the tree through parents' associations to answer queries.
 
-* `peter.father` will retrieve peter's father
-* `peter.paternal_grandfather` will retrieve parents of peter's father
+* `peter.father` returns peter's father
+* `peter.paternal_grandfather` returns parents of peter's father
 
 Some methods return a sorted array:
 
-* `peter.parents` will retrieve peter's parents as 2 elements sorted array: [father,mother]
+* `peter.parents` returns peter's parents as 2 elements sorted array: [father,mother]
 * `peter.paternal_grandparents` returns a 2 elements sorted array: [paternal_grandfather, paternal_granmother]
 * `peter.grandparents` returns a 4 elements sorted array: [paternal_grandfather, paternal_granmdother, maternal_grandfather, maternal_grandmother]
 

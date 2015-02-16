@@ -11,11 +11,20 @@ end
 
 describe "*** Alter current_spouse methods ***", :done, :spouse do
 
+  context "when current spouse tracking not enabled", :wip do
+    before {  @model = get_test_model }
+    include_context 'unreleted people exist'
+    describe "paul.add_current_spouse(titty)" do
+      specify { expect { paul.add_current_spouse(titty) }.to raise_error(Genealogy::FeatureNotEnabled)}
+    end
+    describe "paul.remove_current_spouse" do
+      specify { expect { paul.remove_current_spouse }.to raise_error(Genealogy::FeatureNotEnabled)}
+    end
+  end
+
   context "when taking account validation (options for has_parents: {:current_spouse => true})" do
 
-    before(:context) do
-      @model = get_test_model({:current_spouse => true})
-    end
+    before { @model = get_test_model({:current_spouse => true}) }      
 
     include_context 'unreleted people exist'  
     

@@ -1,4 +1,5 @@
 module Genealogy
+  # Module QueryMethods provides methods to run genealogy queries to retrive relatives by role. It's included by the genealogy enabled AR model
   module QueryMethods
     extend ActiveSupport::Concern
 

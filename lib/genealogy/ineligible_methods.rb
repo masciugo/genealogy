@@ -1,4 +1,6 @@
 module Genealogy
+  # Module IneligibleMethods provides methods to run genealogy queries to retrive groups of individuals who cannot be relatives according to provided role.
+  # It's included by the genealogy enabled AR model
   module IneligibleMethods
     extend ActiveSupport::Concern
 

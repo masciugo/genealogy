@@ -1,32 +1,38 @@
 module Genealogy
+  # Module SpouseMethods provides methods to manage and query current spouse. It's included by the genealogy enabled AR model
   module SpouseMethods
     extend ActiveSupport::Concern
 
     include Constants
 
-    # add method
-    def add_current_spouse(obj)
-      raise ArgumentError, "Expected #{self.genealogy_class} object. Got #{obj.class}" unless obj.class.respond_to?(:genealogy_enabled)
-      raise IncompatibleRelationshipException, "#{obj} can't be spouse of #{self}" unless eligible_current_spouses.include? obj
+    # add current spouse updating receiver and argument individuals foreign_key in a transaction
+    # @param [Object] spouse
+    # @return [Boolean] 
+    def add_current_spouse(spouse)
+      raise_unless_current_spouse_enabled
+      raise ArgumentError, "Expected #{self.genealogy_class} spouse. Got #{spouse.class}" unless spouse.class.respond_to?(:genealogy_enabled)
+      raise IncompatibleRelationshipException, "#{spouse} can't be spouse of #{self}" if ineligible_current_spouses.include? spouse
 
       if perform_validation
-        self.current_spouse = obj
-        obj.current_spouse = self
+        self.current_spouse = spouse
+        spouse.current_spouse = self
         transaction do
-          obj.save!
+          spouse.save!
           save!
         end
       else
         transaction do
-          self.update_attribute(:current_spouse,obj)
-          obj.update_attribute(:current_spouse,self)
+          self.update_attribute(:current_spouse,spouse)
+          spouse.update_attribute(:current_spouse,self)
         end
       end
 
     end
 
-    # remove method
+    # remove current spouse resetting receiver and argument individuals foreign_key in a transaction
+    # @return [Boolean] 
     def remove_current_spouse
+      raise_unless_current_spouse_enabled
       if perform_validation
         ex_current_spouse = current_spouse
         current_spouse.current_spouse = nil
@@ -43,9 +49,17 @@ module Genealogy
       end
     end
 
-    # query methods
-    def eligible_current_spouses
-      self.genealogy_class.send("#{OPPOSITESEX[sex_to_s.to_sym]}s") - spouses
+    # list of individual who cannot be current spouse
+    # @return [Array]
+    def ineligible_current_spouses
+      raise_unless_current_spouse_enabled
+      self.genealogy_class.send(sex_to_s.pluralize) + spouses
+    end
+
+    private
+
+    def raise_unless_current_spouse_enabled
+      raise FeatureNotEnabled, "Spouse tracking not enabled. Enable it with option 'current_spouse_enabled: true' for has_parents method}" unless self.class.current_spouse_enabled
     end
 
   end

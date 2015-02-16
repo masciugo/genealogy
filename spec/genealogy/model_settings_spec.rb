@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'TestModel' do
+describe 'TestModel', :model do
 
   subject { @model }
 
-  opts1 = {column_names: {father_id: "padre", mother_id: "madre", sex: "gender"}}
+  opts1 = {column_names: {father_id: "padre", mother_id: "madre", sex: "gender", birth_date: "dob", death_date: "dod"}}
   context "initialized with options: #{opts1}"  do
     before(:context) { @model = get_test_model(opts1) }
     opts1[:column_names].each do |attribute,col_name|
@@ -80,5 +80,6 @@ describe 'TestModel' do
   context "initialized with wrong options: #{opts7}"  do
     specify { expect { get_test_model(opts7) }.to raise_error ArgumentError }
   end
+
 end
 
