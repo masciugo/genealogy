@@ -11,7 +11,7 @@ end
 
 describe "*** Alter current_spouse methods ***", :done, :spouse do
 
-  context "when current spouse tracking not enabled", :wip do
+  context "when current spouse tracking not enabled" do
     before {  @model = get_test_model }
     include_context 'unreleted people exist'
     describe "paul.add_current_spouse(titty)" do

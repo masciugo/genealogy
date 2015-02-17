@@ -15,10 +15,14 @@ module Genealogy
       sex == sex_male_value
     end
 
+    # Genealogy thinks time in term of Date, not DateTime
+    # @return [Date]
     def birth
       self.send("#{genealogy_class.birth_date_column}").try(:to_date)
     end
 
+    # Genealogy thinks time in term of Date, not DateTime
+    # @return [Date]
     def death
       self.send("#{genealogy_class.death_date_column}").try(:to_date)
     end

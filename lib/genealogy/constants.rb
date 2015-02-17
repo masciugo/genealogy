@@ -12,7 +12,15 @@ module Genealogy
       },
       perform_validation: true,
       current_spouse: false,
-      sex_values: ['M','F']
+      sex_values: ['M','F'],
+      check_ages: {
+        min_male_procreation_age: 12,
+        max_male_procreation_age: 75,
+        min_female_procreation_age: 9,
+        max_female_procreation_age: 50,
+        max_male_life_expectancy: 110,
+        max_female_life_expectancy: 110
+      }
     }
 
     PARENT2LINEAGE = ActiveSupport::HashWithIndifferentAccess.new({ :father => :paternal, :mother => :maternal })

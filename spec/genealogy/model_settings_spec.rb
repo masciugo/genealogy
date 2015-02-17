@@ -74,11 +74,33 @@ describe 'TestModel', :model do
     its(:perform_validation) { is_expected.to be true }
     its(:column_names) { is_expected.to_not include("current_spouse_id") }
     its(:current_spouse_enabled) { is_expected.to be false }
+    its(:check_ages_enabled) { is_expected.to be true }
+    [:min_male_procreation_age, :max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
+      its(age) { is_expected.to eq Genealogy::Constants::DEFAULTS[:check_ages][age] }
+    end
   end
 
   opts7 = {:column_names => 'bar' }
   context "initialized with wrong options: #{opts7}"  do
     specify { expect { get_test_model(opts7) }.to raise_error ArgumentError }
+  end
+
+  opts8 = {check_ages: false}
+  context "initialized with options: #{opts8}"  do
+    before(:context) { @model = get_test_model(opts8) }
+    its(:check_ages_enabled) { is_expected.to be false }
+    [:min_male_procreation_age, :max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
+      describe age do
+        specify { expect { @model.send(age) }.to raise_error}
+      end
+    end
+  end
+
+  opts9 = {check_ages: {min_male_procreation_age: 12}}
+  context "initialized with options: #{opts9}"  do
+    before(:context) { @model = get_test_model(opts9) }
+    its(:check_ages_enabled) { is_expected.to be true }
+    its(:min_male_procreation_age) { is_expected.to be 12 }
   end
 
 end

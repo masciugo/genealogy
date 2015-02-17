@@ -14,7 +14,7 @@
 	<key>BackgroundGraphic</key>
 	<dict>
 		<key>Bounds</key>
-		<string>{{0, 0}, {806, 536}}</string>
+		<string>{{0, 0}, {806, 535.99997329711914}}</string>
 		<key>Class</key>
 		<string>SolidGraphic</string>
 		<key>GridCenter</key>
@@ -65,7 +65,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{693.83646870269786, 363.29920291900635}, {54, 28}}</string>
+							<string>{{693.83646870269786, 363.29920291900635}, {62, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -73,7 +73,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>638</integer>
+							<integer>1104</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -110,8 +110,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 barbara\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 barbara
+\b0 \
+10-12-1974}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -124,7 +125,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>639</integer>
+							<integer>1105</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -174,7 +175,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>637</integer>
+					<integer>1103</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -183,7 +184,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{589.2337791954044, 363.29920291900635}, {54, 28}}</string>
+							<string>{{589.2337791954044, 363.29920291900635}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -191,7 +192,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>641</integer>
+							<integer>1107</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -228,8 +229,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 mia\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 mia
+\b0 \
+10-1-1985}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -242,7 +244,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>642</integer>
+							<integer>1108</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -292,7 +294,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>640</integer>
+					<integer>1106</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -307,7 +309,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>644</integer>
+							<integer>1110</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -355,7 +357,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{491.6310960517884, 363.29920291900635}, {47, 28}}</string>
+							<string>{{491.6310960517884, 363.29920291900635}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -363,7 +365,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>645</integer>
+							<integer>1111</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -400,8 +402,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 mark\
-4/4/1891}</string>
+\f0\b\fs24 \cf0 mark
+\b0 \
+4-5-1980}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -410,7 +413,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>643</integer>
+					<integer>1109</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -425,7 +428,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>647</integer>
+							<integer>1113</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -473,7 +476,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{392.06635015258792, 363.29920291900635}, {47, 28}}</string>
+							<string>{{392.06635015258792, 363.29920291900635}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -481,7 +484,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>648</integer>
+							<integer>1114</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -518,8 +521,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 rud\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 rud
+\b0 \
+3-5-1970}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -528,7 +532,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>646</integer>
+					<integer>1112</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -537,7 +541,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{287.00160425338748, 363.29920291900635}, {54, 28}}</string>
+							<string>{{287.00160425338748, 363.29920291900635}, {49, 42}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -545,7 +549,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>650</integer>
+							<integer>1116</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -582,8 +586,10 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 titty\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 titty
+\b0 \
+unknown\
+6-8-2010}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -596,7 +602,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>651</integer>
+							<integer>1117</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -646,7 +652,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>649</integer>
+					<integer>1115</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -661,7 +667,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>653</integer>
+							<integer>1119</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -709,7 +715,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{189.39789064941402, 363.29920291900635}, {47, 28}}</string>
+							<string>{{189.39789064941402, 363.29920291900635}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -717,7 +723,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>654</integer>
+							<integer>1120</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -754,8 +760,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 paul\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 paul
+\b0 \
+3-3-1970}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -764,7 +771,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>652</integer>
+					<integer>1118</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -773,7 +780,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{84.333144750213506, 363.29920291900635}, {54, 28}}</string>
+							<string>{{84.333144750213506, 363.29920291900635}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -781,7 +788,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>656</integer>
+							<integer>1122</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -818,8 +825,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 michelle\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 michelle
+\b0 \
+6-7-1980}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -832,7 +840,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>657</integer>
+							<integer>1123</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -882,11 +890,11 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>655</integer>
+					<integer>1121</integer>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>636</integer>
+			<integer>1102</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -906,7 +914,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>610</integer>
+							<integer>1126</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -954,7 +962,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{744.31139580383297, 476.3385705947876}, {47, 28}}</string>
+							<string>{{744.31139580383297, 476.3385705947876}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -962,7 +970,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>611</integer>
+							<integer>1127</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -999,8 +1007,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 charlie\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 charlie
+\b0 \
+3-12-2012}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1009,7 +1018,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>609</integer>
+					<integer>1125</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1024,7 +1033,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>613</integer>
+							<integer>1129</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -1072,7 +1081,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{658.88918644866999, 476.3385705947876}, {47, 28}}</string>
+							<string>{{658.88918644866999, 476.3385705947876}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1080,7 +1089,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>614</integer>
+							<integer>1130</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1117,8 +1126,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 sam\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 sam
+\b0 \
+3-9-2010}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1127,7 +1137,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>612</integer>
+					<integer>1128</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1136,7 +1146,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{566.4670301185613, 476.3385705947876}, {54, 28}}</string>
+							<string>{{566.4670301185613, 476.3385705947876}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1144,7 +1154,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>616</integer>
+							<integer>1132</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1181,8 +1191,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 sue\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 sue
+\b0 \
+10-2-1999}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1195,7 +1206,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>617</integer>
+							<integer>1133</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -1245,7 +1256,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>615</integer>
+					<integer>1131</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1262,7 +1273,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>619</integer>
+							<integer>1135</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1299,8 +1310,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 mary\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 mary
+\b0 \
+10-4-2011}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1313,7 +1325,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>620</integer>
+							<integer>1136</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -1363,7 +1375,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>618</integer>
+					<integer>1134</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1378,7 +1390,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>622</integer>
+							<integer>1138</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -1426,7 +1438,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{389.54684296951319, 476.3385705947876}, {47, 28}}</string>
+							<string>{{389.54684296951319, 476.3385705947876}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1434,7 +1446,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>623</integer>
+							<integer>1139</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1471,8 +1483,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 steve\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 steve
+\b0 \
+3-5-2009}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1481,7 +1494,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>621</integer>
+					<integer>1137</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1496,7 +1509,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>625</integer>
+							<integer>1141</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -1544,7 +1557,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{218.70253030929581, 476.3385705947876}, {47, 28}}</string>
+							<string>{{218.70253030929581, 476.3385705947876}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1552,7 +1565,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>626</integer>
+							<integer>1142</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1589,8 +1602,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 ruben\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 ruben
+\b0 \
+3-2-1996}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1599,7 +1613,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>624</integer>
+					<integer>1140</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1614,7 +1628,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>628</integer>
+							<integer>1144</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -1662,7 +1676,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{304.1246866394045, 476.3385705947876}, {47, 28}}</string>
+							<string>{{304.1246866394045, 476.3385705947876}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1670,7 +1684,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>629</integer>
+							<integer>1145</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1707,8 +1721,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 peter\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 peter
+\b0 \
+3-10-2005}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1717,7 +1732,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>627</integer>
+					<integer>1143</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1726,7 +1741,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{126.28037397918712, 476.3385705947876}, {54, 28}}</string>
+							<string>{{126.28037397918712, 476.3385705947876}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1734,7 +1749,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>631</integer>
+							<integer>1147</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1771,8 +1786,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 beatrix\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 beatrix
+\b0 \
+6-5-2003}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1785,7 +1801,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>632</integer>
+							<integer>1148</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -1835,7 +1851,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>630</integer>
+					<integer>1146</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -1850,7 +1866,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>634</integer>
+							<integer>1150</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -1898,7 +1914,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{41.319249944305454, 476.3385705947876}, {47, 28}}</string>
+							<string>{{41.319249944305454, 476.3385705947876}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1906,7 +1922,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>635</integer>
+							<integer>1151</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -1943,8 +1959,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 julian\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 julian
+\b0 \
+3-2-2000}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -1953,11 +1970,11 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>633</integer>
+					<integer>1149</integer>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>608</integer>
+			<integer>1124</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -1971,7 +1988,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{731.67717599868774, 250.2598352432251}, {54, 28}}</string>
+							<string>{{731.67717599868774, 250.2598352432251}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -1979,7 +1996,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>660</integer>
+							<integer>1154</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2016,8 +2033,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 maggie\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 maggie
+\b0 \
+17-4-1952}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2030,7 +2048,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>661</integer>
+							<integer>1155</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -2080,7 +2098,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>659</integer>
+					<integer>1153</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2095,7 +2113,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>663</integer>
+							<integer>1157</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -2143,7 +2161,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{541.20970653076176, 250.2598352432251}, {47, 28}}</string>
+							<string>{{541.20970653076176, 250.2598352432251}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2151,7 +2169,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>664</integer>
+							<integer>1158</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2188,8 +2206,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 paso\
-4/4/1891}</string>
+\f0\b\fs24 \cf0 paso
+\b0 \
+4-1-1945}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2198,7 +2217,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>662</integer>
+					<integer>1156</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2213,7 +2232,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>666</integer>
+							<integer>1160</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -2261,7 +2280,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{343.74224010391242, 250.2598352432251}, {47, 28}}</string>
+							<string>{{343.74224010391242, 250.2598352432251}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2269,7 +2288,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>667</integer>
+							<integer>1161</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2306,8 +2325,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 manuel\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 manuel
+\b0 \
+13-9-1938}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2316,7 +2336,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>665</integer>
+					<integer>1159</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2325,7 +2345,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{242.02747551269539, 250.2598352432251}, {54, 28}}</string>
+							<string>{{242.02747551269539, 250.2598352432251}, {62, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2333,7 +2353,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>669</integer>
+							<integer>1163</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2370,8 +2390,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 terry\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 terry
+\b0 \
+16-10-1940}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2384,7 +2405,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>670</integer>
+							<integer>1164</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -2434,7 +2455,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>668</integer>
+					<integer>1162</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2451,7 +2472,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>672</integer>
+							<integer>1166</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2488,8 +2509,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 naomi\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 naomi
+\b0 \
+6-11-1950}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2502,7 +2524,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>673</integer>
+							<integer>1167</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -2552,7 +2574,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>671</integer>
+					<integer>1165</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2567,7 +2589,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>675</integer>
+							<integer>1169</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -2615,7 +2637,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{46.520010920715336, 250.2598352432251}, {47, 28}}</string>
+							<string>{{46.520010920715336, 250.2598352432251}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2623,7 +2645,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>676</integer>
+							<integer>1170</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2660,8 +2682,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 ned\
-1/5/1902}</string>
+\f0\b\fs24 \cf0 ned
+\b0 \
+1-5-1930}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2670,7 +2693,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>674</integer>
+					<integer>1168</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2685,7 +2708,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>678</integer>
+							<integer>1172</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -2733,7 +2756,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{637.42447112197897, 250.2598352432251}, {47, 28}}</string>
+							<string>{{637.42447112197897, 250.2598352432251}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2741,7 +2764,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>679</integer>
+							<integer>1173</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2778,8 +2801,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 john\
-4/4/1891}</string>
+\f0\b\fs24 \cf0 john
+\b0 \
+4-12-1948}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2788,7 +2812,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>677</integer>
+					<integer>1171</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -2797,7 +2821,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{437.99494193954473, 250.2598352432251}, {54, 28}}</string>
+							<string>{{437.99494193954473, 250.2598352432251}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2805,7 +2829,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>681</integer>
+							<integer>1175</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -2842,8 +2866,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 irene\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 irene
+\b0 \
+10-3-1847}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -2856,7 +2881,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>682</integer>
+							<integer>1176</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -2906,11 +2931,11 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>680</integer>
+					<integer>1174</integer>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>658</integer>
+			<integer>1152</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -2930,7 +2955,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>685</integer>
+							<integer>1179</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -2978,7 +3003,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{548.28054675979627, 137.22046756744385}, {47, 28}}</string>
+							<string>{{548.28054675979627, 137.22046756744385}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -2986,7 +3011,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>686</integer>
+							<integer>1180</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3023,8 +3048,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 jack\
-4/4/1891}</string>
+\f0\b\fs24 \cf0 jack
+\b0 \
+1-10-1915}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3033,7 +3059,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>684</integer>
+					<integer>1178</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3042,7 +3068,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{440.56199226684572, 137.22046756744385}, {54, 28}}</string>
+							<string>{{440.56199226684572, 137.22046756744385}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3050,7 +3076,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>688</integer>
+							<integer>1182</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3087,8 +3113,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 debby\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 debby
+\b0 \
+1-2-1920}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3101,7 +3128,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>689</integer>
+							<integer>1183</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -3151,7 +3178,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>687</integer>
+					<integer>1181</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3160,7 +3187,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{644.20240882873543, 134.38582181930542}, {54, 28}}</string>
+							<string>{{644.20240882873543, 137.22046756744385}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3168,7 +3195,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>691</integer>
+							<integer>1185</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3205,8 +3232,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 alison\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 alison
+\b0 \
+10-8-1920}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3215,11 +3243,11 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{623.70311733245842, 139.88187181930542}, {17.007899999999999, 17.007899999999999}}</string>
+							<string>{{623.70311733245842, 142.71651756744384}, {17.007899999999999, 17.007899999999999}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>692</integer>
+							<integer>1186</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -3269,7 +3297,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>690</integer>
+					<integer>1184</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3278,13 +3306,13 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{318.00950052948002, 139.88187181930542}, {17.007899999999999, 17.007899999999999}}</string>
+							<string>{{318.00950052948002, 142.71651756744384}, {17.007899999999999, 17.007899999999999}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>694</integer>
+							<integer>1188</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -3332,7 +3360,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{338.97085478134159, 134.38582181930542}, {47, 28}}</string>
+							<string>{{338.97085478134159, 137.22046756744385}, {55, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3340,7 +3368,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>695</integer>
+							<integer>1189</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3377,8 +3405,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 tommy\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 tommy
+\b0 \
+9-12-1895}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3387,7 +3416,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>693</integer>
+					<integer>1187</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3396,7 +3425,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{232.7523002883911, 134.38582181930542}, {54, 28}}</string>
+							<string>{{232.7523002883911, 137.22046756744385}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3404,7 +3433,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>697</integer>
+							<integer>1191</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3441,8 +3470,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 emily\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 emily
+\b0 \
+6-1-1903}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3451,11 +3481,11 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{212.25197833175656, 139.88187181930542}, {17.007899999999999, 17.007899999999999}}</string>
+							<string>{{212.25197833175656, 142.71651756744384}, {17.007899999999999, 17.007899999999999}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>698</integer>
+							<integer>1192</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -3505,7 +3535,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>696</integer>
+					<integer>1190</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3514,13 +3544,13 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{113.4668826675414, 139.88187181930542}, {17.007899999999999, 17.007899999999999}}</string>
+							<string>{{113.4668826675414, 142.71651756744384}, {17.007899999999999, 17.007899999999999}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>700</integer>
+							<integer>1194</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -3568,7 +3598,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{133.99477809066764, 134.38582181930542}, {47, 28}}</string>
+							<string>{{133.99477809066764, 137.22046756744385}, {49, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3576,7 +3606,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>701</integer>
+							<integer>1195</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3613,8 +3643,9 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 marcel\
-1/5/1902}</string>
+\f0\b\fs24 \cf0 marcel
+\b0 \
+1-5-1902}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3623,11 +3654,11 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>699</integer>
+					<integer>1193</integer>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>683</integer>
+			<integer>1177</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -3647,7 +3678,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>704</integer>
+							<integer>1198</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -3695,7 +3726,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{560.80932220039369, 21.34645414352417}, {47, 28}}</string>
+							<string>{{560.80932220039369, 21.34645414352417}, {49, 42}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3703,7 +3734,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>705</integer>
+							<integer>1199</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3740,8 +3771,10 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 bob\
-4/4/1891}</string>
+\f0\b\fs24 \cf0 bob
+\b0 \
+unknown\
+6-5-1949}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3750,7 +3783,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>703</integer>
+					<integer>1197</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3759,7 +3792,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{304.38796828422556, 21.34645414352417}, {54, 28}}</string>
+							<string>{{304.38796828422556, 21.34645414352417}, {55, 42}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3767,7 +3800,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>707</integer>
+							<integer>1201</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3804,8 +3837,10 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 rosa\
-6/10/1885}</string>
+\f0\b\fs24 \cf0 rosa
+\b0 \
+6-10-1885\
+5-5-1935}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3818,7 +3853,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>708</integer>
+							<integer>1202</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -3868,7 +3903,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>706</integer>
+					<integer>1200</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3883,7 +3918,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>710</integer>
+							<integer>1204</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -3931,7 +3966,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{224.38786471900943, 21.34645414352417}, {47, 28}}</string>
+							<string>{{224.38786471900943, 21.34645414352417}, {49, 42}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -3939,7 +3974,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>711</integer>
+							<integer>1205</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -3976,8 +4011,10 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 luis\
-4/5/1890}</string>
+\f0\b\fs24 \cf0 luis
+\b0 \
+4-5-1890\
+unknown}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -3986,7 +4023,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>709</integer>
+					<integer>1203</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -3995,7 +4032,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{471.84817724952705, 21.34645414352417}, {54, 28}}</string>
+							<string>{{471.84817724952705, 21.34645414352417}, {55, 42}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -4003,7 +4040,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>713</integer>
+							<integer>1207</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -4040,8 +4077,10 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 louise\
-10/4/1874}</string>
+\f0\b\fs24 \cf0 louise
+\b0 \
+10-4-1874\
+7-8-1930}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -4054,7 +4093,7 @@
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
-							<integer>714</integer>
+							<integer>1208</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{1.1484700000000001, -0.67734000000000005}</string>
@@ -4104,7 +4143,7 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>712</integer>
+					<integer>1206</integer>
 				</dict>
 				<dict>
 					<key>Class</key>
@@ -4119,7 +4158,7 @@
 							<key>GridCenter</key>
 							<string>YES</string>
 							<key>ID</key>
-							<integer>716</integer>
+							<integer>1210</integer>
 							<key>Magnets</key>
 							<array>
 								<string>{-0.73960000000000004, -1.1093999999999999}</string>
@@ -4167,7 +4206,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{391.84910414466867, 21.34645414352417}, {47, 28}}</string>
+							<string>{{391.84910414466867, 21.34645414352417}, {49, 42}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -4175,7 +4214,7 @@
 							<key>Flow</key>
 							<string>Resize</string>
 							<key>ID</key>
-							<integer>717</integer>
+							<integer>1211</integer>
 							<key>Shape</key>
 							<string>Rectangle</string>
 							<key>Style</key>
@@ -4212,8 +4251,10 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
-\f0\fs24 \cf0 larry\
-3/9/1870}</string>
+\f0\b\fs24 \cf0 larry
+\b0 \
+3-9-1870\
+6-4-1900}</string>
 								<key>VerticalPad</key>
 								<integer>0</integer>
 							</dict>
@@ -4222,11 +4263,11 @@
 						</dict>
 					</array>
 					<key>ID</key>
-					<integer>715</integer>
+					<integer>1209</integer>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>702</integer>
+			<integer>1196</integer>
 		</dict>
 	</array>
 	<key>GridInfo</key>
@@ -4285,7 +4326,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2015-02-17 11:05:14 +0000</string>
+	<string>2015-02-17 16:49:14 +0000</string>
 	<key>Modifier</key>
 	<string>Corrado Masciullo</string>
 	<key>NotesVisible</key>
@@ -4316,7 +4357,7 @@
 		<key>NSPaperSize</key>
 		<array>
 			<string>size</string>
-			<string>{842, 595}</string>
+			<string>{842, 594.99997329711914}</string>
 		</array>
 		<key>NSPrintReverseOrientation</key>
 		<array>
@@ -4366,7 +4407,7 @@
 			</dict>
 		</array>
 		<key>Frame</key>
-		<string>{{500, 431}, {1563, 954}}</string>
+		<string>{{879, 463}, {1563, 954}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
