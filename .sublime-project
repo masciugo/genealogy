@@ -1,17 +1,20 @@
 {
-  "folders":
-  [
-    {
-      "folder_exclude_patterns":
-      [
-        ".*",
-        "doc"
-      ],
-      "path": "/Users/masciugo/dev/genealogy",
-      "file_exclude_patterns":
-      [
-        ".sublime-project.sublime-workspace"
-      ]
-    }
-  ]
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				".sublime-project.sublime-workspace"
+			],
+			"folder_exclude_patterns":
+			[
+				".*",
+				"doc"
+			],
+			"path": "/Users/masciugo/dev/genealogy"
+		},
+		{
+			"path": "/Users/masciugo/Dropbox/genealogy"
+		}
+	]
 }
