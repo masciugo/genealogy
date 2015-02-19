@@ -132,12 +132,32 @@ describe "*** Ineligible methods ***", :ineligible do
   context "when releted people exist", :wip do
     include_context "releted people exist"
 
-    describe "paso, child of alison" do
-      subject {paso}
-      before { paso.update_attributes(father_id: jack.id, mother_id: alison.id) }
-      # inelegible fathers sono tutte le femmine, se stesso (paso), i siblings maschi di paso, tutti gli antenati maschi dei siblings di paso, tutto i discendenti maschi dei siblings di paso
-      # its(:ineligible_fathers) { is_expected.to match_array @model.females + [paso, jack, bob, paso, john, rud, mark, sam, steve, peter] }
-      # its(:ineligible_sons) { is_expected.to match_array @model.females + [paso, paso, john, jack, bob] }
+    describe "alison" do
+      subject { alison }
+      its(:ineligible_fathers) {  }
+      its(:ineligible_mothers) {  }
+    end
+
+    describe "debby" do
+      subject { debby }
+      its(:ineligible_children) {  }
+    end
+
+    context 'when titty has no mother' do
+      before { titty.update_attributes(mother_id: nil) }
+
+      describe "titty" do
+        subject { titty }
+
+        its(:ineligible_mothers) {  }
+
+      end
+
+      describe "steve" do
+        subject { steve }
+        its(:ineligible_maternal_grandmothers) {  }
+        its(:ineligible_maternal_grandfathers) {  }
+      end
     end
 
   end
