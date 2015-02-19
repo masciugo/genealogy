@@ -3,6 +3,8 @@ module Genealogy
   module UtilMethods
     extend ActiveSupport::Concern
 
+    include Constants
+
     # @return [Boolean] 
     def is_female?
       return female? if respond_to?(:female?)
@@ -45,6 +47,8 @@ module Genealogy
       death - birth 
     end
 
+    # If either birth or death are present it's possible to estimate a life range using the life max expectancy
+    # @return [Range] 
     def life_range
       case [birth.present?,death.present?]
       when [true,true]
@@ -56,6 +60,9 @@ module Genealogy
       end
     end
 
+
+    # If either birth or death are present it's possible to estimate a life range using the min and max procreation ages
+    # @return [Range] 
     def fertility_range
       case [birth.present?,death.present?]
       when [true,true]
@@ -67,22 +74,31 @@ module Genealogy
       end
     end
 
-    def parent_birth_range
-      (life_range.begin - max_fpa)..(life_range.begin - min_fpa) if life_range
+
+    # @!macro [attach] generate
+    #   @method $1_birth_range
+    #   If life range is definable than it's possible to estimate the $1 life range using the min and max procreation ages
+    #   @return [Range]
+    def self.generate_method_parent_birth_range(parent)
+      define_method "#{parent}_birth_range" do
+        (life_range.begin - max_fpa(PARENT2SEX[parent]))..(life_range.begin - min_fpa(PARENT2SEX[parent])) if life_range
+      end
     end
+    generate_method_parent_birth_range(:father)
+    generate_method_parent_birth_range(:mother)
 
     private
 
-    def max_le
-      genealogy_class.send("max_#{sex_to_s}_life_expectancy").years
+    def max_le(sex=nil)
+      genealogy_class.send("max_#{sex or sex_to_s}_life_expectancy").years
     end
 
-    def max_fpa
-      genealogy_class.send("max_#{sex_to_s}_procreation_age").years
+    def max_fpa(sex=nil)
+      genealogy_class.send("max_#{sex or sex_to_s}_procreation_age").years
     end
 
-    def min_fpa
-      genealogy_class.send("min_#{sex_to_s}_procreation_age").years
+    def min_fpa(sex=nil)
+      genealogy_class.send("min_#{sex or sex_to_s}_procreation_age").years
     end
 
     def sex_to_s

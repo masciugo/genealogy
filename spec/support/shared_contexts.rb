@@ -102,7 +102,7 @@ shared_context "unreleted people exist with dates" do
     julian.update_attributes(birth_date: Date.new(2000,2,3))
     larry.update_attributes(birth_date: Date.new(1870,9,3),death_date: Date.new(1900,4,6))
     louise.update_attributes(birth_date: Date.new(1874,4,10),death_date: Date.new(1930,8,7))
-    luis.update_attributes(birth_date: Date.new(1890,5,4))
+    # luis.update_attributes(birth_date: Date.new(1890,5,4))
     maggie.update_attributes(birth_date: Date.new(1952,4,17),death_date: Date.new(1979,6,6))
     manuel.update_attributes(birth_date: Date.new(1938,9,13))
     marcel.update_attributes(birth_date: Date.new(1902,5,1))
