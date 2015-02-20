@@ -90,7 +90,7 @@ module Genealogy
     # list of individual who cannot be siblings: ancestors, descendants, half siblings with an undefined parent and theirself
     # @return [Array]
     def ineligible_siblings
-      ancestors | descendants | siblings(:half => :include).delete_if{|sib| sib.parents.any?(&:nil?) } | [self]
+      ancestors | descendants | genealogy_class.indivs_with_parents | [self]
     end
 
     private
