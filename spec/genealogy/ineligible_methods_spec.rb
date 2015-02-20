@@ -54,7 +54,7 @@ describe "*** Ineligible methods ***", :ineligible do
           before { paso.update_attributes(mother_id: alison.id) }
           its(:ineligible_fathers) {is_expected.to match_array @model.females + [paso,rud]}
           its(:ineligible_mothers) {is_expected.to be nil}
-          its(:ineligible_paternal_grandfathers) {is_expected.to match_array @model.females + [paso,rud]}
+          its(:ineligible_paternal_grandfathers) {Packages_bk + [paso,rud]}
           its(:ineligible_paternal_grandmothers) {is_expected.to match_array @model.males}
           its(:ineligible_maternal_grandfathers) {is_expected.to match_array @model.females + [paso,rud]}
           its(:ineligible_maternal_grandmothers) {is_expected.to match_array @model.males + [alison]}
@@ -77,7 +77,7 @@ describe "*** Ineligible methods ***", :ineligible do
 
     end
 
-    describe "rud, an unreleted individual", :wip do
+    describe "rud, an unreleted individual" do
       subject {rud}
       its(:ineligible_fathers) {is_expected.to match_array @model.females + [rud]}
       its(:ineligible_mothers) {is_expected.to match_array @model.males}
@@ -129,23 +129,41 @@ describe "*** Ineligible methods ***", :ineligible do
   end
 
 
-  context "when releted people exist", :wip do
+  context "when releted people exist", :cinzia do
     include_context "releted people exist"
 
-    describe "alison" do
-      subject { alison }
-      its(:ineligible_fathers) {  }
-      its(:ineligible_mothers) {  }
+    describe "manuel" do
+      subject { manuel }
+      its(:ineligible_fathers) { is_expected.to match_array @model.females + [manuel,paul,julian,ruben,peter,steve] }
+      its(:ineligible_mothers) { is_expected.to match_array @model.males + [beatrix,mary] }
+      its(:ineligible_children) { is_expected.to match_array [manuel,paul] }
+      context "when julian and beatrix has no father" do
+        before do
+          julian.update_attributes(father_id: nil)
+          beatrix.update_attributes(father_id: nil)
+        end
+        its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,ruben,peter,steve,mary] }       
+      end
+        context "when manuel has emily as mother" do
+          before do
+            julian.update_attributes(father_id: nil)
+            beatrix.update_attributes(father_id: nil)
+            manuel.update_attributes(mother_id: emily.id)
+            manuel.update_attributes(father_id: luis.id)
+          end
+          its(:ineligible_fathers) {is_expected.to be nil}
+          its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,ruben,peter,steve,mary,titty,rud,mark,emily,luis,rosa] }
+          # its(:half_siblings) {is_expected.to match_array [manuel,paul,ruben,peter,steve,mary]}       
+        end
     end
 
     describe "debby" do
       subject { debby }
-      its(:ineligible_children) {  }
+      its(:ineligible_siblings) { is_expected.to match_array [paso,john] }
     end
 
     context 'when titty has no mother' do
       before { titty.update_attributes(mother_id: nil) }
-
       describe "titty" do
         subject { titty }
 
