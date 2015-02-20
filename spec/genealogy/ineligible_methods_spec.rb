@@ -143,18 +143,16 @@ describe "*** Ineligible methods ***", :ineligible do
           beatrix.update_attributes(father_id: nil)
         end
         its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,ruben,peter,steve,mary] }       
-      end
-        context "when manuel has emily as mother" do
+        context "when manuel has emily and luis as parents" do
           before do
-            julian.update_attributes(father_id: nil)
-            beatrix.update_attributes(father_id: nil)
-            manuel.update_attributes(mother_id: emily.id)
-            manuel.update_attributes(father_id: luis.id)
+            manuel.update_attributes(mother_id: emily.id, father_id: luis.id)
           end
           its(:ineligible_fathers) {is_expected.to be nil}
           its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,ruben,peter,steve,mary,titty,rud,mark,emily,luis,rosa] }
           # its(:half_siblings) {is_expected.to match_array [manuel,paul,ruben,peter,steve,mary]}       
         end
+
+      end
     end
 
     describe "debby" do
