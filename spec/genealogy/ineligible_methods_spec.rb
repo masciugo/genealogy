@@ -142,13 +142,13 @@ describe "*** Ineligible methods ***", :ineligible do
           julian.update_attributes(father_id: nil)
           beatrix.update_attributes(father_id: nil)
         end
-        its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,ruben,peter,steve,mary] }       
+        its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,michelle,ruben,peter,steve,mary,sue,sam,charlie,titty,rud,mark,barbara,paso,john,tommy,debby,jack,emily,irene] }       
         context "when manuel has emily as mother" do
           before do
             manuel.update_attributes(mother_id: emily.id)
           end
-          its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,ruben,peter,steve,mary,titty,rud,mark,emily,luis,rosa] }
-          # its(:half_siblings) {is_expected.to match_array [manuel,paul,ruben,peter,steve,mary]}       
+          its(:ineligible_siblings) { is_expected.to match_array [manuel,paul,michelle,ruben,peter,steve,mary,sue,sam,charlie,titty,rud,mark,barbara,paso,john,tommy,debby,jack,luis,rosa,irene,emily] }
+          its(:half_siblings) {is_expected.to match_array [irene]}       
         end
 
       end
@@ -156,7 +156,7 @@ describe "*** Ineligible methods ***", :ineligible do
 
     describe "debby" do
       subject { debby }
-      its(:ineligible_siblings) { is_expected.to match_array [paso,john] }
+      its(:ineligible_siblings) { is_expected.to match_array [debby,louise,bob,jack,emily,tommy,irene,paso,john,barbara,mark,rud,titty,paul,michelle,julian,beatrix,ruben,peter,steve,mary,sue,sam,charlie] }
     end
 
     context 'when titty has no mother' do
@@ -168,9 +168,9 @@ describe "*** Ineligible methods ***", :ineligible do
 
       end
 
-      describe "steve" do
-        subject { steve }
-        its(:ineligible_maternal_grandmothers) {  }
+      describe "ruben" do
+        subject { ruben }
+        its(:ineligible_mothers) { is_expected.to match_array @model.males}
         its(:ineligible_maternal_grandfathers) {  }
       end
     end
