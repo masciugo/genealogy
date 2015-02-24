@@ -58,4 +58,12 @@ describe "*** Ineligible methods ***", :ineligible_dates do
     its(:ineligible_fathers) {is_expected.to match_array @model.females + [manuel,paso,john,paul,rud,mark,ruben,julian,peter,steve,sam,charlie,larry] }
     its(:ineligible_mothers) {is_expected.to match_array @model.males + [terry,naomi,maggie,barbara,michelle,mia,sue,beatrix,mary,rosa,louise,irene,emily] }
   end
+
+  describe "mia" , :cin do
+    subject { mia }
+    its(:ineligible_children) {is_expected.to match_array [mia,barbara,mark,rud,paul,michelle,maggie,john,paso,irene,manuel,terry,naomi,ned,alison,jack,debby,tommy,emily,marcel,bob,louise,larry,rosa,luis] }
+    its(:ineligible_mothers) {is_expected.to match_array @model.males + [mia,michelle,beatrix,mary,sue,maggie,irene,emily,debby,alison,rosa,louise] }
+    
+  end
+
 end
