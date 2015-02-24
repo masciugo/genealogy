@@ -171,7 +171,8 @@ describe "*** Ineligible methods ***", :ineligible do
       describe "ruben" do
         subject { ruben }
         its(:ineligible_mothers) { is_expected.to match_array @model.males}
-        its(:ineligible_maternal_grandfathers) {  }
+        its(:ineligible_maternal_grandfathers) { is_expected.to match_array @model.females + [ruben,peter,steve,julian]}
+        its(:ineligible_children) { is_expected.to match_array [ruben,manuel,paul,michelle,julian,beatrix,peter,steve,mary,sue, sam,charlie,barbara,mark,rud,titty,terry,irene,paso,john,jack,debby,tommy,emily] }
       end
     end
 
