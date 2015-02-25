@@ -44,7 +44,7 @@ describe "*** Ineligible methods ***", :ineligible_dates do
     subject {paul}
     its(:birth) {is_expected.to eq Date.new(1970,3,3)}
     its(:death) {is_expected.to be nil}
-    its(:ineligible_mothers) {is_expected.to match_array @model.males + [michelle,mia,barbara,beatrix,mary,sue,irene,emily,debby,alison,louise,rosa] }
+    its(:ineligible_mothers) {is_expected.to match_array @model.males + [michelle,mia,barbara,beatrix,mary,sue,emily,debby,louise,rosa] }
 
   end
   describe "titty", :cin do
@@ -52,7 +52,7 @@ describe "*** Ineligible methods ***", :ineligible_dates do
     its(:birth) {is_expected.to be nil}
     its(:death) {is_expected.to eq Date.new(2010,8,6)}
     its(:ineligible_fathers) {is_expected.to match_array @model.females + [larry,julian,peter,steve,sam,charlie]}
-    its(:ineligible_mothers) {is_expected.to match_array @model.males + [titty,beatrix, irene, mary] }
+    its(:ineligible_mothers) {is_expected.to match_array @model.males + [titty,beatrix,mary] }
     its(:ineligible_maternal_grandfathers) {is_expected.to match_array @model.females + [julian,ruben,peter,steve,sam,charlie]}
   end
 

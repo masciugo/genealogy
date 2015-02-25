@@ -81,7 +81,11 @@ module Genealogy
     #   @return [Range]
     def self.generate_method_parent_birth_range(parent)
       define_method "#{parent}_birth_range" do
-        (life_range.begin - max_fpa(PARENT2SEX[parent]))..(life_range.begin - min_fpa(PARENT2SEX[parent])) if life_range
+        if birth
+          (birth - max_fpa(PARENT2SEX[parent]))..(birth - min_fpa(PARENT2SEX[parent]))
+        elsif life_range
+          (life_range.begin - max_fpa(PARENT2SEX[parent]))..(life_range.end - min_fpa(PARENT2SEX[parent]))
+        end
       end
     end
     generate_method_parent_birth_range(:father)
