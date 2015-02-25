@@ -329,12 +329,6 @@ module Genealogy
       def females
         where(sex_column => sex_female_value)
       end
-      # all individuals with parents
-      # @return [ActiveRecord_Relation] 
-      def indivs_with_parents
-        where("#{father_id_column} IS NOT ? AND #{mother_id_column} IS NOT ?", nil,nil)
-      end
-
 
     end
 

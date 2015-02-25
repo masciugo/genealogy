@@ -54,7 +54,7 @@ describe "*** Ineligible methods ***", :ineligible do
           before { paso.update_attributes(mother_id: alison.id) }
           its(:ineligible_fathers) {is_expected.to match_array @model.females + [paso,rud]}
           its(:ineligible_mothers) {is_expected.to be nil}
-          its(:ineligible_paternal_grandfathers) {Packages_bk + [paso,rud]}
+          its(:ineligible_paternal_grandfathers) {is_expected.to match_array @model.females + [paso,rud]}
           its(:ineligible_paternal_grandmothers) {is_expected.to match_array @model.males}
           its(:ineligible_maternal_grandfathers) {is_expected.to match_array @model.females + [paso,rud]}
           its(:ineligible_maternal_grandmothers) {is_expected.to match_array @model.males + [alison]}
@@ -97,7 +97,7 @@ describe "*** Ineligible methods ***", :ineligible do
         its(:ineligible_maternal_grandmothers) {is_expected.to match_array @model.males + [irene]}
         its(:ineligible_siblings) {is_expected.to match_array [rud,irene]}
         its(:ineligible_children) {is_expected.to match_array [rud,irene]}
-        context "and with mark and titty as siblings" do
+        context "and with mark and titty as maternal half siblings" do
           before { 
             mark.update_attributes(mother_id: irene.id)
             titty.update_attributes(mother_id: irene.id) 
@@ -109,7 +109,7 @@ describe "*** Ineligible methods ***", :ineligible do
           its(:ineligible_maternal_grandmothers) {is_expected.to match_array @model.males + [irene,titty]} 
           its(:ineligible_siblings) {is_expected.to match_array [rud,irene]}
           its(:ineligible_children) {is_expected.to match_array [rud,irene]}
-          context "and with peter and steve as grandchild" do
+          context "and with peter and steve as nephews" do
             before { 
               peter.update_attributes(mother_id: titty.id)
               steve.update_attributes(mother_id: titty.id) 
@@ -119,7 +119,7 @@ describe "*** Ineligible methods ***", :ineligible do
             its(:ineligible_paternal_grandmothers) {is_expected.to match_array @model.males + [titty]}
             its(:ineligible_maternal_grandfathers) {is_expected.to match_array @model.females + [rud,mark]}
             its(:ineligible_maternal_grandmothers) {is_expected.to match_array @model.males + [irene,titty]}
-            its(:ineligible_siblings) {is_expected.to match_array [rud,irene]}
+            its(:ineligible_siblings) {is_expected.to match_array [rud,irene,peter,steve]}
             its(:ineligible_children) {is_expected.to match_array [rud,irene]}
           end
         end
@@ -129,7 +129,7 @@ describe "*** Ineligible methods ***", :ineligible do
   end
 
 
-  context "when releted people exist", :cinzia do
+  context "when releted people exist" do
     include_context "releted people exist"
 
     describe "manuel" do

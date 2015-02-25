@@ -35,6 +35,41 @@ module Genealogy
     generate_method_ineligibles_parent(:mother)
 
 
+    # @!macro [attach] generate
+    #   @method ineligible_$1_grand$2(grandparent)
+    #   list of individual who cannot be $1 grand$2 
+    #   @return [Array,NilClass] Return nil if $$1 grand$2 already assigned
+    def self.generate_method_ineligible_grandparent(lineage,grandparent)
+      relationship = "#{lineage}_grand#{grandparent}"
+      define_method "ineligible_#{relationship}s" do
+        unless send(relationship)
+          parent = send(LINEAGE2PARENT[lineage])
+          ineligibles = [parent].compact | descendants | siblings(half: :include) | [self] | genealogy_class.send("#{OPPOSITESEX[PARENT2SEX[grandparent]]}s")
+          if genealogy_class.check_ages_enabled              
+            ineligibles += if parent
+              parent.send("ineligible_#{grandparent}s")
+            else
+              (genealogy_class.all - ineligibles).find_all do |indiv|
+                if indiv.life_range
+                  !indiv.can_procreate_during?(send("#{LINEAGE2PARENT[lineage]}_birth_range"))
+                else
+                  false
+                end
+              end
+            end
+          end
+          ineligibles
+        end
+      end
+    end
+    
+    generate_method_ineligible_grandparent(:paternal,:father)
+    generate_method_ineligible_grandparent(:paternal,:mother)
+    generate_method_ineligible_grandparent(:maternal,:father)
+    generate_method_ineligible_grandparent(:maternal,:mother)
+
+
+
     # # list of individual who cannot be grandfather
     # # @return [Array]
     # def ineligible_paternal_grandfathers
@@ -57,29 +92,31 @@ module Genealogy
     #   end
     # end
     
-    # list of individual who cannot be grandfather
-    # @return [Array]
-    def ineligible_paternal_grandfathers
-      [father].compact | descendants | siblings(half: :include) | [self] | genealogy_class.females unless paternal_grandfather
-    end
+
+
+    # # list of individual who cannot be grandfather
+    # # @return [Array]
+    # def ineligible_paternal_grandfathers
+    #   [father].compact | descendants | siblings(half: :include) | [self] | genealogy_class.females unless paternal_grandfather
+    # end
     
-    # list of individual who cannot be grandmother
-    # @return [Array]
-    def ineligible_paternal_grandmothers
-      [father].compact | descendants | siblings(half: :include) | [self] | genealogy_class.males unless paternal_grandmother
-    end
+    # # list of individual who cannot be grandmother
+    # # @return [Array]
+    # def ineligible_paternal_grandmothers
+    #   [father].compact | descendants | siblings(half: :include) | [self] | genealogy_class.males unless paternal_grandmother
+    # end
     
-    # list of individual who cannot be grandfather
-    # @return [Array]
-    def ineligible_maternal_grandfathers
-      [mother].compact | descendants | siblings(half: :include) | [self] | genealogy_class.females unless maternal_grandfather
-    end
+    # # list of individual who cannot be grandfather
+    # # @return [Array]
+    # def ineligible_maternal_grandfathers
+    #   [mother].compact | descendants | siblings(half: :include) | [self] | genealogy_class.females unless maternal_grandfather
+    # end
     
-    # list of individual who cannot be grandmother
-    # @return [Array]
-    def ineligible_maternal_grandmothers
-      [mother].compact | descendants | siblings(half: :include) | [self] | genealogy_class.males unless maternal_grandmother
-    end
+    # # list of individual who cannot be grandmother
+    # # @return [Array]
+    # def ineligible_maternal_grandmothers
+    #   [mother].compact | descendants | siblings(half: :include) | [self] | genealogy_class.males unless maternal_grandmother
+    # end
 
     # list of individual who cannot be children: ancestors, children, full siblings and theirself
     # @return [Array]
@@ -87,13 +124,13 @@ module Genealogy
       ancestors | children | siblings | [self]
     end
 
-    # list of individual who cannot be siblings: ancestors, descendants, half siblings with an undefined parent and theirself
+    # list of individual who cannot be full siblings: ancestors, descendants, siblings and indivs with different father or mother
     # @return [Array]
     def ineligible_siblings
-      ancestors | descendants | genealogy_class.indivs_with_parents | [self]
+      indivs_with_other_father = (father ? genealogy_class.where(father_id_column).where.not(father_id_column => father) : [])
+      indivs_with_other_mother = (mother ? genealogy_class.where(mother_id_column).where.not(mother_id_column => mother) : [])
+      ancestors | descendants | siblings | indivs_with_other_father | indivs_with_other_mother | [self]
     end
-
-    private
 
   end
 end

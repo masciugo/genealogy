@@ -60,12 +60,12 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       specify { expect { paul.add_children(peter, :spouse => john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
     end
 
-    context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (dylan)" do
+    context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (ruben)" do
       before {
         peter.update_attributes(father_id: paul.id, mother_id: titty.id)
         steve.update_attributes(father_id: paul.id, mother_id: titty.id)
         julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
-        dylan.update_attributes(father_id: paul.id)
+        ruben.update_attributes(father_id: paul.id)
       }
 
       describe "paul.remove_children" do
@@ -74,7 +74,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it { is_expected.to build_the_trio(peter, nil, titty) }
         it { is_expected.to build_the_trio(steve, nil, titty) }
         it { is_expected.to build_the_trio(julian, nil, michelle) }
-        it { is_expected.to build_the_trio(dylan, nil, nil) }
+        it { is_expected.to build_the_trio(ruben, nil, nil) }
         context "when steve is invalid" do
           before { steve.mark_invalid! }
           specify { expect { paul.remove_children }.to raise_error }
@@ -83,7 +83,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
             it { is_expected.to keep_the_trio(peter, paul, titty) }
             it { is_expected.to keep_the_trio(steve, paul, titty) }
             it { is_expected.to keep_the_trio(julian, paul, michelle) }
-            it { is_expected.to keep_the_trio(dylan, paul, nil) }
+            it { is_expected.to keep_the_trio(ruben, paul, nil) }
           end
         end
       end
@@ -94,7 +94,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it { is_expected.to build_the_trio(peter, nil, nil) }
         it { is_expected.to build_the_trio(steve, nil, nil) }
         it { is_expected.to build_the_trio(julian, nil, nil) }
-        it { is_expected.to build_the_trio(dylan, nil, nil) }
+        it { is_expected.to build_the_trio(ruben, nil, nil) }
       end
 
       describe "paul.remove_children(:spouse => titty)" do
@@ -103,7 +103,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it { is_expected.to build_the_trio(peter, nil, titty) }
         it { is_expected.to build_the_trio(steve, nil, titty) }
         it { is_expected.to build_the_trio(julian, paul, michelle) }
-        it { is_expected.to build_the_trio(dylan, paul, nil) }
+        it { is_expected.to build_the_trio(ruben, paul, nil) }
       end
 
       describe "paul.remove_children(:spouse => titty, :affect_spouse => true)" do
@@ -112,7 +112,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it { is_expected.to build_the_trio(peter, nil, nil) }
         it { is_expected.to build_the_trio(steve, nil, nil) }
         it { is_expected.to build_the_trio(julian, paul, michelle) }
-        it { is_expected.to build_the_trio(dylan, paul, nil) }
+        it { is_expected.to build_the_trio(ruben, paul, nil) }
       end
 
       describe "paul.remove_children(:spouse => maggie)" do
@@ -121,7 +121,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it { is_expected.to keep_the_trio(peter, paul, titty) }
         it { is_expected.to keep_the_trio(steve, paul, titty) }
         it { is_expected.to keep_the_trio(julian, paul, michelle) }
-        it { is_expected.to keep_the_trio(dylan, paul, nil) }
+        it { is_expected.to keep_the_trio(ruben, paul, nil) }
       end
 
       context "when specify a spouse with the same sex" do
@@ -155,12 +155,12 @@ describe "*** Alter children methods ***", :done, :alter_c  do
 
     end
 
-    context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (dylan)" do
+    context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (ruben)" do
       before {
         peter.update_attributes(father_id: paul.id, mother_id: titty.id)
         steve.update_attributes(father_id: paul.id, mother_id: titty.id)
         julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
-        dylan.update_attributes(father_id: paul.id)
+        ruben.update_attributes(father_id: paul.id)
       }
 
       describe "paul.remove_children" do
@@ -172,7 +172,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
           it { is_expected.to build_the_trio(peter, nil, titty) }
           it { is_expected.to build_the_trio(steve, nil, titty) }
           it { is_expected.to build_the_trio(julian, nil, michelle) }
-          it { is_expected.to build_the_trio(dylan, nil, nil) }
+          it { is_expected.to build_the_trio(ruben, nil, nil) }
         end
       end
 

@@ -8,14 +8,14 @@ describe "*** Query methods ***", :done, :query do
   describe "class methods" do
     describe ".males" do
       specify do
-        all_males = [nick, ruben, paul, peter, paso, manuel, john, jack, bob, tommy, luis, larry, ned, steve, marcel, julian, rud, mark, sam, charlie, dylan, walter]
+        all_males = [ruben, paul, peter, paso, manuel, john, jack, bob, tommy, luis, larry, ned, steve, marcel, julian, rud, mark, sam, charlie]
         expect(@model.males.all).to match_array all_males
       end
     end
 
     describe ".females" do
       specify do
-        all_females = [titty, mary, barbara, irene, terry, debby, alison, maggie, emily, rosa, louise, naomi, michelle, beatrix, mia, sue, agata]
+        all_females = [titty, mary, barbara, irene, terry, debby, alison, maggie, emily, rosa, louise, naomi, michelle, beatrix, mia, sue]
         expect(@model.females.all).to match_array all_females
       end
     end

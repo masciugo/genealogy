@@ -1,14 +1,12 @@
 shared_context 'unreleted people exist' do
   
   people = [
-    {name: "agata", sex: "F"},
     {name: "alison", sex: "F"},
     {name: "barbara", sex: "F"},
     {name: "beatrix", sex: "F"},
     {name: "bob", sex: "M"},
     {name: "charlie", sex: "M"},
     {name: "debby", sex: "F"},
-    {name: "dylan", sex: "M"},
     {name: "emily", sex: "F"},
     {name: "irene", sex: "F"},
     {name: "jack", sex: "M"},
@@ -26,7 +24,6 @@ shared_context 'unreleted people exist' do
     {name: "michelle", sex: "F"},
     {name: "naomi", sex: "F"},
     {name: "ned", sex: "M"},
-    {name: "nick", sex: "M"},
     {name: "paso", sex: "M"},
     {name: "paul", sex: "M"},
     {name: "peter", sex: "M"},
@@ -38,8 +35,7 @@ shared_context 'unreleted people exist' do
     {name: "sue", sex: "F"},
     {name: "terry", sex: "F"},
     {name: "titty", sex: "F"},
-    {name: "tommy", sex: "M"},
-    {name: "walter", sex: "M"}
+    {name: "tommy", sex: "M"}
   ]
   people.each{|person| let(person[:name]) { @model.my_find_by_name(person[:name])} }
 
@@ -96,7 +92,7 @@ shared_context "unreleted people exist with dates" do
     charlie.update_attributes(birth_date: Date.new(2012,12,3))
     debby.update_attributes(birth_date: Date.new(1920,2,1))
     emily.update_attributes(birth_date: Date.new(1903,1,6),death_date: Date.new(1944,4,6))
-    irene.update_attributes(birth_date: Date.new(1847,3,10),death_date: Date.new(1980,5,4))
+    irene.update_attributes(birth_date: Date.new(1947,3,10),death_date: Date.new(1980,5,4))
     jack.update_attributes(birth_date: Date.new(1915,10,1),death_date: Date.new(1960,7,3))
     john.update_attributes(birth_date: Date.new(1948,12,4))
     julian.update_attributes(birth_date: Date.new(2000,2,3))

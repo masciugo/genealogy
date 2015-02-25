@@ -60,15 +60,6 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         end
       end
 
-      describe "peter.add_siblings(steve,walter)" do
-        subject { peter.add_siblings(steve,walter) }
-        it { is_expected.to be true }
-        describe "steve, peter, walter" do
-          it { subject and expect([peter,steve,walter]).to be_siblings }
-        end
-      end
-
-
       shared_examples "a method which add paternal half siblings" do |*args|
         before { args.map!{|p| eval(p.to_s)} }
         it { is_expected.to be true }
@@ -98,13 +89,13 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         end
       end
 
-      context "when peter has steve and manuel as full sibling and julian and paso as paternal half sibling (mother maggie) and agata as maternal half sibling (father dylan)" do
+      context "when peter has steve and manuel as full sibling and julian and paso as paternal half sibling (mother maggie) and louise as maternal half sibling (father bob)" do
         before {
           steve.update_attributes(father_id: paul.id, mother_id: titty.id)
           manuel.update_attributes(father_id: paul.id, mother_id: titty.id)
           paso.update_attributes(father_id: paul.id, mother_id: maggie.id)
           julian.update_attributes(father_id: paul.id, mother_id: maggie.id)
-          agata.update_attributes(father_id: dylan.id, mother_id: titty.id)
+          louise.update_attributes(father_id: bob.id, mother_id: titty.id)
         }
 
         describe "peter.remove_siblings" do
@@ -124,9 +115,9 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
               expect(paso.reload.father).to eq paul and
               expect(paso.reload.mother).to eq maggie 
             end
-            it "agata is still maternal half sibling" do
-              expect(agata.reload.father).to eq dylan and
-              expect(agata.reload.mother).to eq titty 
+            it "louise is still maternal half sibling" do
+              expect(louise.reload.father).to eq bob and
+              expect(louise.reload.mother).to eq titty 
             end
           end
         end
@@ -169,8 +160,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
               expect(julian.reload.father).to eq nil and
               expect(paso.reload.father).to eq nil 
             end
-            it "agata is still maternal half sibling" do
-              expect(agata.reload.mother).to eq titty 
+            it "louise is still maternal half sibling" do
+              expect(louise.reload.mother).to eq titty 
             end
           end
         end
@@ -195,8 +186,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
               expect(julian.reload.father).to eq paul and
               expect(paso.reload.father).to eq paul 
             end
-            it "agata is not maternal half sibling" do
-              expect(agata.reload.mother).to eq nil 
+            it "louise is not maternal half sibling" do
+              expect(louise.reload.mother).to eq nil 
             end
           end
         end
@@ -225,7 +216,20 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
     end
 
+    context "when sue is son of mark and mia" do
 
+      before { sue.update_attributes(father_id: mark.id, mother_id: mia.id) }
+
+      describe "sue.add_siblings(sam,charlie)" do
+        subject { sue.add_siblings(sam,charlie) }
+        it { is_expected.to be true }
+        describe "sam, sue, charlie" do
+          it { subject and expect([sue,sam,charlie]).to be_siblings }
+        end
+      end
+
+
+    end
 
   end
 
@@ -250,7 +254,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         end
       end
 
-      context "when peter has steve and manuel as full sibling and julian and paso as paternal half sibling (mother maggie) and agata as maternal half sibling (father dylan)" do
+      context "when peter has steve and manuel as full sibling and julian and paso as paternal half sibling (mother maggie) and louise as maternal half sibling (father bob)" do
         before { 
           steve.update_attribute(:father_id, paul.id) 
           steve.update_attribute(:mother_id, titty.id) 
