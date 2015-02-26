@@ -121,7 +121,7 @@ module Genealogy
     # list of individual who cannot be children: ancestors, children, full siblings and theirself
     # @return [Array]
     def ineligible_children
-      ancestors | children | siblings | [self]
+      ancestors | children | siblings | [self] | genealogy_class.where(SEX2PARENT[sex])
     end
 
     # list of individual who cannot be full siblings: ancestors, descendants, siblings and indivs with different father or mother

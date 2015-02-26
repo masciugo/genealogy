@@ -15,7 +15,7 @@ describe "*** Ineligible methods ***", :ineligible_dates do
 
   describe "louise" do
     subject {louise}
-    its(:birth) {is_expected.to eq Date.new(1874,4,10)}
+    its(:birth) {debugger; sleep 0; is_expected.to eq Date.new(1874,4,10)}
     its(:death) {is_expected.to eq Date.new(1930,8,7)}
     its(:life_range) { is_expected.to eq Date.new(1874,4,10)..Date.new(1930,8,7) }
     its(:fertility_range) { is_expected.to eq Date.new(1874+9,4,10)..Date.new(1874+50,4,10) }
