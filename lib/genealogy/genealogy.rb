@@ -17,12 +17,19 @@ module Genealogy
 
       check_options(options)
 
-      class_attribute :genealogy_enabled, :current_spouse_enabled, :genealogy_class, :perform_validation, :check_ages_enabled
-      self.genealogy_enabled = true
-      self.genealogy_class = self # keep track of the original extend class to prevent wrong scopes in query method in case of STI
-      self.current_spouse_enabled = options[:current_spouse].try(:==,true) || DEFAULTS[:current_spouse] 
-      self.perform_validation = options[:perform_validation].try(:==,false) ? false : DEFAULTS[:perform_validation]
+      # keep track of the original extend class to prevent wrong scopes in query method in case of STI
+      class_attribute :genealogy_class
+      self.genealogy_class = self 
+      
+      class_attribute :check_ages_enabled
       self.check_ages_enabled = options[:check_ages].try(:==,false) ? false : true
+      
+      [:current_spouse, :perform_validation, :replace_parent].each do |opt|
+        ca = "#{opt}_enabled"
+        class_attribute ca
+        self.send "#{ca}=", options.key?(opt) ? options[opt] : DEFAULTS[opt]
+      end
+
 
       # column names class attributes
       DEFAULTS[:column_names].merge(options[:column_names]).each do |k,v|

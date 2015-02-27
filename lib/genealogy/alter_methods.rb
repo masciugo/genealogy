@@ -9,12 +9,12 @@ module Genealogy
     #   @method add_$1(parent)
     #   Add $1 
     #   @param [Object] parent
-    #   @raise [Exception] if perform_validation is enabled and self is invalid
+    #   @raise [Exception] if perform validation is enabled and self is invalid
     #   @return [Boolean] 
     def self.generate_method_add_parent(parent)
       define_method "add_#{parent}" do |relative|
         check_incompatible_relationship(parent,relative) unless relative.nil?
-        if perform_validation
+        if perform_validation_enabled
           self.send("#{parent}=",relative)
           save!
         else
@@ -28,11 +28,11 @@ module Genealogy
     # @!macro [attach] generate
     #   @method remove_$1
     #   remove $1. Foreign_key set to nil
-    #   @raise [Exception] if perform_validation is enabled and self is invalid
+    #   @raise [Exception] if perform validation is enabled and self is invalid
     #   @return [Boolean] 
     def self.generate_method_remove_parent(parent)
       define_method "remove_#{parent}" do
-        if perform_validation
+        if perform_validation_enabled
           self.send("#{parent}=",nil)
           save!
         else
@@ -71,7 +71,7 @@ module Genealogy
     #   @method add_$1_grand$2(grandparent)
     #   Add $1 grand$2 
     #   @param [Object] gp grandparent
-    #   @raise [Exception] if perform_validation is enabled and self is invalid
+    #   @raise [Exception] if perform validation is enabled and self is invalid
     #   @return [Boolean] 
     def self.generate_method_add_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
@@ -90,7 +90,7 @@ module Genealogy
     # @!macro [attach] generate
     #   @method remove_$1_grand$2
     #   remove $1 grand$2 
-    #   @raise [Exception] if perform_validation is enabled and self is invalid
+    #   @raise [Exception] if perform validation is enabled and self is invalid
     #   @return [Boolean] 
     def self.generate_method_remove_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
@@ -110,7 +110,7 @@ module Genealogy
     #   Add $1 grandparents 
     #   @param [Object] gf grandfather
     #   @param [Object] gm grandmother
-    #   @raise [Exception] if perform_validation is enabled and self is invalid
+    #   @raise [Exception] if perform validation is enabled and self is invalid
     #   @return [Boolean] 
     def self.generate_method_add_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
@@ -126,7 +126,7 @@ module Genealogy
     # @!macro [attach] generate
     #   @method remove_$1_grandparents
     #   remove $1 grandparents 
-    #   @raise [Exception] if perform_validation is enabled and self is invalid
+    #   @raise [Exception] if perform validation is enabled and self is invalid
     #   @return [Boolean] 
     def self.generate_method_remove_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"

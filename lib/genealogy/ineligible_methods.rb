@@ -118,18 +118,27 @@ module Genealogy
     #   [mother].compact | descendants | siblings(half: :include) | [self] | genealogy_class.males unless maternal_grandmother
     # end
 
-    # list of individual who cannot be children: ancestors, children, full siblings and theirself
+    # list of individual who cannot be children: ancestors, children, full siblings, theirself and, if replace_parent options enabled, all individuals with father or mother according to self's sex
     # @return [Array]
     def ineligible_children
-      ancestors | children | siblings | [self] | genealogy_class.where(SEX2PARENT[sex])
+      ineligibles = ancestors | children | siblings | [self]
+      if genealogy_class.replace_parent_enabled
+        ineligibles |= genealogy_class.all_with(SEX2PARENT[sex_to_s])
+      else
+        ineligibles
+      end
     end
 
-    # list of individual who cannot be full siblings: ancestors, descendants, siblings and indivs with different father or mother
+    # list of individual who cannot be full siblings: ancestors, descendants, siblings, theirself and, if replace_parent options enabled, all individuals with different father or mother
     # @return [Array]
     def ineligible_siblings
-      indivs_with_other_father = (father ? genealogy_class.where(father_id_column).where.not(father_id_column => father) : [])
-      indivs_with_other_mother = (mother ? genealogy_class.where(mother_id_column).where.not(mother_id_column => mother) : [])
-      ancestors | descendants | siblings | indivs_with_other_father | indivs_with_other_mother | [self]
+      ineligibles = ancestors | descendants | siblings | [self]
+      if genealogy_class.replace_parent_enabled
+        ineligibles |= father ? genealogy_class.where(father_id_column).where.not(father_id_column => father) : []
+        ineligibles |= mother ? genealogy_class.where(mother_id_column).where.not(mother_id_column => mother) : []
+      else
+        ineligibles
+      end
     end
 
   end

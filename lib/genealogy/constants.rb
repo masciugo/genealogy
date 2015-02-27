@@ -11,6 +11,7 @@ module Genealogy
         death_date: 'death_date'
       },
       perform_validation: true,
+      replace_parent: false,
       current_spouse: false,
       sex_values: ['M','F'],
       check_ages: {
@@ -24,9 +25,9 @@ module Genealogy
     }
 
     PARENT2LINEAGE = ActiveSupport::HashWithIndifferentAccess.new({ :father => :paternal, :mother => :maternal })
-    LINEAGE2PARENT = ActiveSupport::HashWithIndifferentAccess.new(PARENT2LINEAGE.invert)
+    LINEAGE2PARENT = ActiveSupport::HashWithIndifferentAccess.new({ :paternal => :father, :maternal => :mother })
     PARENT2SEX = ActiveSupport::HashWithIndifferentAccess.new({ :father => :male, :mother => :female })
-    SEX2PARENT = ActiveSupport::HashWithIndifferentAccess.new(PARENT2SEX.invert)
+    SEX2PARENT = ActiveSupport::HashWithIndifferentAccess.new({ :male => :father, :female => :mother })
     OPPOSITESEX = ActiveSupport::HashWithIndifferentAccess.new({:male => :female, :female => :male})
 
     AKA = ActiveSupport::HashWithIndifferentAccess.new({

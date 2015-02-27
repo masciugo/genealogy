@@ -330,6 +330,17 @@ module Genealogy
         where(sex_column => sex_female_value)
       end
 
+      def all_with(role)
+        case role
+        when :father
+          where(father_id_column)
+        when :mother
+          where(mother_id_column)
+        when :parents
+          where(father_id_column).where(mother_id_column)
+        end
+      end
+
     end
 
   end

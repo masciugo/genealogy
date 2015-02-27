@@ -10,10 +10,10 @@ module Genealogy
     # @return [Boolean] 
     def add_current_spouse(spouse)
       raise_unless_current_spouse_enabled
-      raise ArgumentError, "Expected #{self.genealogy_class} spouse. Got #{spouse.class}" unless spouse.class.respond_to?(:genealogy_enabled)
+      raise ArgumentError, "Expected #{self.genealogy_class} spouse. Got #{spouse.class}" unless spouse.class.respond_to?(:genealogy_class)
       raise IncompatibleRelationshipException, "#{spouse} can't be spouse of #{self}" if ineligible_current_spouses.include? spouse
 
-      if perform_validation
+      if perform_validation_enabled
         self.current_spouse = spouse
         spouse.current_spouse = self
         transaction do
@@ -33,7 +33,7 @@ module Genealogy
     # @return [Boolean] 
     def remove_current_spouse
       raise_unless_current_spouse_enabled
-      if perform_validation
+      if perform_validation_enabled
         ex_current_spouse = current_spouse
         current_spouse.current_spouse = nil
         self.current_spouse = nil

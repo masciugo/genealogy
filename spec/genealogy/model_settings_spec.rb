@@ -17,7 +17,7 @@ describe 'TestModel', :model do
     its(:sex_male_value) { is_expected.to eq 'M' }
     its(:sex_female_value) { is_expected.to eq 'F' }
     its(:current_spouse_enabled) { is_expected.to be false }
-    its(:perform_validation) { is_expected.to be true }
+    its(:perform_validation_enabled) { is_expected.to be true }
   end
 
   opts2 = {column_names: {sex: "gender"}, sex_values: [1,2]}
@@ -58,7 +58,7 @@ describe 'TestModel', :model do
   opts6 = {:perform_validation => false}
   context "initialized with options: #{opts6}"  do
     before(:context) { @model = get_test_model(opts6) }
-    its(:perform_validation) { is_expected.to be false }
+    its(:perform_validation_enabled) { is_expected.to be false }
   end
 
   context "initialized with default options"  do
@@ -70,8 +70,9 @@ describe 'TestModel', :model do
         expect(@model.column_names).to include("#{col_name}")
       end
     end
+    its(:replace_parent_enabled) { is_expected.to be false }
     its(:genealogy_class) { is_expected.to be @model }
-    its(:perform_validation) { is_expected.to be true }
+    its(:perform_validation_enabled) { is_expected.to be true }
     its(:column_names) { is_expected.to_not include("current_spouse_id") }
     its(:current_spouse_enabled) { is_expected.to be false }
     its(:check_ages_enabled) { is_expected.to be true }
@@ -101,6 +102,12 @@ describe 'TestModel', :model do
     before(:context) { @model = get_test_model(opts9) }
     its(:check_ages_enabled) { is_expected.to be true }
     its(:min_male_procreation_age) { is_expected.to be 12 }
+  end
+
+  opts10 = {replace_parent: true}
+  context "initialized with options: #{opts10}"  do
+    before(:context) { @model = get_test_model(opts10) }
+    its(:replace_parent_enabled) { is_expected.to be true }
   end
 
 end
