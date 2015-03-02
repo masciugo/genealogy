@@ -10,7 +10,9 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "returns nil if father already set" do
         expect(rud.ineligible_fathers).to be nil
       end
-      it "does not return nil if father is not set"
+      it "does not return nil if father is not set" do
+        expect(manuel.ineligible_fathers).to_not be nil
+      end  
       it "includes theirself" do
         expect(manuel.ineligible_fathers).to include manuel
       end
@@ -34,6 +36,9 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "returns nil if mother already set" do
         expect(rud.ineligible_mothers).to be nil
       end
+      it "does not return nil if mother is not set" do
+        expect(mia.ineligible_mothers).to_not be nil
+      end  
       it "includes theirself" do
         expect(manuel.ineligible_mothers).to include manuel
       end
@@ -47,7 +52,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "includes female descendants" do
         expect(alison.ineligible_mothers).to include titty,sue
       end
-      it "does not include female paternal half siblings, i.e., they can become full siblings" do
+      it "does not include female paternal half siblings" do
         expect(ruben.ineligible_mothers).to_not include mary
       end
     end
