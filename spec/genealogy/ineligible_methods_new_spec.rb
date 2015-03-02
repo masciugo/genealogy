@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe "*** Ineligible methods without considering ages ***", :ineligible, :new do
 
-  context 'when can replace parent' do
-    before { @model = get_test_model({:current_spouse => true, :check_ages => false, :replace_parent => true }) }  
+  context 'when cannot replace parent (default)' do
+    before { @model = get_test_model({:current_spouse => true, :check_ages => false }) }  
     include_context "releted people exist" #all following examples are based on sample pedigree
 
     describe "#ineligible_fathers" do
@@ -64,14 +64,58 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "includes theirself" do
         expect(paul.ineligible_paternal_grandfathers).to include paul
       end
-      it "includes father, i.e., father can't be paternal grandfather"
-      it "does not include maternal male ancestors"
-      it "includes male descendants"
+      it "includes father, i.e., father can't be paternal grandfather" do
+        expect(paul.ineligible_paternal_grandfathers).to include manuel
+      end
+      it "does not include maternal male ancestors" do
+        expect(paul.ineligible_paternal_grandfathers).to_not include marcel
+      end
+      it "includes male descendants" do
+        expect(jack.ineligible_paternal_grandfathers).to include rud,mark,sam,charlie,peter,steve
+      end
       it "includes all females" do
         expect(manuel.ineligible_paternal_grandfathers).to include *@model.females
       end
-
     end
+
+    describe "#ineligible_paternal_grandmothers" do
+      
+    end
+
+    describe "#ineligible_maternal_grandfathers" do
+      
+    end
+
+    describe "#ineligible_maternal_grandmothers" do
+      
+    end
+
+    describe "#siblings" do
+      
+    end
+
+    describe "#children" do
+      it "includes theirself"
+      it "includes ancestors"
+      it "includes full siblings"
+      it "includes all individuals with both parents"
+      context 'when receiver is male' do
+        it "includes all individuals with father"
+        it "does not include maternal half siblings without father, i.e., the father can be the receiver"
+        it "includes maternal half siblings with father"
+      end
+      context 'when receiver is female' do
+        it "includes all individuals with mother"
+        it "does not include paternal half siblings without mother, i.e., the mother can be the receiver"
+        it "includes paternal half siblings with mother"
+      end
+    end
+
+  end
+
+  context 'when can replace parent' do
+    before { @model = get_test_model({:current_spouse => true, :check_ages => false, :replace_parent => true }) }  
+    include_context "releted people exist"
 
     describe "#siblings" do
       
@@ -80,12 +124,6 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
     describe "#children" do
       
     end
-
-  end
-
-  context 'when cannot replace parent (default)' do
-    before { @model = get_test_model({:current_spouse => true, :check_ages => false }) }  
-    include_context "releted people exist"
 
   end
 end
