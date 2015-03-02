@@ -61,6 +61,9 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "returns nil if paternal_grandfather already set" do
         expect(rud.ineligible_paternal_grandfathers).to be nil
       end
+      it "does not return nil if paternal_grandfather is not set" do
+        expect(paul.ineligible_paternal_grandfathers).to_not be nil
+      end 
       it "includes theirself" do
         expect(paul.ineligible_paternal_grandfathers).to include paul
       end
@@ -76,6 +79,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "includes all females" do
         expect(manuel.ineligible_paternal_grandfathers).to include *@model.females
       end
+      it "includes all half siblings"
     end
 
     describe "#ineligible_paternal_grandmothers" do
