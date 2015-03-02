@@ -13,7 +13,7 @@ module Genealogy
     def self.generate_method_ineligibles_parent(parent)
       define_method "ineligible_#{parent}s" do
         unless self.send(parent) 
-          ineligibles = descendants | siblings | self.send("#{PARENT2LINEAGE[parent]}_half_siblings") | [self] | genealogy_class.send("#{OPPOSITESEX[PARENT2SEX[parent]]}s")
+          ineligibles = descendants | [self] | genealogy_class.send("#{OPPOSITESEX[PARENT2SEX[parent]]}s")
           if genealogy_class.check_ages_enabled and life_range
             ineligibles += (genealogy_class.all - ineligibles).find_all do |indiv|
               if indiv.life_range
