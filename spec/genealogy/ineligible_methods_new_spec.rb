@@ -57,7 +57,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       end
     end
 
-    describe "#ineligible_paternal_grandfathers" do
+    describe "#ineligible_paternal_grandfathers", :nonni do
       it "returns nil if paternal_grandfather already set" do
         expect(rud.ineligible_paternal_grandfathers).to be nil
       end
@@ -94,16 +94,106 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       end
     end
 
-    describe "#ineligible_paternal_grandmothers" do
+    describe "#ineligible_paternal_grandmothers", :nonni do
+      it "returns nil if paternal_grandmother already set" do
+        expect(rud.ineligible_paternal_grandmothers).to be nil
+      end
+      it "does not return nil if paternal_grandmother is not set" do
+        expect(paul.ineligible_paternal_grandmothers).to_not be nil
+      end 
+      it "includes theirself" do
+        expect(mia.ineligible_paternal_grandmothers).to include mia
+      end
+      it "does not include maternal female ancestors" do
+        paso.update_attributes(mother_id: nil)
+        expect(rud.ineligible_paternal_grandmothers).to_not include irene,emily,rosa
+      end
+      it "includes female descendants" do
+        expect(jack.ineligible_paternal_grandmothers).to include barbara,mary
+      end
+      it "includes all males" do
+        expect(paul.ineligible_paternal_grandmothers).to include *@model.males
+      end
+      it "includes full siblings" do
+        paul.update_attributes(mother_id: nil)
+        expect(julian.ineligible_paternal_grandmothers).to include beatrix
+      end
+      it "includes paternal half siblings" do
+        paul.update_attributes(mother_id: nil)
+        expect(julian.ineligible_paternal_grandmothers).to include mary
+      end
+      it "does not include maternal half siblings (it might happen when a grandparent have a child with their grandchildren)" do
+        paso.update_attributes(mother_id: nil)
+        titty.update_attributes(father_id: nil, mother_id: irene)
+        expect(rud.ineligible_paternal_grandmothers).to_not include titty
+      end
       
     end
 
-    describe "#ineligible_maternal_grandfathers" do
-      
+    describe "#ineligible_maternal_grandfathers", :nonni do
+      it "returns nil if maternal_grandfather already set" do
+        expect(rud.ineligible_maternal_grandfathers).to be nil
+      end
+      it "does not return nil if maternal_grandfather is not set" do
+        expect(sam.ineligible_maternal_grandfathers).to_not be nil
+      end 
+      it "includes theirself" do
+        expect(sam.ineligible_maternal_grandfathers).to include sam
+      end
+      it "does not include paternal male ancestors" do
+        expect(barbara.ineligible_maternal_grandfathers).to_not include jack,bob
+      end
+      it "includes male descendants" do
+        expect(paso.ineligible_maternal_grandfathers).to include rud,mark,sam,charlie,peter,steve
+      end
+      it "includes all females" do
+        expect(paso.ineligible_maternal_grandfathers).to include *@model.females
+      end
+      it "includes full siblings" do
+        expect(sue.ineligible_maternal_grandfathers).to include sam,charlie
+      end
+      it "includes maternal half siblings" do
+        expect(jack.ineligible_maternal_grandfathers).to include tommy
+      end
+      it "does not include paternal half siblings (it might happen when a grandparent have a child with their grandchildren)" do
+        michelle.update_attributes(father_id: nil)
+        expect(julian.ineligible_maternal_grandfathers).to_not include ruben,peter,steve
+      end      
     end
 
-    describe "#ineligible_maternal_grandmothers" do
-      
+    describe "#ineligible_maternal_grandmothers", :nonni do
+      it "returns nil if maternal_grandmother already set" do
+        expect(rud.ineligible_maternal_grandmothers).to be nil
+      end
+      it "does not return nil if maternal_grandmother is not set" do
+        expect(paul.ineligible_maternal_grandmothers).to_not be nil
+      end 
+      it "includes theirself" do
+        expect(paul.ineligible_maternal_grandmothers).to include paul
+      end
+      it "includes mother, i.e., mother can't be maternal grandmother" do
+        expect(paul.ineligible_maternal_grandmothers).to include terry
+      end
+      it "does not include paternal female ancestors" do
+        expect(barbara.ineligible_maternal_grandmothers).to_not include alison,louise
+      end
+      it "includes female descendants" do
+        expect(jack.ineligible_maternal_grandmothers).to include barbara,mary
+      end
+      it "includes all males" do
+        expect(manuel.ineligible_maternal_grandmothers).to include *@model.males
+      end
+      it "includes full siblings" do
+        michelle.update_attributes(mother_id: nil)
+        expect(julian.ineligible_maternal_grandmothers).to include beatrix
+      end
+      it "includes maternal half siblings" do
+        expect(tommy.ineligible_maternal_grandmothers).to include debby
+      end
+      it "does not include paternal half siblings (it might happen when a grandparent have a child with their grandchildren)" do
+        michelle.update_attributes(mother_id: nil)
+        expect(julian.ineligible_maternal_grandmothers).to_not include mary
+      end      
     end
 
     describe "#siblings" do
