@@ -79,8 +79,19 @@ describe "*** Ineligible methods without considering ages ***", :ineligible, :ne
       it "includes all females" do
         expect(manuel.ineligible_paternal_grandfathers).to include *@model.females
       end
-      it "includes full siblings and paternal half siblings"  
-      it "does not include maternal half siblings, i.e., a paternal grandmother cam have a child with her grandchildren"
+      it "includes full siblings" do
+        paul.update_attributes(father_id: nil)
+        expect(peter.ineligible_paternal_grandfathers).to include steve
+      end
+      it "includes paternal half siblings" do
+        paul.update_attributes(father_id: nil)
+        expect(peter.ineligible_paternal_grandfathers).to include julian,ruben
+      end
+      it "does not include maternal half siblings (it might happen when a grandparent have a child with their grandchildren)" do
+        paul.update_attributes(father_id: nil)
+        ruben.update_attributes(father_id: nil, mother_id: titty)
+        expect(peter.ineligible_paternal_grandfathers).to_not include ruben
+      end
     end
 
     describe "#ineligible_paternal_grandmothers" do
