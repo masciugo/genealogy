@@ -40,14 +40,13 @@ shared_context 'unreleted people exist' do
   people.each{|person| let(person[:name]) { @model.my_find_by_name(person[:name])} }
 
   before do
-    # puts 'creating people'
     DatabaseCleaner.clean
     @model.create! people
   end
 
 end
 
-shared_context "releted people exist" do
+shared_context "pedigree exists" do
 
   include_context 'unreleted people exist'
 
@@ -58,15 +57,15 @@ shared_context "releted people exist" do
     charlie.update_attributes(father_id: mark.id, mother_id: mia.id)
     debby.update_attributes(father_id: bob.id, mother_id: louise.id)
     emily.update_attributes(father_id: luis.id, mother_id: rosa.id)
-    irene.update_attributes(father_id: tommy.id, mother_id: emily.id, current_spouse_id: paso.id)
+    irene.update_attributes(father_id: tommy.id, mother_id: emily.id)
     jack.update_attributes(father_id: bob.id, mother_id: louise.id)
     john.update_attributes(father_id: jack.id, mother_id: alison.id)
     julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
     mark.update_attributes(father_id: paso.id, mother_id: irene.id)
     mary.update_attributes(father_id: paul.id, mother_id: barbara.id)
-    michelle.update_attributes(father_id: ned.id, mother_id: naomi.id, current_spouse_id: paul.id)
-    paso.update_attributes(father_id: jack.id, mother_id: alison.id, current_spouse_id: irene.id )
-    paul.update_attributes(father_id: manuel.id, mother_id: terry.id, current_spouse_id: michelle.id)
+    michelle.update_attributes(father_id: ned.id, mother_id: naomi.id)
+    paso.update_attributes(father_id: jack.id, mother_id: alison.id )
+    paul.update_attributes(father_id: manuel.id, mother_id: terry.id)
     peter.update_attributes(father_id: paul.id, mother_id: titty.id)
     ruben.update_attributes(father_id: paul.id)
     rud.update_attributes(father_id: paso.id, mother_id: irene.id)
@@ -76,6 +75,12 @@ shared_context "releted people exist" do
     terry.update_attributes(father_id: marcel.id)
     titty.update_attributes(father_id: paso.id, mother_id: irene.id)
     tommy.update_attributes(father_id: larry.id, mother_id: louise.id)
+    if @model.current_spouse_enabled?
+      irene.update_attributes(current_spouse_id: paso.id)
+      michelle.update_attributes(current_spouse_id: paul.id)
+      paso.update_attributes(current_spouse_id: irene.id )
+      paul.update_attributes(current_spouse_id: michelle.id)
+    end
   end
 end
 

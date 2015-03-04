@@ -9,19 +9,19 @@ module Genealogy
     def parents
       [father,mother]
     end
-
+    # @return [ActiveRecord] 
     def paternal_grandfather
       father && father.father
     end
-
+    # @return [ActiveRecord] 
     def paternal_grandmother
       father && father.mother
     end
-
+    # @return [ActiveRecord] 
     def maternal_grandfather
       mother && mother.father
     end
-
+    # @return [ActiveRecord] 
     def maternal_grandmother
       mother && mother.mother
     end
@@ -55,13 +55,13 @@ module Genealogy
         raise SexError, "Problems while looking for #{self}'s children made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex
       end
       result = case sex
-      when sex_male_value
+      when gclass.sex_male_value
         if options.keys.include?(:spouse)
           children_as_father.with(spouse.try(:id))
         else
           children_as_father
         end
-      when sex_female_value
+      when gclass.sex_female_value
         if options.keys.include?(:spouse)
           children_as_mother.with(spouse.try(:id))
         else
@@ -320,16 +320,17 @@ module Genealogy
 
     module ClassMethods
       # all male individuals
-      # @return [ActiveRecord_Relation] 
+      # @return [ActiveRecord::Relation] 
       def males
         where(sex_column => sex_male_value)
       end
       # all female individuals
-      # @return [ActiveRecord_Relation] 
+      # @return [ActiveRecord::Relation] 
       def females
         where(sex_column => sex_female_value)
       end
-
+      # all individuals individuals having relative with specified role
+      # @return [ActiveRecord, ActiveRecord::Relation] 
       def all_with(role)
         case role
         when :father

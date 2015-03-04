@@ -13,8 +13,8 @@ module Genealogy
     #   @return [Boolean] 
     def self.generate_method_add_parent(parent)
       define_method "add_#{parent}" do |relative|
-        check_incompatible_relationship(parent,relative) unless relative.nil?
-        if perform_validation_enabled
+        check_incompatible_relationship(parent,relative)
+        if gclass.perform_validation_enabled
           self.send("#{parent}=",relative)
           save!
         else
@@ -32,7 +32,7 @@ module Genealogy
     #   @return [Boolean] 
     def self.generate_method_remove_parent(parent)
       define_method "remove_#{parent}" do
-        if perform_validation_enabled
+        if gclass.perform_validation_enabled
           self.send("#{parent}=",nil)
           save!
         else
@@ -254,10 +254,10 @@ module Genealogy
       transaction do
         args.inject(true) do |res,child|
           res &= case sex
-          when sex_male_value
+          when gclass.sex_male_value
             child.add_mother(options[:spouse]) if options[:spouse]
             child.add_father(self)
-          when sex_female_value
+          when gclass.sex_female_value
             child.add_father(options[:spouse]) if options[:spouse]
             child.add_mother(self)
           else 
@@ -295,9 +295,9 @@ module Genealogy
             child.remove_parents
           else
             case sex
-            when sex_male_value
+            when gclass.sex_male_value
               child.remove_father
-            when sex_female_value
+            when gclass.sex_female_value
               child.remove_mother
             else 
               raise SexError, "Sex value not valid for #{self}"
@@ -327,9 +327,16 @@ module Genealogy
       relationship = args.shift
       args.each do |relative|
         # puts "[#{__method__}]: #{arg} class: #{arg.class}, #{self} class: #{self.class}"
-        raise ArgumentError, "Expected #{self.genealogy_class} object. Got #{relative.class}" unless relative.class.equal? self.genealogy_class
-        # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
-        raise IncompatibleRelationshipException, "#{relative} can't be #{relationship} of #{self}" if self.send("ineligible_#{relationship.to_s.pluralize}").include? relative
+        next if relative.nil?
+        raise ArgumentError, "Expected #{self.gclass} object. Got #{relative.class}" unless relative.class.equal? self.gclass
+        if gclass.ineligibility_enabled
+          if ineligibles = self.send("ineligible_#{relationship.to_s.pluralize}")
+            # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
+            raise IncompatibleRelationshipException, "#{relative} can't be #{relationship} of #{self}" if ineligibles.include? relative
+          else
+            raise IncompatibleRelationshipException, "#{self} already has #{relationship}"
+          end
+        end
       end
     end
 

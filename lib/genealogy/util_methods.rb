@@ -8,25 +8,25 @@ module Genealogy
     # @return [Boolean] 
     def is_female?
       return female? if respond_to?(:female?)
-      sex == sex_female_value
+      sex == gclass.sex_female_value
     end
 
     # @return [Boolean] 
     def is_male?
       return male? if respond_to?(:male?)
-      sex == sex_male_value
+      sex == gclass.sex_male_value
     end
 
     # Genealogy thinks time in term of Date, not DateTime
     # @return [Date]
     def birth
-      self.send("#{genealogy_class.birth_date_column}").try(:to_date)
+      self.send("#{gclass.birth_date_column}").try(:to_date)
     end
 
     # Genealogy thinks time in term of Date, not DateTime
     # @return [Date]
     def death
-      self.send("#{genealogy_class.death_date_column}").try(:to_date)
+      self.send("#{gclass.death_date_column}").try(:to_date)
     end
 
     # According to procreation ages says if self can procreate at specified time
@@ -94,22 +94,22 @@ module Genealogy
     private
 
     def max_le(sex=nil)
-      genealogy_class.send("max_#{sex or sex_to_s}_life_expectancy").years
+      gclass.send("max_#{sex or sex_to_s}_life_expectancy").years
     end
 
     def max_fpa(sex=nil)
-      genealogy_class.send("max_#{sex or sex_to_s}_procreation_age").years
+      gclass.send("max_#{sex or sex_to_s}_procreation_age").years
     end
 
     def min_fpa(sex=nil)
-      genealogy_class.send("min_#{sex or sex_to_s}_procreation_age").years
+      gclass.send("min_#{sex or sex_to_s}_procreation_age").years
     end
 
     def sex_to_s
       case sex
-      when sex_male_value
+      when gclass.sex_male_value
         'male'
-      when sex_female_value
+      when gclass.sex_female_value
         'female'
       else
         raise SexError, "Sex value not valid for #{self}"

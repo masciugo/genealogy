@@ -10,7 +10,7 @@ RSpec::Matchers.define :build_the_trio do |child, father, mother|
     child.father == father and child.mother == mother
   end
   description do
-    "build the trio: #{trio_to_s(child, child.father, child.mother)}"
+    "build the expected trio"
   end
   failure_message do
     <<-MSG

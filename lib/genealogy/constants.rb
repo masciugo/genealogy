@@ -11,10 +11,10 @@ module Genealogy
         death_date: 'death_date'
       },
       perform_validation: true,
-      replace_parent: false,
+      ineligibility: :pedigree,
       current_spouse: false,
       sex_values: ['M','F'],
-      check_ages: {
+      limit_ages: {
         min_male_procreation_age: 12,
         max_male_procreation_age: 75,
         min_female_procreation_age: 9,

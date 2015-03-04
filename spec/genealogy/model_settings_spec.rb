@@ -70,14 +70,16 @@ describe 'TestModel', :model do
         expect(@model.column_names).to include("#{col_name}")
       end
     end
-    its(:replace_parent_enabled) { is_expected.to be false }
-    its(:genealogy_class) { is_expected.to be @model }
+    its(:gclass) { is_expected.to be @model }
     its(:perform_validation_enabled) { is_expected.to be true }
     its(:column_names) { is_expected.to_not include("current_spouse_id") }
     its(:current_spouse_enabled) { is_expected.to be false }
-    its(:check_ages_enabled) { is_expected.to be true }
+    its(:ineligibility_enabled) { is_expected.to be true }
+    its(:ineligibility_criteria) { is_expected.to match_array [:pedigree] }
     [:min_male_procreation_age, :max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
-      its(age) { is_expected.to eq Genealogy::Constants::DEFAULTS[:check_ages][age] }
+      describe age do
+        specify { expect { @model.send(age) }.to raise_error}
+      end
     end
   end
 
@@ -86,28 +88,41 @@ describe 'TestModel', :model do
     specify { expect { get_test_model(opts7) }.to raise_error ArgumentError }
   end
 
-  opts8 = {check_ages: false}
-  context "initialized with options: #{opts8}"  do
-    before(:context) { @model = get_test_model(opts8) }
-    its(:check_ages_enabled) { is_expected.to be false }
+  opts10 = {ineligibility: :pedigree}
+  context "initialized with options: #{opts10}"  do
+    before(:context) { @model = get_test_model(opts10) }
+    its(:ineligibility_enabled) { is_expected.to be true }
+    its(:ineligibility_criteria) { is_expected.to match_array [:pedigree] }
+  end
+
+  opts11 = {ineligibility: :dates}
+  context "initialized with options: #{opts11}"  do
+    before(:context) { @model = get_test_model(opts11) }
+    its(:ineligibility_enabled) { is_expected.to be true }
+    its(:ineligibility_criteria) { is_expected.to match_array [:dates] }
     [:min_male_procreation_age, :max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
-      describe age do
-        specify { expect { @model.send(age) }.to raise_error}
-      end
+      its(age) { is_expected.to eq Genealogy::Constants::DEFAULTS[:limit_ages][age] }
     end
   end
 
-  opts9 = {check_ages: {min_male_procreation_age: 12}}
-  context "initialized with options: #{opts9}"  do
-    before(:context) { @model = get_test_model(opts9) }
-    its(:check_ages_enabled) { is_expected.to be true }
+  opts12 = {ineligibility: :both, limit_ages: {min_male_procreation_age: 12} }
+  context "initialized with options: #{opts12}"  do
+    before(:context) { @model = get_test_model(opts12) }
+    its(:ineligibility_enabled) { is_expected.to be true }
+    its(:ineligibility_criteria) { is_expected.to match_array [:dates, :pedigree] }
     its(:min_male_procreation_age) { is_expected.to be 12 }
   end
 
-  opts10 = {replace_parent: true}
-  context "initialized with options: #{opts10}"  do
-    before(:context) { @model = get_test_model(opts10) }
-    its(:replace_parent_enabled) { is_expected.to be true }
+  opts13 = {ineligibility: false}
+  context "initialized with options: #{opts13}"  do
+    before(:context) { @model = get_test_model(opts13) }
+    its(:ineligibility_enabled) { is_expected.to be false }
+    its(:ineligibility_criteria) { is_expected.to be nil }
+  end
+
+  opts14 = {ineligibility: 'foo'}
+  context "initialized with options: #{opts14}"  do
+    specify { expect { get_test_model(opts14) }.to raise_error ArgumentError }
   end
 
 end

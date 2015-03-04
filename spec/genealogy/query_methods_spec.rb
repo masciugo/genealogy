@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "*** Query methods ***", :done, :query do
 
   before { @model = get_test_model({:current_spouse => true})}
-  include_context "releted people exist"
+  include_context "pedigree exists"
 
   describe "class methods" do
     describe ".males" do
