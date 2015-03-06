@@ -131,7 +131,7 @@ describe "*** Query methods ***", :done, :query do
     its(:grandparents) {is_expected.to match_array [manuel, terry, john, maggie]}
     its(:half_siblings) {is_expected.to match_array [ruben, peter, julian, beatrix, steve] }
     its(:descendants) {is_expected.to be_empty}
-    its(:siblings) {is_expected.to_not include peter }
+    its(:siblings) {is_expected.not_to include peter }
     its(:ancestors) {is_expected.to match_array [paul, barbara, manuel, terry, john, maggie, marcel, jack, alison, bob, louise]}
   end
 

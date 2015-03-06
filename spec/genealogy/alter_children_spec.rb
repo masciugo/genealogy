@@ -154,7 +154,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       context 'when child argument already has parent' do
         before { peter.update_attribute(:father_id, rud.id) }
         subject { paul.add_children(peter) }
-        specify { expect { subject }.to_not raise_error}
+        specify { expect { subject }.not_to raise_error}
         it { is_expected.to be true }
         it "updates child's parent" do
           subject
@@ -164,7 +164,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
 
       context "when child argument is an ancestor" do
         subject { paul.add_children(manuel) }
-        specify { expect { subject }.to_not raise_error}
+        specify { expect { subject }.not_to raise_error}
         it { is_expected.to be true }
         it "updates child's parent" do
           subject
@@ -185,7 +185,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       describe "#add_children" do
         before { steve.mark_invalid! }
         subject { paul.add_children(peter,steve) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "updates children's parent, keeping the other unaffected" do
           subject
           expect([peter, paul, nil]).to be_a_trio and
@@ -197,7 +197,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         include_context 'paul has some children'
         before { steve.mark_invalid! }
         subject { paul.remove_children }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "make all children lose father but keeping mother" do
           subject
           expect([peter, nil, titty]).to be_a_trio and

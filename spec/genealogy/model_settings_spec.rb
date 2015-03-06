@@ -72,7 +72,7 @@ describe 'TestModel', :model do
     end
     its(:gclass) { is_expected.to be @model }
     its(:perform_validation_enabled) { is_expected.to be true }
-    its(:column_names) { is_expected.to_not include("current_spouse_id") }
+    its(:column_names) { is_expected.not_to include("current_spouse_id") }
     its(:current_spouse_enabled) { is_expected.to be false }
     its(:ineligibility_enabled) { is_expected.to be true }
     its(:ineligibility_criteria) { is_expected.to match_array [:pedigree] }

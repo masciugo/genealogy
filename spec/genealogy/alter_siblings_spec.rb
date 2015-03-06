@@ -119,7 +119,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         it { is_expected.to be true }
         it "makes receiver to not have full siblings" do
           subject
-          expect([peter,steve,sue]).to_not be_siblings
+          expect([peter,steve,sue]).not_to be_siblings
         end
         it "makes receiver to keep paternal half siblings" do
           subject
@@ -135,7 +135,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
             it { is_expected.to be true }
             it "makes receiver to remove that sibling and keep the others" do
               subject
-              expect([peter,steve]).to_not be_siblings and
+              expect([peter,steve]).not_to be_siblings and
               expect([peter,sue]).to be_siblings
             end
           end
@@ -156,7 +156,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
             expect([peter,steve,sue]).to be_siblings
           end
           it "makes receiver to not have paternal half siblings" do
-            expect([peter,ruben,julian,mary]).to_not be_paternal_half_siblings
+            expect([peter,ruben,julian,mary]).not_to be_paternal_half_siblings
           end
           it "makes receiver to keep maternal half siblings" do
             expect([peter,rud]).to be_maternal_half_siblings
@@ -171,7 +171,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
             expect([peter,ruben,julian,mary]).to be_paternal_half_siblings
           end
           it "makes receiver to not have maternal half siblings" do
-            expect([peter,rud]).to_not be_maternal_half_siblings
+            expect([peter,rud]).not_to be_maternal_half_siblings
           end
         end
         context "when specify unexpected value for :half option" do
@@ -180,7 +180,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         context "when specify option :half => :father and :remove_other_parent => true" do
           before { peter.remove_siblings(:half => :father, :remove_other_parent => true) }
           it "makes receiver to not have paternal half siblings" do
-            expect([peter,ruben,julian,mary]).to_not be_paternal_half_siblings
+            expect([peter,ruben,julian,mary]).not_to be_paternal_half_siblings
           end
           it "makes all ex paternal half siblings to not have a mother" do
             expect( [ruben,julian,mary].map(&:reload).map(&:mother).compact).to be_empty
@@ -202,7 +202,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
       context "when argument is a receiver's ancestor" do
         subject { peter.add_siblings(manuel) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "argument and receiver become siblings" do
           subject 
           expect([peter,manuel]).to be_siblings
@@ -211,7 +211,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
       context "when argument is already a receiver's sibling" do
         subject { peter.add_siblings(steve) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "argument and receiver are still siblings" do
           subject 
           expect([peter,steve]).to be_siblings
@@ -234,7 +234,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           }
         end
         subject { peter.add_siblings(steve) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "argument and receiver become siblings" do
           subject 
           expect([peter,steve]).to be_siblings
@@ -246,10 +246,10 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           before { steve.mark_invalid! }
         end
         subject { peter.remove_siblings }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "makes receiver to not have full siblings" do
           subject
-          expect([peter,steve,sue]).to_not be_siblings
+          expect([peter,steve,sue]).not_to be_siblings
         end
       end
 

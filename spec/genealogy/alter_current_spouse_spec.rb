@@ -87,7 +87,7 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
     describe "#add_current_spouse" do
       context 'when current spouse is already set' do
         subject { paul.add_current_spouse(titty) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "updates the current spouse" do
           subject rescue nil
           expect([paul,titty]).to be_a_couple
@@ -95,7 +95,7 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
       end
       context 'when argument is an ineligible individual, for example a male' do
         subject { paul.add_current_spouse(rud) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it "updates the current spouse" do
           subject rescue nil
           expect([paul,rud]).to be_a_couple
@@ -119,14 +119,14 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
           
       describe "#add_current_spouse" do
         subject { paul.add_current_spouse(titty) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to build_the_couple(paul,titty) }
       end
 
       describe "#remove_current_spouse" do
         include_context 'paul and titty are spouses to each other'
         subject { paul.remove_current_spouse }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it 'receiver and argument become singles' do
           subject
           expect(paul).to be_single and expect(titty).to be_single

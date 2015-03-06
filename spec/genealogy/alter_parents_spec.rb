@@ -131,14 +131,14 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
 
     describe "#add_father" do
       context 'when father is already set' do
-        specify { expect { peter.add_father(rud) }.to_not raise_error }
+        specify { expect { peter.add_father(rud) }.not_to raise_error }
         it "updates the father" do
           peter.add_father(rud)
           expect(peter.father).to eq rud
         end
       end
       context 'when argument is an ineligible individual, for example a descendant' do
-        specify { expect { terry.add_mother(beatrix) }.to_not raise_error }
+        specify { expect { terry.add_mother(beatrix) }.not_to raise_error }
         it "updates the mother" do
           terry.add_mother(beatrix)
           expect(terry.mother).to eq beatrix
@@ -157,7 +157,7 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
         include_context 'unreleted people exist'
         before { peter.mark_invalid! }
         subject { peter.add_parents(paul,titty) }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to build_the_trio(peter, paul, titty) }
       end
 
@@ -165,7 +165,7 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
         include_context "pedigree exists"
         before { paul.mark_invalid! }
         subject { peter.remove_parents }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to build_the_trio(peter, nil, nil) }
       end
 

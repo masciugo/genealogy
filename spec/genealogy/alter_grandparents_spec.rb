@@ -161,14 +161,14 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
 
     describe "#add_paternal_grandfather" do
       context 'when father is already set' do
-        specify { expect { peter.add_paternal_grandfather(rud) }.to_not raise_error }
+        specify { expect { peter.add_paternal_grandfather(rud) }.not_to raise_error }
         it "updates the paternal grandfather" do
           peter.add_paternal_grandfather(rud)
           expect(peter.paternal_grandfather).to eq rud
         end
       end
       context 'when argument is an ineligible individual, for example a descendant' do
-        specify { expect { terry.add_paternal_grandfather(steve) }.to_not raise_error }
+        specify { expect { terry.add_paternal_grandfather(steve) }.not_to raise_error }
         it "updates the paternal grandfather" do
           terry.add_paternal_grandfather(steve)
           expect(terry.paternal_grandfather).to eq steve
@@ -190,7 +190,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
           paul.mark_invalid!
           peter.update_attributes(father_id: paul.id) 
         }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to build_the_trio(peter, paul, nil) }
       end
 
@@ -198,7 +198,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         include_context "pedigree exists"
         before { paul.mark_invalid! }
         subject { peter.remove_paternal_grandfather }
-        specify { expect { subject }.to_not raise_error }
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to build_the_trio(paul, nil, terry) }
       end
 

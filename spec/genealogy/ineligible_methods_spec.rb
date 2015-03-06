@@ -11,7 +11,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_fathers).to be nil
       end
       it "does not return nil if father is not set" do
-        expect(manuel.ineligible_fathers).to_not be nil
+        expect(manuel.ineligible_fathers).not_to be nil
       end  
       it "includes theirself" do
         expect(manuel.ineligible_fathers).to include manuel
@@ -21,14 +21,14 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       end
       it "does not include male ancestors (e.g., maternal grandfather)" do
         rud.update_attributes(father_id: nil)
-        expect(rud.ineligible_fathers).to_not include luis,larry,tommy
+        expect(rud.ineligible_fathers).not_to include luis,larry,tommy
       end
       it "includes male descendants" do
         expect(alison.ineligible_fathers).to include paso,john,rud,mark,peter,steve,sam,charlie
       end
       it "does not include male maternal half siblings" do
         steve.update_attributes(father_id: nil)
-        expect(steve.ineligible_fathers).to_not include peter
+        expect(steve.ineligible_fathers).not_to include peter
       end
     end
 
@@ -37,7 +37,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_mothers).to be nil
       end
       it "does not return nil if mother is not set" do
-        expect(mia.ineligible_mothers).to_not be nil
+        expect(mia.ineligible_mothers).not_to be nil
       end  
       it "includes theirself" do
         expect(manuel.ineligible_mothers).to include manuel
@@ -47,13 +47,13 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       end
       it "does not include female ancestors (e.g., paternal grandmother)" do
         rud.update_attributes(mother_id: nil)
-        expect(rud.ineligible_mothers).to_not include alison
+        expect(rud.ineligible_mothers).not_to include alison
       end
       it "includes female descendants" do
         expect(alison.ineligible_mothers).to include titty,sue
       end
       it "does not include female paternal half siblings" do
-        expect(ruben.ineligible_mothers).to_not include mary
+        expect(ruben.ineligible_mothers).not_to include mary
       end
     end
 
@@ -62,7 +62,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_paternal_grandfathers).to be nil
       end
       it "does not return nil if paternal_grandfather is not set" do
-        expect(paul.ineligible_paternal_grandfathers).to_not be nil
+        expect(paul.ineligible_paternal_grandfathers).not_to be nil
       end 
       it "includes theirself" do
         expect(paul.ineligible_paternal_grandfathers).to include paul
@@ -71,7 +71,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(paul.ineligible_paternal_grandfathers).to include manuel
       end
       it "does not include maternal male ancestors" do
-        expect(paul.ineligible_paternal_grandfathers).to_not include marcel
+        expect(paul.ineligible_paternal_grandfathers).not_to include marcel
       end
       it "includes male descendants" do
         expect(jack.ineligible_paternal_grandfathers).to include rud,mark,sam,charlie,peter,steve
@@ -90,7 +90,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       it "does not include maternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
         paul.update_attributes(father_id: nil)
         ruben.update_attributes(father_id: nil, mother_id: titty)
-        expect(peter.ineligible_paternal_grandfathers).to_not include ruben
+        expect(peter.ineligible_paternal_grandfathers).not_to include ruben
       end
     end
 
@@ -99,14 +99,14 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_paternal_grandmothers).to be nil
       end
       it "does not return nil if paternal_grandmother is not set" do
-        expect(paul.ineligible_paternal_grandmothers).to_not be nil
+        expect(paul.ineligible_paternal_grandmothers).not_to be nil
       end 
       it "includes theirself" do
         expect(mia.ineligible_paternal_grandmothers).to include mia
       end
       it "does not include maternal female ancestors" do
         paso.update_attributes(mother_id: nil)
-        expect(rud.ineligible_paternal_grandmothers).to_not include irene,emily,rosa
+        expect(rud.ineligible_paternal_grandmothers).not_to include irene,emily,rosa
       end
       it "includes female descendants" do
         expect(jack.ineligible_paternal_grandmothers).to include barbara,mary
@@ -125,7 +125,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       it "does not include maternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
         paso.update_attributes(mother_id: nil)
         titty.update_attributes(father_id: nil, mother_id: irene)
-        expect(rud.ineligible_paternal_grandmothers).to_not include titty
+        expect(rud.ineligible_paternal_grandmothers).not_to include titty
       end
       
     end
@@ -135,13 +135,13 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_maternal_grandfathers).to be nil
       end
       it "does not return nil if maternal_grandfather is not set" do
-        expect(sam.ineligible_maternal_grandfathers).to_not be nil
+        expect(sam.ineligible_maternal_grandfathers).not_to be nil
       end 
       it "includes theirself" do
         expect(sam.ineligible_maternal_grandfathers).to include sam
       end
       it "does not include paternal male ancestors" do
-        expect(barbara.ineligible_maternal_grandfathers).to_not include jack,bob
+        expect(barbara.ineligible_maternal_grandfathers).not_to include jack,bob
       end
       it "includes male descendants" do
         expect(paso.ineligible_maternal_grandfathers).to include rud,mark,sam,charlie,peter,steve
@@ -157,7 +157,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       end
       it "does not include paternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
         michelle.update_attributes(father_id: nil)
-        expect(julian.ineligible_maternal_grandfathers).to_not include ruben,peter,steve
+        expect(julian.ineligible_maternal_grandfathers).not_to include ruben,peter,steve
       end      
     end
 
@@ -166,7 +166,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_maternal_grandmothers).to be nil
       end
       it "does not return nil if maternal_grandmother is not set" do
-        expect(paul.ineligible_maternal_grandmothers).to_not be nil
+        expect(paul.ineligible_maternal_grandmothers).not_to be nil
       end 
       it "includes theirself" do
         expect(paul.ineligible_maternal_grandmothers).to include paul
@@ -175,7 +175,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(paul.ineligible_maternal_grandmothers).to include terry
       end
       it "does not include paternal female ancestors" do
-        expect(barbara.ineligible_maternal_grandmothers).to_not include alison,louise
+        expect(barbara.ineligible_maternal_grandmothers).not_to include alison,louise
       end
       it "includes female descendants" do
         expect(jack.ineligible_maternal_grandmothers).to include barbara,mary
@@ -192,7 +192,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       end
       it "does not include paternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
         michelle.update_attributes(mother_id: nil)
-        expect(julian.ineligible_maternal_grandmothers).to_not include mary
+        expect(julian.ineligible_maternal_grandmothers).not_to include mary
       end      
     end
 
@@ -204,7 +204,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         expect(rud.ineligible_siblings).to include mark,titty
       end
       it "does not include half siblings with other parent unset" do
-        expect(peter.ineligible_siblings).to_not include ruben
+        expect(peter.ineligible_siblings).not_to include ruben
       end
       it "includes half siblings with other parent set" do
         expect(peter.ineligible_siblings).to include mary
@@ -220,7 +220,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
       end
       context 'when both parents are unset' do
         it "does not include individuals with both parents set (expect descendants)" do
-          expect(manuel.ineligible_siblings).to_not include (@model.all_with(:parents) - manuel.descendants)
+          expect(manuel.ineligible_siblings).not_to include (@model.all_with(:parents) - manuel.descendants)
         end
       end
       context 'when mother is unset' do
@@ -229,7 +229,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         end
         it "does not include individuals without father, except ancestors, descendants and siblings" do
           sam.update_attributes(father_id: nil)
-          expect(ruben.ineligible_siblings).to_not include sam,ned,naomi,luis,rosa,larry,louise,bob,alison,maggie,mia
+          expect(ruben.ineligible_siblings).not_to include sam,ned,naomi,luis,rosa,larry,louise,bob,alison,maggie,mia
         end
       end
       context 'when father is unset' do
@@ -239,7 +239,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         end
         it "does not include individuals without mother, except ancestors, descendants and siblings" do
           sam.update_attributes(mother_id: nil)
-          expect(peter.ineligible_siblings).to_not include sam,ned,naomi,maggie,mia
+          expect(peter.ineligible_siblings).not_to include sam,ned,naomi,maggie,mia
         end
       end
     end
@@ -263,7 +263,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
         end
         it "does not include maternal half siblings without father (i.e., the father can be the receiver itself)" do
           sam.update_attributes(father_id: nil)
-          expect(charlie.ineligible_children).to_not include sam
+          expect(charlie.ineligible_children).not_to include sam
         end
         it "includes maternal half siblings with father" do
           sam.update_attributes(father_id: rud.id)
@@ -275,7 +275,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
           expect(titty.ineligible_children).to include *@model.all_with(:mother)
         end
         it "does not include paternal half siblings without mother (i.e., the mother can be the receiver itself)" do
-          expect(beatrix.ineligible_children).to_not include ruben
+          expect(beatrix.ineligible_children).not_to include ruben
         end
         it "includes paternal half siblings with mother" do
           expect(beatrix.ineligible_children).to include peter,steve,mary
@@ -291,35 +291,35 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
 
   #   describe "#ineligible_siblings" do
   #     it "does not include all other individuals with parents (unless they are ancestors, descendants, siblings and theirself)" do
-  #       expect(rud.ineligible_siblings).to_not include barbara,sue,sam,charlie,mary,steve,peter,paul,beatrix,julian,michelle,debby
+  #       expect(rud.ineligible_siblings).not_to include barbara,sue,sam,charlie,mary,steve,peter,paul,beatrix,julian,michelle,debby
   #     end
   #     it "does not include half siblings with other parent set" do
-  #       expect(peter.ineligible_siblings).to_not include mary
+  #       expect(peter.ineligible_siblings).not_to include mary
   #     end
   #     it "does not include half siblings with other parent unset" do
-  #       expect(peter.ineligible_siblings).to_not include ruben
+  #       expect(peter.ineligible_siblings).not_to include ruben
   #     end
   #     context 'when both parents are unset' do
   #       it "does not include individuals with both parents set (expect descendants)" do
-  #         expect(manuel.ineligible_siblings).to_not include (@model.all_with(:parents) - manuel.descendants)
+  #         expect(manuel.ineligible_siblings).not_to include (@model.all_with(:parents) - manuel.descendants)
   #       end
   #     end
   #     context 'when mother is unset' do
   #       it "does not include individuals with father already set but different (expect descendants and ancestors)" do
-  #         expect(ruben.ineligible_siblings).to_not include *(@model.all_with(:father).where.not(father_id: ruben.father.id) - [terry,paul])
+  #         expect(ruben.ineligible_siblings).not_to include *(@model.all_with(:father).where.not(father_id: ruben.father.id) - [terry,paul])
   #       end
   #     end
   #     context 'when father is unset' do
   #       it "does not include individuals with mother already set but different (expect descendants and ancestors)" do
   #         peter.update_attributes(father_id: nil)
-  #         expect(peter.ineligible_siblings).to_not include *(@model.all_with(:mother).where.not(mother_id: peter.mother.id) - [titty,irene,emily,tommy,paso,jack])
+  #         expect(peter.ineligible_siblings).not_to include *(@model.all_with(:mother).where.not(mother_id: peter.mother.id) - [titty,irene,emily,tommy,paso,jack])
   #       end
   #     end
   #   end
 
   #   describe "#ineligible_children" do
   #     it "does not include individuals with both parents (unless they are ancestors, children, siblings and theirself)" do
-  #       expect(rud.ineligible_children).to_not include michelle,julian,beatrix,peter,steve,paul,mary,sue,charlie,barbara,john
+  #       expect(rud.ineligible_children).not_to include michelle,julian,beatrix,peter,steve,paul,mary,sue,charlie,barbara,john
   #     end
   #   end
   # end
