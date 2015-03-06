@@ -116,5 +116,22 @@ module Genealogy
       end
     end
 
+    def check_incompatible_relationship(*args)
+      relationship = args.shift
+      args.each do |relative|
+        # puts "[#{__method__}]: #{arg} class: #{arg.class}, #{self} class: #{self.class}"
+        next if relative.nil?
+        raise ArgumentError, "Expected #{self.gclass} object. Got #{relative.class}" unless relative.class.equal? self.gclass
+        if gclass.ineligibility_enabled
+          if ineligibles = self.send("ineligible_#{relationship.to_s.pluralize}")
+            # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
+            raise IncompatibleRelationshipException, "#{relative} can't be #{relationship} of #{self}" if ineligibles.include? relative
+          else
+            raise IncompatibleRelationshipException, "#{self} already has #{relationship}"
+          end
+        end
+      end
+    end
+
   end
 end

@@ -9,9 +9,9 @@ module Genealogy
     # @param [Object] spouse
     # @return [Boolean] 
     def add_current_spouse(spouse)
+
       raise_unless_current_spouse_enabled
-      raise ArgumentError, "Expected #{self.gclass} spouse. Got #{spouse.class}" unless spouse.class.respond_to?(:gclass)
-      raise IncompatibleRelationshipException, "#{spouse} can't be spouse of #{self}" if ineligible_current_spouses.include? spouse
+      check_incompatible_relationship(:current_spouse,spouse)
 
       if gclass.perform_validation_enabled
         self.current_spouse = spouse

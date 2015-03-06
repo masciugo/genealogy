@@ -4,13 +4,13 @@ end
 
 
 # trio matchers
-RSpec::Matchers.define :build_the_trio do |child, father, mother|
+RSpec::Matchers.define :build_the_trio do |child, father, mother, desc|
   child.reload
   match do
     child.father == father and child.mother == mother
   end
   description do
-    "build the expected trio"
+    "build the expected trio #{desc ? '(' + desc + ')' : nil}"
   end
   failure_message do
     <<-MSG
@@ -36,7 +36,7 @@ RSpec::Matchers.define :be_a_trio do
   end
   failure_message do
     <<-MSG
-expected: #{trio_to_s(*trio)}
+expected: #{trio_to_s(*actual)}
      got: #{trio_to_s(child, child.father, child.mother)}
 MSG
   end
@@ -44,6 +44,7 @@ MSG
     "got: #{trio_to_s(child, child.father, child.mother)}"
   end
 end
+RSpec::Matchers.alias_matcher :remain_a_trio, :be_a_trio
 
 # siblings matchers
 RSpec::Matchers.define :be_siblings do
@@ -56,13 +57,15 @@ end
 RSpec::Matchers.define :be_paternal_half_siblings do
   match do |siblings|
     fathers = siblings.map{|s| s.reload.father}
-    fathers.uniq.count == 1
+    mothers = siblings.map{|s| s.reload.mother}.delete_if(&:nil?)
+    fathers.uniq.count == 1 and mothers.uniq.count == mothers.count
   end
 end
 RSpec::Matchers.define :be_maternal_half_siblings do
   match do |siblings|
+    fathers = siblings.map{|s| s.reload.father}.delete_if(&:nil?)
     mothers = siblings.map{|s| s.reload.mother}
-    mothers.uniq.count == 1
+    mothers.uniq.count == 1 and fathers.uniq.count == fathers.count
   end
 end
 
@@ -76,7 +79,7 @@ RSpec::Matchers.define :build_the_couple do |spouse1, spouse2|
     spouse1.current_spouse == spouse2 and spouse2.current_spouse == spouse1
   end
   description do
-    "build the couple: #{spouse1} - #{spouse2}"
+    "build the expected couple"
   end
   failure_message do
     <<-MSG
@@ -112,11 +115,14 @@ MSG
     "#{spouse1} and #{spouse2} are a couple"
   end
 end
+RSpec::Matchers.alias_matcher :remain_a_couple, :be_a_couple
+
 RSpec::Matchers.define :be_single do
   match do |person|
     person.reload.current_spouse.nil?
   end
 end
+RSpec::Matchers.alias_matcher :remain_single, :be_single
 
 
 # family matcher

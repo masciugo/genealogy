@@ -1,182 +1,214 @@
-# require 'spec_helper'
+require 'spec_helper'
 
-# describe "*** Alter children methods ***", :done, :alter_c  do
+shared_context 'paul has some children' do
+  before do
+    peter.update_attributes(father_id: paul.id, mother_id: titty.id)
+    steve.update_attributes(father_id: paul.id, mother_id: titty.id)
+    julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
+    ruben.update_attributes(father_id: paul.id)
+  end
+end
 
-#   context "when taking account validation (default options for has_parents)" do
-#     before { @model = get_test_model({}) }
+
+describe "*** Alter children methods ***", :done, :alter_c  do
+
+  context "when taking account validation (default options for has_parents)" do
+    before { @model = get_test_model({}) }
   
-#     include_context 'unreleted people exist'
+    include_context 'unreleted people exist'
 
-#     describe "paul.add_children(peter)" do
-#       subject { paul.add_children(peter) }
-#       it { is_expected.to be true }
-#       it { is_expected.to build_the_trio(peter, paul, nil) }
-#     end
+    describe "#add_children" do
 
-#     it_behaves_like 'rejecting semantically wrong arguments', :paul, :add_children
+      context "when passing one child" do
+        subject { paul.add_children(peter) }
+        it { is_expected.to be true }
+        it "updates child's parent, keeping the other unaffected" do
+          subject
+          expect([peter, paul, nil]).to be_a_trio 
+        end
+      end
 
-#     describe "paul.add_children(peter,steve)" do
+      it_behaves_like 'raising error because of semantically wrong argument', :paul, :add_children
 
-#       subject { paul.add_children(peter,steve) }
+      context "when passing more children" do
+        subject { paul.add_children(peter,steve) }
+        it { is_expected.to be true }
+        it "updates children's parent, keeping the other unaffected" do
+          subject
+          expect([peter, paul, nil]).to be_a_trio and
+          expect([steve, paul, nil]).to be_a_trio 
+        end
+
+        context "when one child is invalid" do
+          before { steve.mark_invalid! }
+          subject { paul.add_children(peter,steve) }
+          specify { expect { subject }.to raise_error }
+          it "children remain unaffected" do
+            subject rescue nil
+            expect([peter, nil, nil]).to be_a_trio and
+            expect([steve, nil, nil]).to be_a_trio 
+          end
+        end
+
+      end
+
+      context 'when child argument already has parent' do
+        before { peter.update_attribute(:father_id, rud.id) }
+        specify { expect { paul.add_children(peter) }.to raise_error(Genealogy::IncompatibleRelationshipException)}
+      end
+
+      context "when child argument is an ancestor" do
+        before { paul.update_attribute(:father_id, peter.id) }
+        specify { expect { paul.add_children(peter) }.to raise_error(Genealogy::IncompatibleRelationshipException)}
+      end
+
+      context "when has undefined sex" do
+        before { paul.sex = nil }
+        specify { expect { paul.add_children(peter) }.to raise_error(Genealogy::SexError) }
+      end
       
-#       context "when steve is valid" do
-#         it { is_expected.to build_the_trio(peter, paul, nil) }
-#         it { is_expected.to build_the_trio(steve, paul, nil) }
-#       end
+      context "when specify spouse too" do
+        subject { paul.add_children(julian, :spouse => michelle) }
+        it { is_expected.to build_the_trio(julian, paul, michelle) }
+      end
 
-#       context "when steve is invalid" do
-#         before { steve.mark_invalid! }
-#         specify { expect { subject }.to raise_error }
-#         describe "resulting trios" do
-#           subject { paul.add_children(peter,steve) rescue true }
-#           it { is_expected.to keep_the_trio(peter, nil, nil) }
-#           it { is_expected.to keep_the_trio(steve, nil, nil) }
-#         end
-#       end
+      describe "when specify spouse but spouse is ineligible" do 
+        specify { expect { paul.add_children(peter, :spouse => john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
+      end
 
-#     end
+    end
 
-#     describe "paul.add_child(peter)" do
-#       subject { paul.add_child(peter) }
-#       it { is_expected.to build_the_trio(peter, paul, nil)}
-#     end
+    describe "#remove_children" do
+      include_context 'paul has some children'
+      subject { paul.remove_children }
+      it { is_expected.to be true }
+      it "make all children lose father but keeping mother" do
+        subject
+        expect([peter, nil, titty]).to be_a_trio and
+        expect([steve, nil, titty]).to be_a_trio and
+        expect([julian, nil, michelle]).to be_a_trio and
+        expect([ruben, nil, nil]).to be_a_trio
+      end
+      context 'when specify to affect the other parent removing them' do
+        it "make all children lose both parents" do
+          paul.remove_children(:remove_other_parent => true)
+          expect([peter, nil, nil]).to be_a_trio and
+          expect([steve, nil, nil]).to be_a_trio and
+          expect([julian, nil, nil]).to be_a_trio and
+          expect([ruben, nil, nil]).to be_a_trio
+        end
+      end
+      context 'when specify spouse' do
+        it "make only children with that spouse lose father but keeping mother" do
+          paul.remove_children(:spouse => titty)
+          expect([peter, nil, titty]).to be_a_trio and
+          expect([steve, nil, titty]).to be_a_trio and
+          expect([julian, paul, michelle]).to be_a_trio and
+          expect([ruben, paul, nil]).to be_a_trio
+        end
+      end
+      context 'when specify spouse and to affect the other parent removing them' do
+        it "make only children with that spouse lose both parents" do
+          paul.remove_children(:spouse => titty, :remove_other_parent => true)
+          expect([peter, nil, nil]).to be_a_trio and
+          expect([steve, nil, nil]).to be_a_trio and
+          expect([julian, paul, michelle]).to be_a_trio and
+          expect([ruben, paul, nil]).to be_a_trio
+        end
+      end
+      context 'when specify a spouse with whom receiver has not children' do
+        it "children remain unaffected" do
+          paul.remove_children(:spouse => maggie)
+          expect([peter, paul, titty]).to be_a_trio and
+          expect([steve, paul, titty]).to be_a_trio and
+          expect([julian, paul, michelle]).to be_a_trio and
+          expect([ruben, paul, nil]).to be_a_trio
+        end
+      end
+      context "when specify a spouse with the same sex" do
+        specify { expect { paul.remove_children(:spouse => john) }.to raise_error(Genealogy::SexError) }
+      end
+      context "when one child is invalid" do
+        before { steve.mark_invalid! }
+        subject { paul.remove_children }
+        specify { expect { subject }.to raise_error }
+        it "children remain unaffected" do
+          subject rescue nil
+          expect([peter, paul, titty]).to be_a_trio and
+          expect([steve, paul, titty]).to be_a_trio and
+          expect([julian, paul, michelle]).to be_a_trio and
+          expect([ruben, paul, nil]).to be_a_trio
+        end
+      end
 
-#     context "when peter is an ancestor" do
-#       before { paul.update_attribute(:father_id, peter.id) }
-#       specify { expect { paul.add_children(peter) }.to raise_error(Genealogy::IncompatibleRelationshipException)}
-#     end
+    end
 
-#     context "when paul has undefined sex" do
-#       before { paul.sex = nil }
-#       specify { expect { paul.add_children(peter) }.to raise_error(Genealogy::SexError) }
-#     end
-    
-#     describe "paul.add_children(julian, :spouse => michelle)" do
-#       subject { paul.add_children(julian, :spouse => michelle) }
-#       it { is_expected.to build_the_trio(julian, paul, michelle) }
-#     end
+  end
 
-#     describe "paul.add_children(peter, :spouse => john)" do 
-#       specify { expect { paul.add_children(peter, :spouse => john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
-#     end
+  context 'when ignoring ineligibility (options for has_parents: {:ineligibility => false})' do
+    before { @model = get_test_model({:ineligibility => false }) }
 
-#     context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (ruben)" do
-#       before {
-#         peter.update_attributes(father_id: paul.id, mother_id: titty.id)
-#         steve.update_attributes(father_id: paul.id, mother_id: titty.id)
-#         julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
-#         ruben.update_attributes(father_id: paul.id)
-#       }
+    include_context "pedigree exists"
 
-#       describe "paul.remove_children" do
-#         subject { paul.remove_children }
-#         it { is_expected.to be true }
-#         it { is_expected.to build_the_trio(peter, nil, titty) }
-#         it { is_expected.to build_the_trio(steve, nil, titty) }
-#         it { is_expected.to build_the_trio(julian, nil, michelle) }
-#         it { is_expected.to build_the_trio(ruben, nil, nil) }
-#         context "when steve is invalid" do
-#           before { steve.mark_invalid! }
-#           specify { expect { paul.remove_children }.to raise_error }
-#           describe "resulting trios" do
-#             subject { paul.remove_children rescue true }
-#             it { is_expected.to keep_the_trio(peter, paul, titty) }
-#             it { is_expected.to keep_the_trio(steve, paul, titty) }
-#             it { is_expected.to keep_the_trio(julian, paul, michelle) }
-#             it { is_expected.to keep_the_trio(ruben, paul, nil) }
-#           end
-#         end
-#       end
+    describe "#add_children" do
+      context 'when child argument already has parent' do
+        before { peter.update_attribute(:father_id, rud.id) }
+        subject { paul.add_children(peter) }
+        specify { expect { subject }.to_not raise_error}
+        it { is_expected.to be true }
+        it "updates child's parent" do
+          subject
+          expect(peter.father).to eq paul
+        end
+      end
 
-#       describe "paul.remove_children(:affect_spouse => true)" do
-#         subject { paul.remove_children(:affect_spouse => true) }
-#         it { is_expected.to be true }
-#         it { is_expected.to build_the_trio(peter, nil, nil) }
-#         it { is_expected.to build_the_trio(steve, nil, nil) }
-#         it { is_expected.to build_the_trio(julian, nil, nil) }
-#         it { is_expected.to build_the_trio(ruben, nil, nil) }
-#       end
+      context "when child argument is an ancestor" do
+        subject { paul.add_children(manuel) }
+        specify { expect { subject }.to_not raise_error}
+        it { is_expected.to be true }
+        it "updates child's parent" do
+          subject
+          expect(manuel.father).to eq paul
+        end
+      end
+    end
 
-#       describe "paul.remove_children(:spouse => titty)" do
-#         subject { paul.remove_children(:spouse => titty) }
-#         it { is_expected.to be true }
-#         it { is_expected.to build_the_trio(peter, nil, titty) }
-#         it { is_expected.to build_the_trio(steve, nil, titty) }
-#         it { is_expected.to build_the_trio(julian, paul, michelle) }
-#         it { is_expected.to build_the_trio(ruben, paul, nil) }
-#       end
+  end
 
-#       describe "paul.remove_children(:spouse => titty, :affect_spouse => true)" do
-#         subject { paul.remove_children(:spouse => titty, :affect_spouse => true) }
-#         it { is_expected.to be true }
-#         it { is_expected.to build_the_trio(peter, nil, nil) }
-#         it { is_expected.to build_the_trio(steve, nil, nil) }
-#         it { is_expected.to build_the_trio(julian, paul, michelle) }
-#         it { is_expected.to build_the_trio(ruben, paul, nil) }
-#       end
+  context "when ignoring validation (options for has_parents: {:perform_validation => false})" do
+    before { @model = get_test_model({:perform_validation => false }) }
 
-#       describe "paul.remove_children(:spouse => maggie)" do
-#         subject { paul.remove_children(:spouse => maggie) }
-#         it { is_expected.to be false }
-#         it { is_expected.to keep_the_trio(peter, paul, titty) }
-#         it { is_expected.to keep_the_trio(steve, paul, titty) }
-#         it { is_expected.to keep_the_trio(julian, paul, michelle) }
-#         it { is_expected.to keep_the_trio(ruben, paul, nil) }
-#       end
+    include_context 'unreleted people exist'
 
-#       context "when specify a spouse with the same sex" do
-#         describe "paul.remove_children(:spouse => john)" do
-#           specify { expect { paul.remove_children(:spouse => john) }.to raise_error(Genealogy::SexError) }
-#         end
-#       end
+    context 'when one child becomes invalid' do
 
-#     end
+      describe "#add_children" do
+        before { steve.mark_invalid! }
+        subject { paul.add_children(peter,steve) }
+        specify { expect { subject }.to_not raise_error }
+        it "updates children's parent, keeping the other unaffected" do
+          subject
+          expect([peter, paul, nil]).to be_a_trio and
+          expect([steve, paul, nil]).to be_a_trio 
+        end
+      end
 
-#   end
+      describe "#remove_children" do
+        include_context 'paul has some children'
+        before { steve.mark_invalid! }
+        subject { paul.remove_children }
+        specify { expect { subject }.to_not raise_error }
+        it "make all children lose father but keeping mother" do
+          subject
+          expect([peter, nil, titty]).to be_a_trio and
+          expect([steve, nil, titty]).to be_a_trio and
+          expect([julian, nil, michelle]).to be_a_trio and
+          expect([ruben, nil, nil]).to be_a_trio
+        end
+      end
 
-#   context "when ignoring validation (options for has_parents: {:perform_validation => false})" do
-#     before { @model = get_test_model({:perform_validation => false }) }
+    end
 
-#     include_context 'unreleted people exist'
+  end
 
-#     describe "paul.add_children(peter,steve)" do
-
-#       subject { paul.add_children(peter,steve) }
-      
-#       context "when steve is invalid" do
-#         before { steve.mark_invalid! }
-#         specify { expect { subject }.to_not raise_error }
-#         describe "resulting trios" do
-#           subject { paul.add_children(peter,steve) }
-#           it { is_expected.to keep_the_trio(peter, paul, nil) }
-#           it { is_expected.to keep_the_trio(steve, paul, nil) }
-#         end
-#       end
-
-#     end
-
-#     context "when already has two children with titty (steve and peter) and one with michelle (julian) and a last one with an unknown spouse (ruben)" do
-#       before {
-#         peter.update_attributes(father_id: paul.id, mother_id: titty.id)
-#         steve.update_attributes(father_id: paul.id, mother_id: titty.id)
-#         julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
-#         ruben.update_attributes(father_id: paul.id)
-#       }
-
-#       describe "paul.remove_children" do
-#         subject { paul.remove_children }
-        
-#         context "when steve is invalid" do
-#           before { steve.mark_invalid! }
-#           specify { expect { subject }.to_not raise_error }
-#           it { is_expected.to build_the_trio(peter, nil, titty) }
-#           it { is_expected.to build_the_trio(steve, nil, titty) }
-#           it { is_expected.to build_the_trio(julian, nil, michelle) }
-#           it { is_expected.to build_the_trio(ruben, nil, nil) }
-#         end
-#       end
-
-#     end
-#   end
-
-# end
+end

@@ -209,7 +209,7 @@ module Genealogy
     #   @param [Object] siblings list of siblings
     #   @param [Hash] options
     #   @option options [Symbol] half :father for paternal half siblings and :mother for maternal half siblings
-    #   @option options [Boolean] affect_spouse if specified, passed individuals' mother will also be nullified
+    #   @option options [Boolean] remove_other_parent if specified, passed individuals' mother will also be nullified
     # @return [Boolean] true if at least one sibling was affected, false otherwise
     def remove_siblings(*args)
       options = args.extract_options!
@@ -224,9 +224,9 @@ module Genealogy
           case options[:half]
           when :father
             sib.remove_father
-            sib.remove_mother if options[:affect_spouse] == true
+            sib.remove_mother if options[:remove_other_parent] == true
           when :mother
-            sib.remove_father if options[:affect_spouse] == true
+            sib.remove_father if options[:remove_other_parent] == true
             sib.remove_mother
           when nil
             sib.remove_parents
@@ -276,7 +276,7 @@ module Genealogy
     # @overload remove_children(*children,options={})
     #   @param [Object] children list of children
     #   @param [Hash] options
-    #   @option options [Boolean] affect_spouse if specified, passed individuals' mother will also be nullified
+    #   @option options [Boolean] remove_other_parent if specified, passed individuals' mother will also be nullified
     # @return [Boolean] true if at least one child was affected, false otherwise
     def remove_children(*args)
       options = args.extract_options!
@@ -291,7 +291,7 @@ module Genealogy
 
       transaction do
         resulting_indivs.each do |child|
-          if options[:affect_spouse] == true
+          if options[:remove_other_parent] == true
             child.remove_parents
           else
             case sex
@@ -321,23 +321,6 @@ module Genealogy
 
     def raise_if_sex_undefined
       raise SexError, "Can't proceed if sex undefined for #{self}" unless is_male? or is_female?
-    end
-
-    def check_incompatible_relationship(*args)
-      relationship = args.shift
-      args.each do |relative|
-        # puts "[#{__method__}]: #{arg} class: #{arg.class}, #{self} class: #{self.class}"
-        next if relative.nil?
-        raise ArgumentError, "Expected #{self.gclass} object. Got #{relative.class}" unless relative.class.equal? self.gclass
-        if gclass.ineligibility_enabled
-          if ineligibles = self.send("ineligible_#{relationship.to_s.pluralize}")
-            # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
-            raise IncompatibleRelationshipException, "#{relative} can't be #{relationship} of #{self}" if ineligibles.include? relative
-          else
-            raise IncompatibleRelationshipException, "#{self} already has #{relationship}"
-          end
-        end
-      end
     end
 
   end

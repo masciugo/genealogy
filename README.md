@@ -144,13 +144,13 @@ Removing methods examples are:
 * `peter.remove_grandparents` will set all parents' parents to nil
 *
 * `peter.remove_children` will nullify the father of all that records that have peter as father
-* `peter.remove_children(:affect_spouse => true)` will also nullify mother of all that records that have peter as father
+* `peter.remove_children(:remove_other_parent => true)` will also nullify mother of all that records that have peter as father
 * `peter.remove_children(:spouse => titty)` will nullify the father of all that records that have peter as father and titty as mother
-* `peter.remove_children(:spouse => titty, :affect_spouse => true)` will do both last two actions
+* `peter.remove_children(:spouse => titty, :remove_other_parent => true)` will do both last two actions
 
 * `peter.remove_siblings` will nullify both full-siblings parents
 * `peter.remove_siblings(:half => :father)` will nullify only father of all records that have same peter's father as father
-* `peter.remove_siblings(:half => :father, :affect_spouse => true)` will nullify also mother of all records that have same peter's father as father
+* `peter.remove_siblings(:half => :father, :remove_other_parent => true)` will nullify also mother of all records that have same peter's father as father
 
 ### Class methods
 

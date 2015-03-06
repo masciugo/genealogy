@@ -46,10 +46,7 @@ shared_context 'unreleted people exist' do
 
 end
 
-shared_context "pedigree exists" do
-
-  include_context 'unreleted people exist'
-
+shared_context 'connect people' do
   before do
     # puts 'linking people'
     barbara.update_attributes(father_id: john.id, mother_id: maggie.id)
@@ -82,6 +79,11 @@ shared_context "pedigree exists" do
       paul.update_attributes(current_spouse_id: michelle.id)
     end
   end
+end
+
+shared_context "pedigree exists" do
+  include_context 'unreleted people exist'
+  include_context 'connect people'
 end
 
 shared_context "unreleted people exist with dates" do
