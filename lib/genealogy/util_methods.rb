@@ -91,6 +91,8 @@ module Genealogy
     generate_method_parent_birth_range(:father)
     generate_method_parent_birth_range(:mother)
 
+    # sex in terms of :male or :female
+    # @return [Symbol] 
     def ssex
       case sex
       when gclass.sex_male_value
@@ -102,6 +104,8 @@ module Genealogy
       end
     end
 
+    # opposite sex in terms of :male or :female
+    # @return [Symbol] 
     def opposite_ssex
       OPPOSITESEX[ssex]
     end
