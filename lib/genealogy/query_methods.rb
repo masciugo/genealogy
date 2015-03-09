@@ -49,34 +49,21 @@ module Genealogy
     # @param [Hash] options
     # @option options [Symbol] sex to filter result by sex: :male or :female. 
     # @option options [Object] spouse to filter children by spouse
-    # @return [Array] children
+    # @return [ActiveRecord::Relation] children
     def children(options = {})
+      raise SexError, "Sex value not valid for #{self}. It's needed to look for children" unless gclass.sex_values.include? sex
+      result = gclass.where(SEX2PARENT[ssex] => self)
       if spouse = options[:spouse]
+        raise ArgumentError, "Expected #{self.gclass} object. Got #{spouse.class}" unless spouse.class.equal? self.gclass
         raise SexError, "Problems while looking for #{self}'s children made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex
+        result = result.where(SEX2PARENT[opposite_ssex] => spouse )
       end
-      result = case sex
-      when gclass.sex_male_value
-        if options.keys.include?(:spouse)
-          children_as_father.with(spouse.try(:id))
-        else
-          children_as_father
-        end
-      when gclass.sex_female_value
-        if options.keys.include?(:spouse)
-          children_as_mother.with(spouse.try(:id))
-        else
-          children_as_mother
-        end
-      else
-        raise SexError, "Sex value not valid for #{self}"
-      end
-      filter_by_sex(result,options[:sex])
+      result
     end
 
-    # @return [Array] list of individuals with whom has had children
+    # @return [ActiveRecord::Relation] list of individuals with whom has had children
     def spouses
-      parent_method = SEX2PARENT[OPPOSITESEX[sex_to_s.to_sym]]
-      children.collect{|child| child.send(parent_method)}.uniq
+      gclass.where(id: children.pluck("#{SEX2PARENT[opposite_ssex]}_id").compact.uniq)
     end
 
     # @param [Hash] options
@@ -322,23 +309,23 @@ module Genealogy
       # all male individuals
       # @return [ActiveRecord::Relation] 
       def males
-        where(sex_column => sex_male_value)
+        where(sex: sex_male_value)
       end
       # all female individuals
       # @return [ActiveRecord::Relation] 
       def females
-        where(sex_column => sex_female_value)
+        where(sex: sex_female_value)
       end
       # all individuals individuals having relative with specified role
       # @return [ActiveRecord, ActiveRecord::Relation] 
       def all_with(role)
         case role
         when :father
-          where(father_id_column)
+          where.not(father_id: nil)
         when :mother
-          where(mother_id_column)
+          where.not(mother_id: nil)
         when :parents
-          where(father_id_column).where(mother_id_column)
+          where.not(mother_id: nil,father_id: nil)
         end
       end
 

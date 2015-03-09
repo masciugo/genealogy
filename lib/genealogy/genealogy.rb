@@ -8,10 +8,16 @@ module Genealogy
 
     # gives to ActiveRecord model geneaogy capabilities. Modules UtilMethods QueryMethods IneligibleMethods AlterMethods and SpouseMethods are included
     # @param [Hash] options
-    # @option options [Boolean] current_spouse (false) change to true to track individual's current spouse
-    # @option options [Boolean] perform_validation (true) change to false to update relatives external keys without perform validation
-    # @option options [Hash] column_names (sex: 'sex', father_id: 'father_id', mother_id: 'mother_id', current_spouse_id: 'current_spouse_id', birth_date: 'birth_date', death_date: 'death_date') column names to map database individual table
-    # @option options [Array] sex_values (['M','F']) values used in database sex column 
+    # @option options [Boolean] current_spouse (false) specifies whether to track or not individual's current spouse
+    # @option options [Boolean] perform_validation (true) specifies whether to perform validation or not while altering pedigree that is before updating relatives external keys
+    # @option options [Boolean, Symbol] ineligibility (:pedigree) specifies ineligibility setting. If `false` ineligibility checks will be disbled and you can assign, as relative, any individuals you want. 
+    #   This can be dangerous beacause you can build nosense loop (in terms of pedigree). If pass one of symbols `:pedigree`, `:dates` or `:both` ineligibility checks will be enabled.
+    #   More specifically with `:pedigree` (or `true`) checks will be based on pedigree topography, i.e., ineligible children will include ancestors. With `:dates` check will be based on 
+    #   procreation ages (min and max, male and female) and life expectancy (male and female), i.e. an individual born 200 years before is an ineligible mother. With `:both` both kinds of check will be enabled.
+    # @option options [Hash] limit_ages (min_male_procreation_age:12, max_male_procreation_age:75, min_female_procreation_age:9, max_female_procreation_age:50, max_male_life_expectancy:110, max_female_life_expectancy:110) 
+    #   specifies one or more limit ages different than defaults
+    # @option options [Hash] column_names (sex:'sex', father_id:'father_id', mother_id:'mother_id', current_spouse_id:'current_spouse_id', birth_date:'birth_date', death_date:'death_date') specifies column names to map database individual table
+    # @option options [Array] sex_values (['M','F']) specifies values used in database sex column 
     # @return [void] 
     def has_parents options = {}
 
@@ -57,8 +63,8 @@ module Genealogy
         class_attribute_name = "#{k}_column"
         class_attribute class_attribute_name, instance_accessor: false
         self.send("#{class_attribute_name}=", v)
+        alias_attribute k, v unless k == v.to_sym
       end
-      alias_attribute :sex, sex_column unless sex_column == 'sex'
 
       ## sex
       class_attribute :sex_values, :sex_male_value, :sex_female_value, instance_accessor: false
@@ -67,8 +73,8 @@ module Genealogy
       self.sex_female_value = self.sex_values.last
       
       # validation
-      validates_presence_of sex_column
-      validates_format_of sex_column, :with => /[#{sex_values.join}]/
+      validates_presence_of :sex
+      validates_format_of :sex, :with => /[#{sex_values.join}]/
 
       tracked_relatives = [:father, :mother]
       tracked_relatives << :current_spouse if current_spouse_enabled
@@ -76,8 +82,8 @@ module Genealogy
         belongs_to k, class_name: self, foreign_key: self.send("#{k}_id_column")
       end
 
-      has_many :children_as_father, :class_name => self, :foreign_key => self.father_id_column, :dependent => :nullify, :extend => FatherAssociationExtension
-      has_many :children_as_mother, :class_name => self, :foreign_key => self.mother_id_column, :dependent => :nullify, :extend => MotherAssociationExtension
+      has_many :children_as_father, :class_name => self, :foreign_key => self.father_id_column, :dependent => :nullify
+      has_many :children_as_mother, :class_name => self, :foreign_key => self.mother_id_column, :dependent => :nullify
 
       include Genealogy::UtilMethods
       include Genealogy::QueryMethods
@@ -88,17 +94,6 @@ module Genealogy
     end
 
     private
-
-    module MotherAssociationExtension
-      def with(father_id)
-        where(father_id: father_id)
-      end
-    end
-    module FatherAssociationExtension
-      def with(mother_id)
-        where(mother_id: mother_id)
-      end
-    end
 
     def check_options(options)
 

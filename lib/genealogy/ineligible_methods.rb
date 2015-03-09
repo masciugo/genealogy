@@ -74,7 +74,7 @@ module Genealogy
     # @return [Array]
     def ineligible_children
       ineligibles = []
-      ineligibles |= ancestors | children | siblings | [self] | gclass.all_with(SEX2PARENT[sex_to_s]) if gclass.ineligibility_criteria.include? :pedigree
+      ineligibles |= ancestors | children | siblings | [self] | gclass.all_with(SEX2PARENT[ssex]) if gclass.ineligibility_criteria.include? :pedigree
       # if gclass.ineligibility_criteria.include? :dates
       # else
       # end
@@ -87,8 +87,8 @@ module Genealogy
       ineligibles = []
       if gclass.ineligibility_criteria.include? :pedigree
         ineligibles |= ancestors | descendants | siblings | [self]
-        ineligibles |= (father ? gclass.all_with(:father).where.not(gclass.father_id_column => father) : [])
-        ineligibles |= (mother ? gclass.all_with(:mother).where.not(gclass.mother_id_column => mother) : [])
+        ineligibles |= (father ? gclass.all_with(:father).where.not(father_id: father) : [])
+        ineligibles |= (mother ? gclass.all_with(:mother).where.not(mother_id: mother) : [])
       end
       # if gclass.ineligibility_criteria.include? :dates
       # else

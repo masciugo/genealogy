@@ -12,18 +12,32 @@ describe "*** Query methods ***", :done, :query do
         expect(@model.males.all).to match_array all_males
       end
     end
-
     describe ".females" do
       specify do
         all_females = [titty, mary, barbara, irene, terry, debby, alison, maggie, emily, rosa, louise, naomi, michelle, beatrix, mia, sue]
         expect(@model.females.all).to match_array all_females
       end
     end
+    describe ".all_with" do
+      context 'with argument :father' do
+        specify { expect(@model.all_with(:father)).to match_array [irene, beatrix, julian, mary, peter, ruben, steve, mark, rud, titty, michelle, charlie, sam, sue, terry, paul, emily, tommy, barbara, john, paso, debby, jack] }
+      end
+    end
+    describe ".all_with" do
+      context 'with argument :mother' do
+        specify { expect(@model.all_with(:mother)).to match_array [john, paso, mary, irene, mark, rud, titty, debby, jack, tommy, barbara, charlie, sam, sue, beatrix, julian, michelle, emily, paul, peter, steve] }
+      end
+    end
+    describe ".all_with" do
+      context 'with argument :parents' do
+        specify { expect(@model.all_with(:parents)).to match_array [john, paso, mary, irene, mark, rud, titty, debby, jack, tommy, barbara, charlie, sam, sue, beatrix, julian, michelle, emily, paul, peter, steve] }
+      end
+    end
   end
 
   describe "peter" do
     subject {peter}
-    its(:parents) {is_expected.to match_array [paul, titty]}
+    its(:parents) { is_expected.to match_array [paul, titty]}
     its(:paternal_grandfather) {is_expected.to eq manuel}
     its(:paternal_grandmother) {is_expected.to eq terry}
     its(:maternal_grandfather) {is_expected.to eq paso}
@@ -154,6 +168,7 @@ describe "*** Query methods ***", :done, :query do
 
   describe "paul" do
     subject {paul}
+    its(:spouses) {is_expected.to match_array [michelle,titty,barbara]}
     its(:parents) {is_expected.to match_array [manuel, terry]}
     describe "children" do
       it { expect(paul.children).to match_array([ruben, peter, mary, julian, beatrix, steve])}
@@ -194,8 +209,6 @@ describe "*** Query methods ***", :done, :query do
     its(:maternal_grandmother) {is_expected.to be_nil}
     its(:maternal_grandparents) {is_expected.to match_array [marcel, nil]}
     its(:grandparents) {is_expected.to match_array [nil, nil, marcel, nil]}
-    its(:spouses) {is_expected.to match_array [michelle,titty,barbara,nil]}
-
   end
 
   describe "terry" do
@@ -215,7 +228,7 @@ describe "*** Query methods ***", :done, :query do
     end
     its(:descendants) {is_expected.to match_array [mary]}
     its(:grandparents) {is_expected.to match_array [jack, alison, nil, nil]}
-    describe "cousins", :wipp do
+    describe "cousins" do
       it { expect(barbara.cousins).to match_array([titty,rud,mark])}
       context "with options :sex => :male" do
         specify { expect(barbara.cousins(:sex => :male)).to  match_array [rud,mark] }
@@ -279,9 +292,17 @@ describe "*** Query methods ***", :done, :query do
 
   end
 
-  describe "louise" do
+  describe "louise", :wipp do
     subject {louise}
-    its(:children) {is_expected.to match_array [tommy, jack, debby]}
+    describe "children" do
+      specify { expect(louise.children).to match_array [tommy, jack, debby] }
+      context 'with option spouse: bob' do
+        specify { expect(louise.children(spouse: bob)).to match_array [jack, debby] }
+      end
+      context 'with option spouse: larry' do
+        specify { expect(louise.children(spouse: larry)).to match_array [tommy] }
+      end
+    end
     its(:descendants) {is_expected.to match_array [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie, sue]}
     its(:ancestors) {is_expected.to be_empty}
     its(:great_grandchildren) {is_expected.to match_array [titty, rud, mark, barbara]}

@@ -53,7 +53,7 @@ module Genealogy
     # @return [Array]
     def ineligible_current_spouses
       raise_unless_current_spouse_enabled
-      self.gclass.send(sex_to_s.pluralize)
+      self.gclass.send(ssex.to_s.pluralize)
     end
 
     private

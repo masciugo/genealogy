@@ -20,13 +20,13 @@ module Genealogy
     # Genealogy thinks time in term of Date, not DateTime
     # @return [Date]
     def birth
-      self.send("#{gclass.birth_date_column}").try(:to_date)
+      birth_date.try(:to_date)
     end
 
     # Genealogy thinks time in term of Date, not DateTime
     # @return [Date]
     def death
-      self.send("#{gclass.death_date_column}").try(:to_date)
+      death_date.try(:to_date)
     end
 
     # According to procreation ages says if self can procreate at specified time
@@ -93,27 +93,31 @@ module Genealogy
 
     private
 
-    def max_le(sex=nil)
-      gclass.send("max_#{sex or sex_to_s}_life_expectancy").years
+    def max_le(arg=nil)
+      gclass.send("max_#{arg or ssex}_life_expectancy").years
     end
 
-    def max_fpa(sex=nil)
-      gclass.send("max_#{sex or sex_to_s}_procreation_age").years
+    def max_fpa(arg=nil)
+      gclass.send("max_#{arg or ssex}_procreation_age").years
     end
 
-    def min_fpa(sex=nil)
-      gclass.send("min_#{sex or sex_to_s}_procreation_age").years
+    def min_fpa(arg=nil)
+      gclass.send("min_#{arg or ssex}_procreation_age").years
     end
 
-    def sex_to_s
+    def ssex
       case sex
       when gclass.sex_male_value
-        'male'
+        :male
       when gclass.sex_female_value
-        'female'
+        :female
       else
         raise SexError, "Sex value not valid for #{self}"
       end
+    end
+
+    def opposite_ssex
+      OPPOSITESEX[ssex]
     end
 
     def check_incompatible_relationship(*args)
