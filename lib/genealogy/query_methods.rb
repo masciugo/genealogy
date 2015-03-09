@@ -53,119 +53,123 @@ module Genealogy
     def children(options = {})
       raise SexError, "Sex value not valid for #{self}. It's needed to look for children" unless gclass.sex_values.include? sex
       result = gclass.where(SEX2PARENT[ssex] => self)
-      if spouse = options[:spouse]
-        raise ArgumentError, "Expected #{self.gclass} object. Got #{spouse.class}" unless spouse.class.equal? self.gclass
-        raise SexError, "Problems while looking for #{self}'s children made with spouse #{spouse} who should not be a #{spouse.sex}." if spouse.sex == sex
-        result = result.where(SEX2PARENT[opposite_ssex] => spouse )
+      if options.keys.include? :spouse
+        check_indiv(spouse = options[:spouse],opposite_ssex)
+        result = result.where(SEX2PARENT[opposite_ssex] => spouse ) if spouse
       end
       result
     end
 
     # @return [ActiveRecord::Relation] list of individuals with whom has had children
     def spouses
-      gclass.where(id: children.pluck("#{SEX2PARENT[opposite_ssex]}_id").compact.uniq)
+      gclass.where(id: children.pluck("#{SEX2PARENT[opposite_ssex]}_id".to_sym).compact.uniq)
     end
 
     # @param [Hash] options
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
     # @option options [Symbol] half let you filter siblings. Possible values are:
     #   :father for paternal halfsiblings
     #   :mother for maternal halfsiblings
     #   :only for all halfsiblings
     #   :include for fullsiblings and halfsiblings
-    # @return [Array] list of fullsiblings and/or halfsiblings
+    # @return [ActiveRecord::Relation] list of fullsiblings and/or halfsiblings
     def siblings(options = {})
-      result = case options[:half]
+      spouse = options[:spouse]
+
+      result = gclass.where.not(id: id)
+      case options[:half]
       when nil # only full siblings
-        unless parents.include?(nil)
-          father.try(:children, :spouse => mother ).to_a
-        else
-          []
-        end
+        result.all_with(:parents).where(father_id: father, mother_id: mother)
       when :father # common father
-        father.try(:children, options.keys.include?(:spouse) ? {:spouse => options[:spouse]} : {}).to_a - mother.try(:children).to_a
+        result = result.all_with(:father).where(father_id: father)
+        if spouse 
+          check_indiv(spouse, :female)
+          result.where(mother_id: spouse)
+        elsif mother
+          result.where("#{gclass.mother_id_column} != ? or #{gclass.mother_id_column} is ?", mother_id, nil)
+        else
+          result
+        end
       when :mother # common mother
-        mother.try(:children, options.keys.include?(:spouse) ? {:spouse => options[:spouse]} : {}).to_a - father.try(:children).to_a
+        result = result.all_with(:mother).where(mother_id: mother)
+        if spouse
+          check_indiv(spouse, :male)
+          result.where(father_id: spouse)
+        elsif father
+          result.where("#{gclass.father_id_column} != ? or #{gclass.father_id_column} is ?", father_id, nil)
+        else
+          result
+        end
       when :only # only half siblings
-        siblings(:half => :include) - siblings
+        ids = siblings(half: :father).pluck(:id) | siblings(half: :mother).pluck(:id)
+        result.where(id: ids)
       when :include # including half siblings
-        father.try(:children).to_a + mother.try(:children).to_a
+        result.where("#{gclass.father_id_column} == ? or #{gclass.mother_id_column} == ?", father_id, mother_id)
       else
         raise ArgumentError, "Admitted values for :half options are: :father, :mother, false, true or nil"
       end
-      filter_by_sex(result.uniq - [self],options[:sex])
+
     end
 
-    # siblings with option :half => :only
+    # siblings with option half: :only
     # @see #siblings 
     def half_siblings(options = {})
-      siblings(options.merge(:half => :only))
+      siblings(options.merge(half: :only))
     end
 
-    # siblings with option :half => :father
+    # siblings with option half: :father
     # @see #siblings
     def paternal_half_siblings(options = {})
-      siblings(options.merge(:half => :father))
+      siblings(options.merge(half: :father))
     end
 
-    # siblings with option :half => :mother
+    # siblings with option half: :mother
     # @see #siblings
     def maternal_half_siblings(options = {})
-      siblings(options.merge(:half => :mother))
+      siblings(options.merge(half: :mother))
     end
 
     # get list of known ancestrors iterateing over parents
     # @param [Hash] options
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    # @return [Array] list of ancestors
+    # @return [ActiveRecord::Relation] list of ancestors
     def ancestors(options = {})
-      result = []
-      remaining = parents.compact
-      until remaining.empty?
-        result << remaining.shift
-        remaining += result.last.parents.compact
+      ids = []
+      remaining_ids = parents.compact.map(&:id)
+      until remaining_ids.empty?
+        ids << remaining_ids.shift
+        remaining_ids += gclass.find(ids.last).parents.compact.map(&:id)
       end
-      filter_by_sex(result.uniq,options[:sex])
+      gclass.where(id: ids)
     end
 
 
     # get list of known descendants iterateing over children ...
-    # @param [Hash] options
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    # @return [Array] list of descendants
-    def descendants(options = {})
-      result = []
-      remaining = children.to_a.compact
-      until remaining.empty?
-        result << remaining.shift
-        remaining += result.last.children.to_a.compact
-        # break if (remaining - result).empty? can be necessary in case of loop. Idem for ancestors method
+    # @return [ActiveRecord::Relation] list of descendants
+    def descendants
+      ids = []
+      remaining_ids = children.map(&:id)
+      until remaining_ids.empty?
+        ids << remaining_ids.shift
+        remaining_ids += gclass.find(ids.last).children.pluck(:id)
+        # break if (remaining_ids - ids).empty? can be necessary in case of loop. Idem for ancestors method
       end
-      filter_by_sex(result.uniq,options[:sex])
+      gclass.where(id: ids)
     end
 
-    # @return [Array] list of grandchildren
-    # @param [Hash] options
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    def grandchildren(options = {})
+    # @return [ActiveRecord::Relation] list of grandchildren
+    def grandchildren
       result = children.inject([]){|memo,child| memo |= child.children}
-      filter_by_sex(result,options[:sex])
     end
 
-    # @return [Array] list of grat-grandchildren
-    # @param [Hash] options
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    def great_grandchildren(options = {})
+    # @return [ActiveRecord::Relation] list of grat-grandchildren
+    def great_grandchildren
       result = grandchildren.compact.inject([]){|memo,grandchild| memo |= grandchild.children}
-      filter_by_sex(result,options[:sex])
     end
     
     # list of uncles and aunts iterating through parents' siblings
     # @param [Hash] options
     # @option options [Symbol] lineage to filter by lineage: :paternal or :maternal
-    # @option options [Symbol] sex to filter by sex: :male or :female. In few word to get ancles or aunts
     # @option options [Symbol] half to filter by half siblings (see #siblings)
-    # @return [Array] list of uncles and aunts
+    # @return [ActiveRecord::Relation] list of uncles and aunts
     def uncles_and_aunts(options={})
       relation = case options[:lineage]
       when :paternal
@@ -175,41 +179,35 @@ module Genealogy
       else
         parents
       end
-      result = relation.compact.inject([]){|memo,parent| memo |= parent.siblings(half: options[:half])}
-      filter_by_sex(result,options[:sex])
+      ids = relation.compact.inject([]){|memo,parent| memo |= parent.siblings(half: options[:half]).pluck(:id)}
+      gclass.where(id: ids)
     end
 
-    # uncles_and_aunts with option sex: :male
     # @see #uncles_and_aunts
     def uncles(options = {})
-      uncles_and_aunts(options.merge(sex: :male))
+      uncles_and_aunts(options).males
     end
 
-    # uncles_and_aunts with option sex: :female
     # @see #uncles_and_aunts
-    def aunts(options={})
-      uncles_and_aunts(options.merge(sex: :female))
+    def aunts(options = {})
+      uncles_and_aunts(options).females
     end
 
-    # uncles_and_aunts with options  sex: :male, lineage: :paternal
     # @see #uncles_and_aunts
     def paternal_uncles(options = {})
       uncles(options.merge(lineage: :paternal))
     end
 
-    # uncles_and_aunts with options  sex: :male, lineage: :maternal
     # @see #uncles_and_aunts
     def maternal_uncles(options = {})
       uncles(options.merge(lineage: :maternal))
     end
 
-    # uncles_and_aunts with options sex: :female, lineage: :paternal
     # @see #uncles_and_aunts
     def paternal_aunts(options = {})
       aunts(options.merge(lineage: :paternal))
     end
 
-    # uncles_and_aunts with options sex: :female, lineage: :maternal
     # @see #uncles_and_aunts
     def maternal_aunts(options = {})
       aunts(options.merge(lineage: :maternal))
@@ -218,40 +216,34 @@ module Genealogy
     # @param [Hash] options
     # @option options [Symbol] lineage to filter uncles by lineage: :paternal or :maternal
     # @option options [Symbol] half to filter uncles (see #siblings)
-    # @option options [Symbol] sex to filter cousins by sex: :male or :female. 
-    # @return [Array] list of uncles and aunts' children
+    # @return [ActiveRecord::Relation] list of uncles and aunts' children
     def cousins(options = {})
-      sex = options.delete(:sex)
-      result = uncles_and_aunts(options).compact.inject([]){|memo,uncle| memo |= uncle.children}
-      filter_by_sex(result,sex)
+      ids = uncles_and_aunts(options).inject([]){|memo,uncle| memo |= uncle.children.pluck(:id)}
+      gclass.where(id: ids)
     end
 
     # @param [Hash] options
     # @option options [Symbol] half to filter siblings (see #siblings)
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
-    # @return [Array] list of nieces and nephews
+    # @return [ActiveRecord::Relation] list of nieces and nephews
     def nieces_and_nephews(options = {})
-      sex = options.delete(:sex)
-      result = siblings(options).inject([]){|memo,sib| memo |= sib.children}
-      filter_by_sex(result,sex)
+      ids = siblings(options).inject([]){|memo,sib| memo |= sib.children.pluck(:id)}
+      gclass.where(id: ids)
     end
 
-    # nieces_and_nephews with option sex: :male
     # @see #nieces_and_nephews
     def nephews(options = {})
-      nieces_and_nephews(options.merge({sex: :male}))
+      nieces_and_nephews.males
     end
 
-    # nieces_and_nephews with option sex: :female
     # @see #nieces_and_nephews
     def nieces(options = {})
-      nieces_and_nephews(options.merge({sex: :female}))
+      nieces_and_nephews.females
     end
 
-    # family hash with roles as keys and individuals as values. Defaults roles are :father, :mother, :children, :siblings and current_spouse if enabled
+    # family hash with roles as keys? :spouse and individuals as values. Defaults roles are :father, :mother, :children, :siblings and current_spouse if enabled
     # @option options [Symbol] half to filter siblings (see #siblings)
     # @option options [Boolean] extended to include roles for grandparents, grandchildren, uncles, aunts, nieces, nephews and cousins
-    # @return [Hash] family hash with roles as keys and individuals as values. 
+    # @return [Hash] family hash with roles as keys? :spouse and individuals as values. 
     def family_hash(options = {})
       roles = [:father, :mother, :children, :siblings]
       roles += [:current_spouse] if self.class.current_spouse_enabled
@@ -274,7 +266,7 @@ module Genealogy
     # family_hash with option extended: :true
     # @see #family_hash
     def extended_family_hash(options = {})
-      family_hash(options.merge(:extended => true))
+      family_hash(options.merge(extended: true))
     end
 
     # family individuals
@@ -288,22 +280,10 @@ module Genealogy
     # family with option extended: :true
     # @see #family
     def extended_family(options = {})
-      family(options.merge(:extended => true))
+      family(options.merge(extended: true))
     end
 
     private
-
-    def filter_by_sex(list,sex)
-      case sex
-      when :male
-        list.select(&:is_male?)
-      when :female
-        list.select(&:is_female?)
-      else
-        list
-      end
-
-    end
 
     module ClassMethods
       # all male individuals

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "*** Ineligible methods without considering ages ***", :ineligible do
 
   context 'when cannot replace parent (default)' do
-    before { @model = get_test_model({:current_spouse => true }) }  
+    before { @model = get_test_model({current_spouse: true }) }  
     include_context "pedigree exists" #all following examples are based on sample pedigree
 
     describe "#ineligible_fathers" do
@@ -286,7 +286,7 @@ describe "*** Ineligible methods without considering ages ***", :ineligible do
   end
 
   # context 'when can replace parent', :wip do
-  #   before { @model = get_test_model({:current_spouse => true, :check_ages => false, :replace_parent => true }) }  
+  #   before { @model = get_test_model({current_spouse: true, check_ages: false, replace_parent: true }) }  
   #   include_context "releted people exist"
 
   #   describe "#ineligible_siblings" do

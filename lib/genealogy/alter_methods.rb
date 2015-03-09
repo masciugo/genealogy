@@ -213,7 +213,7 @@ module Genealogy
     # @return [Boolean] true if at least one sibling was affected, false otherwise
     def remove_siblings(*args)
       options = args.extract_options!
-      raise ArgumentError.new("Unknown option value: :half => #{options[:half]}.") if (options[:half] and ![:father,:mother].include?(options[:half]))
+      raise ArgumentError.new("Unknown option value: half: #{options[:half]}.") if (options[:half] and ![:father,:mother].include?(options[:half]))
       resulting_indivs = if args.blank?
         siblings(options)
       else

@@ -68,12 +68,12 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       end
       
       context "when specify spouse too" do
-        subject { paul.add_children(julian, :spouse => michelle) }
+        subject { paul.add_children(julian, spouse: michelle) }
         it { is_expected.to build_the_trio(julian, paul, michelle) }
       end
 
       describe "when specify spouse but spouse is ineligible" do 
-        specify { expect { paul.add_children(peter, :spouse => john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
+        specify { expect { paul.add_children(peter, spouse: john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
       end
 
     end
@@ -91,7 +91,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       end
       context 'when specify to affect the other parent removing them' do
         it "make all children lose both parents" do
-          paul.remove_children(:remove_other_parent => true)
+          paul.remove_children(remove_other_parent: true)
           expect([peter, nil, nil]).to be_a_trio and
           expect([steve, nil, nil]).to be_a_trio and
           expect([julian, nil, nil]).to be_a_trio and
@@ -100,7 +100,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       end
       context 'when specify spouse' do
         it "make only children with that spouse lose father but keeping mother" do
-          paul.remove_children(:spouse => titty)
+          paul.remove_children(spouse: titty)
           expect([peter, nil, titty]).to be_a_trio and
           expect([steve, nil, titty]).to be_a_trio and
           expect([julian, paul, michelle]).to be_a_trio and
@@ -109,7 +109,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       end
       context 'when specify spouse and to affect the other parent removing them' do
         it "make only children with that spouse lose both parents" do
-          paul.remove_children(:spouse => titty, :remove_other_parent => true)
+          paul.remove_children(spouse: titty, remove_other_parent: true)
           expect([peter, nil, nil]).to be_a_trio and
           expect([steve, nil, nil]).to be_a_trio and
           expect([julian, paul, michelle]).to be_a_trio and
@@ -118,7 +118,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       end
       context 'when specify a spouse with whom receiver has not children' do
         it "children remain unaffected" do
-          paul.remove_children(:spouse => maggie)
+          paul.remove_children(spouse: maggie)
           expect([peter, paul, titty]).to be_a_trio and
           expect([steve, paul, titty]).to be_a_trio and
           expect([julian, paul, michelle]).to be_a_trio and
@@ -126,7 +126,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         end
       end
       context "when specify a spouse with the same sex" do
-        specify { expect { paul.remove_children(:spouse => john) }.to raise_error(Genealogy::SexError) }
+        specify { expect { paul.remove_children(spouse: john) }.to raise_error(Genealogy::SexError) }
       end
       context "when one child is invalid" do
         before { steve.mark_invalid! }
@@ -145,8 +145,8 @@ describe "*** Alter children methods ***", :done, :alter_c  do
 
   end
 
-  context 'when ignoring ineligibility (options for has_parents: {:ineligibility => false})' do
-    before { @model = get_test_model({:ineligibility => false }) }
+  context 'when ignoring ineligibility (options for has_parents: {ineligibility: false})' do
+    before { @model = get_test_model({ineligibility: false }) }
 
     include_context "pedigree exists"
 
@@ -175,8 +175,8 @@ describe "*** Alter children methods ***", :done, :alter_c  do
 
   end
 
-  context "when ignoring validation (options for has_parents: {:perform_validation => false})" do
-    before { @model = get_test_model({:perform_validation => false }) }
+  context "when ignoring validation (options for has_parents: {perform_validation: false})" do
+    before { @model = get_test_model({perform_validation: false }) }
 
     include_context 'unreleted people exist'
 

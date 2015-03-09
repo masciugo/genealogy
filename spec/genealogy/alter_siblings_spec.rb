@@ -78,13 +78,13 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           end
         end
 
-        context "when specify option :half => :father" do
-          subject { peter.add_siblings(julian, :half => :father ) }
+        context "when specify option half: :father" do
+          subject { peter.add_siblings(julian, half: :father ) }
           it_behaves_like "a method which add paternal half siblings", :peter, :julian
         end
 
-        context "when specify option :half => :father and :spouse" do
-          subject { peter.add_siblings(julian, :half => :father, :spouse => michelle) }
+        context "when specify option half: :father and :spouse" do
+          subject { peter.add_siblings(julian, half: :father, spouse: michelle) }
           it_behaves_like "a method which add paternal half siblings", :peter, :julian do
             it "updates argument's mother with provided spouse" do
               subject 
@@ -93,8 +93,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           end
         end
 
-        describe "when specify option :half => :father and an ineligible :spouse )" do
-          subject { peter.add_siblings(julian, :half => :father, :spouse => paso) }
+        describe "when specify option half: :father and an ineligible :spouse )" do
+          subject { peter.add_siblings(julian, half: :father, spouse: paso) }
           it_behaves_like "raising error and not affecting the trio", Genealogy::IncompatibleRelationshipException, [:julian,nil,nil]
         end
 
@@ -150,8 +150,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
             end
           end
         end
-        context 'when specify option :half => :father' do
-          before { peter.remove_siblings(:half => :father) }
+        context 'when specify option half: :father' do
+          before { peter.remove_siblings(half: :father) }
           it "makes receiver to keep full siblings" do
             expect([peter,steve,sue]).to be_siblings
           end
@@ -162,8 +162,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
             expect([peter,rud]).to be_maternal_half_siblings
           end
         end
-        context 'when specify option :half => :mother' do
-          before { peter.remove_siblings(:half => :mother) }
+        context 'when specify option half: :mother' do
+          before { peter.remove_siblings(half: :mother) }
           it "makes receiver to keep full siblings" do
             expect([peter,steve,sue]).to be_siblings
           end
@@ -175,10 +175,10 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           end
         end
         context "when specify unexpected value for :half option" do
-          specify { expect { peter.remove_siblings(:half => :foo) }.to raise_error ArgumentError }
+          specify { expect { peter.remove_siblings(half: :foo) }.to raise_error ArgumentError }
         end
-        context "when specify option :half => :father and :remove_other_parent => true" do
-          before { peter.remove_siblings(:half => :father, :remove_other_parent => true) }
+        context "when specify option half: :father and remove_other_parent: true" do
+          before { peter.remove_siblings(half: :father, remove_other_parent: true) }
           it "makes receiver to not have paternal half siblings" do
             expect([peter,ruben,julian,mary]).not_to be_paternal_half_siblings
           end
@@ -193,8 +193,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
   end
 
-  context 'when ignoring ineligibility (options for has_parents: {:ineligibility => false})' do
-    before { @model = get_test_model({:ineligibility => false }) }
+  context 'when ignoring ineligibility (options for has_parents: {ineligibility: false})' do
+    before { @model = get_test_model({ineligibility: false }) }
 
     include_context "pedigree exists"
 
@@ -221,8 +221,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
   end
 
-  context "when ignoring validation (options for has_parents: {:perform_validation => false})" do
-    before { @model = get_test_model({:perform_validation => false }) }
+  context "when ignoring validation (options for has_parents: {perform_validation: false})" do
+    before { @model = get_test_model({perform_validation: false }) }
 
     context "when receiver becomes invalid" do
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "*** Query methods ***", :done, :query do
 
-  before { @model = get_test_model({:current_spouse => true})}
+  before { @model = get_test_model({current_spouse: true, column_names: {mother_id: 'madre'}})}
   include_context "pedigree exists"
 
   describe "class methods" do
@@ -54,26 +54,26 @@ describe "*** Query methods ***", :done, :query do
     its(:great_grandparents) {is_expected.to match_array [nil, nil, marcel, nil, jack, alison, tommy, emily]}
     describe "cousins" do
       it { expect(peter.cousins).to match_array([sam, charlie, sue])}
-      context "with options :lineage => :paternal" do
-        specify { expect(peter.cousins(:lineage => :paternal)).to  match_array [] }
+      context "with options lineage: :paternal" do
+        specify { expect(peter.cousins(lineage: :paternal)).to  match_array [] }
       end
-      context "with options :lineage => :maternal" do
-        specify { expect(peter.cousins(:lineage => :maternal)).to  match_array [sam,charlie,sue] }
+      context "with options lineage: :maternal" do
+        specify { expect(peter.cousins(lineage: :maternal)).to  match_array [sam,charlie,sue] }
       end
     end
     describe "family_hash" do
-      it { expect( peter.family_hash ).to match_family({:father => paul, :mother => titty, :children => [], :siblings => [steve], :current_spouse=>nil}) }
-      context "with options :half => :include" do
-        specify { expect(peter.family_hash(:half => :include)).to match_family({:father => paul, :mother => titty, :children => [], :siblings => [steve], :current_spouse=>nil, :half_siblings => [ruben, mary, julian, beatrix] })}
+      it { expect( peter.family_hash ).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil}) }
+      context "with options half: :include" do
+        specify { expect(peter.family_hash(half: :include)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, half_siblings: [ruben, mary, julian, beatrix] })}
       end
-      context "with options :half => :father" do
-        specify { expect(peter.family_hash(:half => :father)).to match_family({:father => paul, :mother => titty, :children => [], :siblings => [steve], :current_spouse=>nil, :paternal_half_siblings => [ruben, mary, julian, beatrix] })}
+      context "with options half: :father" do
+        specify { expect(peter.family_hash(half: :father)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, paternal_half_siblings: [ruben, mary, julian, beatrix] })}
       end
-      context "with options :half => :mother" do
-        specify { expect(peter.family_hash(:half => :mother)).to match_family({:father => paul, :mother => titty, :children => [], :siblings => [steve], :current_spouse=>nil, :maternal_half_siblings => [] })}
+      context "with options half: :mother" do
+        specify { expect(peter.family_hash(half: :mother)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, maternal_half_siblings: [] })}
       end
-      context "with options :extended => true" do
-        specify { expect(peter.family_hash(:extended => true)).to match_family(
+      context "with options extended: true" do
+        specify { expect(peter.family_hash(extended: true)).to match_family(
           :father=>paul, 
           :mother=>titty, 
           :children=>[], 
@@ -88,8 +88,8 @@ describe "*** Query methods ***", :done, :query do
           :nieces_and_nephews=>[], 
           :cousins=>[sam, sue, charlie])}
       end
-      context "with options :extended => true, :half => :include" do
-        specify { expect(peter.family_hash(:extended => true, :half => :include)).to match_family(
+      context "with options extended: true, half: :include" do
+        specify { expect(peter.family_hash(extended: true, half: :include)).to match_family(
           :father=>paul, 
           :mother=>titty, 
           :children=>[], 
@@ -105,30 +105,30 @@ describe "*** Query methods ***", :done, :query do
           :cousins=>[sam, sue, charlie],
           :half_siblings=>[ruben, mary, julian, beatrix])}
       end
-      context "with options :half => :bar" do
-        specify { expect { peter.family_hash(:half => :bar) }.to raise_error(ArgumentError)}
+      context "with options half: :bar" do
+        specify { expect { peter.family_hash(half: :bar) }.to raise_error(ArgumentError)}
       end
     end
 
     describe "family" do
       it { expect(peter.family).to match_array([paul, titty, steve])}
-      context "with options :half => :include" do
-        specify { expect(peter.family(:half => :include)).to match_array([paul, titty, steve, ruben, mary, julian, beatrix])}
+      context "with options half: :include" do
+        specify { expect(peter.family(half: :include)).to match_array([paul, titty, steve, ruben, mary, julian, beatrix])}
       end
-      context "with options :half => :father" do
-        specify { expect(peter.family(:half => :father)).to match_array([paul, titty, steve, ruben, mary, julian, beatrix])}
+      context "with options half: :father" do
+        specify { expect(peter.family(half: :father)).to match_array([paul, titty, steve, ruben, mary, julian, beatrix])}
       end
-      context "with options :half => :mother" do
-        specify { expect(peter.family(:half => :mother)).to match_array([paul, titty, steve])}
+      context "with options half: :mother" do
+        specify { expect(peter.family(half: :mother)).to match_array([paul, titty, steve])}
       end
-      context "with options :extended => true" do
-        specify { expect(peter.family(:extended => true)).to match_array([paul, titty, steve, manuel, terry, paso, irene, rud, mark, sue, sam, charlie])}
+      context "with options extended: true" do
+        specify { expect(peter.family(extended: true)).to match_array([paul, titty, steve, manuel, terry, paso, irene, rud, mark, sue, sam, charlie])}
       end
-      context "with options :extended => true, :half => :include" do
-        specify { expect(peter.family(:extended => true, :half => :include)).to match_array([paul, titty, steve, manuel, terry, paso, irene, rud, mark, sue, sam, charlie, ruben, mary, julian, beatrix])}
+      context "with options extended: true, half: :include" do
+        specify { expect(peter.family(extended: true, half: :include)).to match_array([paul, titty, steve, manuel, terry, paso, irene, rud, mark, sue, sam, charlie, ruben, mary, julian, beatrix])}
       end
-      context "with options :half => :bar" do
-        specify { expect { peter.family(:half => :bar) }.to raise_error(ArgumentError)}
+      context "with options half: :bar" do
+        specify { expect { peter.family(half: :bar) }.to raise_error(ArgumentError)}
       end
     end
   end
@@ -145,7 +145,7 @@ describe "*** Query methods ***", :done, :query do
     its(:grandparents) {is_expected.to match_array [manuel, terry, john, maggie]}
     its(:half_siblings) {is_expected.to match_array [ruben, peter, julian, beatrix, steve] }
     its(:descendants) {is_expected.to be_empty}
-    its(:siblings) {is_expected.not_to include peter }
+    its(:siblings) {is_expected.to be_empty }
     its(:ancestors) {is_expected.to match_array [paul, barbara, manuel, terry, john, maggie, marcel, jack, alison, bob, louise]}
   end
 
@@ -155,14 +155,14 @@ describe "*** Query methods ***", :done, :query do
     its(:siblings) {is_expected.to match_array [julian]}
     its(:half_siblings) {is_expected.to match_array [ruben, peter, steve, mary]}
     its(:paternal_half_siblings) {is_expected.to match_array [ruben, peter, steve, mary]}
-    describe "all half_siblings and siblings: #siblings(:half => :include)" do
-      specify {expect(beatrix.siblings(:half => :include)).to match_array [ruben, peter, steve, mary, julian]}
+    describe "all half_siblings and siblings: #siblings(half: :include)" do
+      specify {expect(beatrix.siblings(half: :include)).to match_array [ruben, peter, steve, mary, julian]}
     end
-    describe "half_siblings with titty: #siblings(:half => father, :spouse => titty)" do
-      specify {expect(beatrix.siblings(:half => :father, :spouse => titty)).to match_array [peter, steve]}
+    describe "half_siblings with titty: #siblings(half: father, spouse: titty)" do
+      specify {expect(beatrix.siblings(half: :father, spouse: titty)).to match_array [peter, steve]}
     end
-    describe "half_siblings with mary: #siblings(:half => father, :spouse => barbara)" do
-      specify {expect(beatrix.siblings(:half => :father, :spouse => barbara)).to match_array [mary]}
+    describe "half_siblings with mary: #siblings(half: father, spouse: barbara)" do
+      specify {expect(beatrix.siblings(half: :father, spouse: barbara)).to match_array [mary]}
     end
   end
 
@@ -172,40 +172,18 @@ describe "*** Query methods ***", :done, :query do
     its(:parents) {is_expected.to match_array [manuel, terry]}
     describe "children" do
       it { expect(paul.children).to match_array([ruben, peter, mary, julian, beatrix, steve])}
-      context "with options :sex => :male" do
-        specify { expect(paul.children(:sex => :male)).to match_array [ruben, peter, julian, steve] }
+      context "with options spouse: barbara" do
+        specify { expect(paul.children(spouse: barbara)).to match_array [mary] }
       end
-      context "with options :sex => :female" do
-        specify { expect(paul.children(:sex => :female)).to match_array [mary, beatrix] }
+      context "with options spouse: michelle" do
+        specify { expect(paul.children(spouse: michelle)).to match_array [julian, beatrix] }
       end
-      context "with options :spouse => barbara" do
-        specify { expect(paul.children(:spouse => barbara)).to match_array [mary] }
-      end
-      context "with options :spouse => michelle" do
-        specify { expect(paul.children(:spouse => michelle)).to match_array [julian, beatrix] }
-      end
-      context "with options :spouse => nil" do
-        specify { expect(paul.children(:spouse => nil)).to match_array [ruben] }
+      context "with options spouse: nil" do
+        specify { expect { paul.children(spouse: nil) }.to raise_error ArgumentError}
       end
     end
-    describe "ancestors" do
-      specify { expect(paul.ancestors).to match_array [manuel, terry, marcel] }
-      context "with options sex: :male" do
-        specify { expect(paul.ancestors(sex: :male)).to match_array [manuel, marcel] }
-      end
-      context "with options sex: :female" do
-        specify { expect(paul.ancestors(sex: :female)).to match_array [terry] }
-      end
-    end
-    describe "descendants" do
-      specify { expect(paul.descendants).to match_array [ruben, peter, mary, julian, beatrix, steve] }
-      context "with options sex: :male" do
-        specify { expect(paul.descendants(sex: :male)).to match_array [ruben, peter, julian, steve] }
-      end
-      context "with options sex: :female" do
-        specify { expect(paul.descendants(sex: :female)).to match_array [mary, beatrix] }
-      end
-    end
+    its(:ancestors) {is_expected.to match_array [manuel, terry, marcel]}
+    its(:descendants) {is_expected.to match_array [ruben, peter, mary, julian, beatrix, steve]}
     its(:maternal_grandmother) {is_expected.to be_nil}
     its(:maternal_grandparents) {is_expected.to match_array [marcel, nil]}
     its(:grandparents) {is_expected.to match_array [nil, nil, marcel, nil]}
@@ -224,28 +202,18 @@ describe "*** Query methods ***", :done, :query do
     subject {barbara}
     its(:children) {is_expected.to match_array [mary]}
     describe "children with manuel" do
-      specify { expect(barbara.children(:spouse => manuel)).to be_empty }
+      specify { expect(barbara.children(spouse: manuel)).to be_empty }
     end
     its(:descendants) {is_expected.to match_array [mary]}
     its(:grandparents) {is_expected.to match_array [jack, alison, nil, nil]}
     describe "cousins" do
       it { expect(barbara.cousins).to match_array([titty,rud,mark])}
-      context "with options :sex => :male" do
-        specify { expect(barbara.cousins(:sex => :male)).to  match_array [rud,mark] }
+      context "with options lineage: :paternal" do
+        specify { expect(barbara.cousins(lineage: :paternal)).to  match_array [titty,rud,mark] }
       end
-      context "with options :sex => :female" do
-        specify { expect(barbara.cousins(:sex => :female)).to  match_array [titty] }
+      context "with options lineage: :maternal" do
+        specify { expect(barbara.cousins(lineage: :maternal)).to  match_array [] }
       end
-      context "with options :lineage => :paternal" do
-        specify { expect(barbara.cousins(:lineage => :paternal)).to  match_array [titty,rud,mark] }
-      end
-      context "with options :lineage => :maternal" do
-        specify { expect(barbara.cousins(:lineage => :maternal)).to  match_array [] }
-      end
-      context "with options :lineage => :paternal, :sex => :female" do
-        specify { expect(barbara.cousins(:lineage => :paternal, :sex => :female)).to  match_array [titty] }
-      end
-
     end
   end
 
@@ -258,27 +226,27 @@ describe "*** Query methods ***", :done, :query do
     its(:paternal_aunts) {is_expected.to match_array [debby]}
     describe "family_hash" do
       it { expect( paso.family_hash ).to match_family({
-        :father => jack, 
-        :mother => alison, 
-        :children => [titty,rud,mark], 
-        :siblings => [john], 
-        :current_spouse => irene}) }
-      context "with options :half => :include" do
-        specify { expect(paso.family_hash(:half => :include)).to match_family({
-          :father => jack, 
-          :mother => alison, 
-          :children => [titty,rud,mark], 
-          :siblings => [john], 
-          :current_spouse => irene,
-          :half_siblings => [] })}
+        father: jack, 
+        mother: alison, 
+        children: [titty,rud,mark], 
+        siblings: [john], 
+        current_spouse: irene}) }
+      context "with options half: :include" do
+        specify { expect(paso.family_hash(half: :include)).to match_family({
+          father: jack, 
+          mother: alison, 
+          children: [titty,rud,mark], 
+          siblings: [john], 
+          current_spouse: irene,
+          half_siblings: [] })}
       end
-      context "with options :extended => true" do
-        specify { expect(paso.family_hash(:extended => true)).to match_family(
-          :father => jack, 
-          :mother => alison, 
-          :children => [titty,rud,mark], 
-          :siblings => [john], 
-          :current_spouse => irene,
+      context "with options extended: true" do
+        specify { expect(paso.family_hash(extended: true)).to match_family(
+          father: jack, 
+          mother: alison, 
+          children: [titty,rud,mark], 
+          siblings: [john], 
+          current_spouse: irene,
           :paternal_grandfather=>bob,
           :paternal_grandmother=>louise,
           :maternal_grandfather=>nil,
@@ -292,7 +260,7 @@ describe "*** Query methods ***", :done, :query do
 
   end
 
-  describe "louise", :wipp do
+  describe "louise" do
     subject {louise}
     describe "children" do
       specify { expect(louise.children).to match_array [tommy, jack, debby] }
@@ -329,29 +297,29 @@ describe "*** Query methods ***", :done, :query do
     its(:nieces) {is_expected.to match_array [sue]}
     describe "cousins" do
       it { expect(titty.cousins).to match_array([barbara])}
-      context "with options :lineage => :paternal" do
-        specify { expect(titty.cousins(:lineage => :paternal)).to  match_array [barbara] }
+      context "with options lineage: :paternal" do
+        specify { expect(titty.cousins(lineage: :paternal)).to  match_array [barbara] }
       end
-      context "with options :lineage => :maternal" do
-        specify { expect(titty.cousins(:lineage => :maternal)).to  match_array [] }
+      context "with options lineage: :maternal" do
+        specify { expect(titty.cousins(lineage: :maternal)).to  match_array [] }
       end
     end
     its(:family) {is_expected.to match_array [peter,steve,rud,mark,irene,paso]}
     its(:extended_family) {is_expected.to match_array [peter,steve,rud,mark,irene,paso,sam,charlie,emily,sue,tommy,jack,alison,john, barbara]}
     describe "family_hash" do
       it { expect( titty.family_hash ).to match_family({
-        :father => paso, 
-        :mother => irene, 
-        :children => [peter,steve], 
-        :siblings => [rud,mark], 
-        :current_spouse => nil}) }
-      context "with options :extended => true" do
-        specify { expect(titty.family_hash(:extended => true)).to match_family(
-          :father => paso, 
-          :mother => irene, 
-          :children => [peter,steve], 
-          :siblings => [rud,mark], 
-          :current_spouse => nil,
+        father: paso, 
+        mother: irene, 
+        children: [peter,steve], 
+        siblings: [rud,mark], 
+        current_spouse: nil}) }
+      context "with options extended: true" do
+        specify { expect(titty.family_hash(extended: true)).to match_family(
+          father: paso, 
+          mother: irene, 
+          children: [peter,steve], 
+          siblings: [rud,mark], 
+          current_spouse: nil,
           :paternal_grandfather=>tommy,
           :paternal_grandmother=>emily,
           :maternal_grandfather=>jack,
@@ -368,33 +336,24 @@ describe "*** Query methods ***", :done, :query do
   describe "irene" do
     subject { irene }
     its(:uncles_and_aunts) {is_expected.to be_empty }
-    describe "#uncles_and_aunts(:half => :include)" do
-      specify { expect(irene.uncles_and_aunts(:half => :include)).to match_array [debby, jack] }
+    describe "#uncles_and_aunts(half: :include)" do
+      specify { expect(irene.uncles_and_aunts(half: :include)).to match_array [debby, jack] }
     end
-    describe "#uncles_and_aunts(:half => :include, :lineage => :paternal )" do
-      specify { expect(irene.uncles_and_aunts(:half => :include, :lineage => :paternal )).to match_array [debby, jack] }
-    end
-    describe "#uncles_and_aunts(:half => :include, :sex => :male)" do
-      specify { expect(irene.uncles_and_aunts(:half => :include, :sex => :male)).to match_array [jack] }
-    end
-    describe "#uncles_and_aunts(:half => :include, :sex => :female)" do
-      specify { expect(irene.uncles_and_aunts(:half => :include, :sex => :female)).to match_array [debby] }
+    describe "#uncles_and_aunts(half: :include, lineage: :paternal )" do
+      specify { expect(irene.uncles_and_aunts(half: :include, lineage: :paternal )).to match_array [debby, jack] }
     end
   end
 
   describe "rud" do
     subject { rud }
     its(:nieces_and_nephews) {is_expected.to match_array [sue, sam, charlie, peter, steve] }
-    describe "#nieces_and_nephews(:sex => :male)" do
-      specify { expect(rud.nieces_and_nephews(:sex => :male)).to match_array [sam, charlie, peter, steve] }
-    end
   end
 
   describe "tommy" do
     subject { tommy }
     its(:nieces_and_nephews) {is_expected.to be_empty }
-    describe "#nieces_and_nephews({},{:half => :include })" do
-      specify { expect(tommy.nieces_and_nephews({:half => :include })).to match_array [paso, john] }
+    describe "#nieces_and_nephews({},{half: :include })" do
+      specify { expect(tommy.nieces_and_nephews({half: :include })).to match_array [paso, john] }
     end
   end
 

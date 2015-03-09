@@ -15,7 +15,7 @@ RSpec::Core::RakeTask.new(:specfile, :pattern, :seed) do |t, task_args|
   t.rspec_opts += " --seed #{task_args[:seed]}" unless task_args[:seed].to_s.empty?
 end
 
-task :default => :spec
+task default: :spec
 
 require "github/markup"
 require "redcarpet"

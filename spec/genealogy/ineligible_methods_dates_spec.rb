@@ -10,7 +10,7 @@ require 'spec_helper'
 
 
 describe "*** Ineligible methods ***", :ineligible_dates do
-  before { @model = get_test_model({:current_spouse => true }) }
+  before { @model = get_test_model({current_spouse: true }) }
   include_context "unreleted people exist with dates"
 
   describe "louise" do

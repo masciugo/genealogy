@@ -154,8 +154,8 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
   end
 
 
-  context 'when ignoring ineligibility (options for has_parents: {:ineligibility => false})' do
-    before { @model = get_test_model({:ineligibility => false }) }
+  context 'when ignoring ineligibility (options for has_parents: {ineligibility: false})' do
+    before { @model = get_test_model({ineligibility: false }) }
 
     include_context "pedigree exists"
 
@@ -178,8 +178,8 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
 
   end
 
-  context "when ignoring validation (options for has_parents: {:perform_validation => false})" do
-    before { @model = get_test_model({:perform_validation => false }) }
+  context "when ignoring validation (options for has_parents: {perform_validation: false})" do
+    before { @model = get_test_model({perform_validation: false }) }
 
     context "when receiver's father becomes invalid" do
 

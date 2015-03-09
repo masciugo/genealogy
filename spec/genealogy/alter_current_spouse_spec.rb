@@ -21,9 +21,9 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
     end
   end
 
-  context "when enabling current spouse traking and taking account validation and ineligibility by pedigree (options for has_parents: {:current_spouse => true})" do
+  context "when enabling current spouse traking and taking account validation and ineligibility by pedigree (options for has_parents: {current_spouse: true})" do
 
-    before { @model = get_test_model({:current_spouse => true}) }      
+    before { @model = get_test_model({current_spouse: true}) }      
 
     include_context 'unreleted people exist'  
     
@@ -79,8 +79,8 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
 
   end
 
-  context 'when ignoring ineligibility (options for has_parents: {:current_spouse => true, :ineligibility => false})' do
-    before { @model = get_test_model({:current_spouse => true, :ineligibility => false }) }
+  context 'when ignoring ineligibility (options for has_parents: {current_spouse: true, ineligibility: false})' do
+    before { @model = get_test_model({current_spouse: true, ineligibility: false }) }
 
     include_context "pedigree exists"
 
@@ -105,10 +105,10 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
 
   end
 
-  context "when ignoring validation (options for has_parents: {:current_spouse => true, :perform_validation => false})" do
+  context "when ignoring validation (options for has_parents: {current_spouse: true, perform_validation: false})" do
 
     before(:context) do
-      @model = get_test_model({:current_spouse => true, :perform_validation => false})
+      @model = get_test_model({current_spouse: true, perform_validation: false})
     end
 
     include_context 'unreleted people exist'  

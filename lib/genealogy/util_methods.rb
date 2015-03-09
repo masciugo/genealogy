@@ -91,20 +91,6 @@ module Genealogy
     generate_method_parent_birth_range(:father)
     generate_method_parent_birth_range(:mother)
 
-    private
-
-    def max_le(arg=nil)
-      gclass.send("max_#{arg or ssex}_life_expectancy").years
-    end
-
-    def max_fpa(arg=nil)
-      gclass.send("max_#{arg or ssex}_procreation_age").years
-    end
-
-    def min_fpa(arg=nil)
-      gclass.send("min_#{arg or ssex}_procreation_age").years
-    end
-
     def ssex
       case sex
       when gclass.sex_male_value
@@ -120,12 +106,26 @@ module Genealogy
       OPPOSITESEX[ssex]
     end
 
+    private
+
+    def max_le(arg=nil)
+      gclass.send("max_#{arg or ssex}_life_expectancy").years
+    end
+
+    def max_fpa(arg=nil)
+      gclass.send("max_#{arg or ssex}_procreation_age").years
+    end
+
+    def min_fpa(arg=nil)
+      gclass.send("min_#{arg or ssex}_procreation_age").years
+    end
+
     def check_incompatible_relationship(*args)
       relationship = args.shift
       args.each do |relative|
         # puts "[#{__method__}]: #{arg} class: #{arg.class}, #{self} class: #{self.class}"
         next if relative.nil?
-        raise ArgumentError, "Expected #{self.gclass} object. Got #{relative.class}" unless relative.class.equal? self.gclass
+        check_indiv(relative)
         if gclass.ineligibility_enabled
           if ineligibles = self.send("ineligible_#{relationship.to_s.pluralize}")
             # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
@@ -135,6 +135,11 @@ module Genealogy
           end
         end
       end
+    end
+
+    def check_indiv(arg, arg_sex=nil)
+      raise ArgumentError, "Expected #{self.gclass} object. Got #{arg.class}" unless arg.class.equal? self.gclass
+      raise SexError, "Expected a #{arg_sex} as argument. Got a #{arg.ssex}" if arg_sex and arg.ssex != arg_sex
     end
 
   end

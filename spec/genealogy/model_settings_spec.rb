@@ -55,7 +55,7 @@ describe 'TestModel', :model do
     its(:current_spouse_enabled) { is_expected.to be true }
   end
 
-  opts6 = {:perform_validation => false}
+  opts6 = {perform_validation: false}
   context "initialized with options: #{opts6}"  do
     before(:context) { @model = get_test_model(opts6) }
     its(:perform_validation_enabled) { is_expected.to be false }
@@ -83,7 +83,7 @@ describe 'TestModel', :model do
     end
   end
 
-  opts7 = {:column_names => 'bar' }
+  opts7 = {column_names: 'bar' }
   context "initialized with wrong options: #{opts7}"  do
     specify { expect { get_test_model(opts7) }.to raise_error ArgumentError }
   end
