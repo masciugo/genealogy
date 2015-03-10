@@ -5,18 +5,6 @@ module Genealogy
 
     include Constants
 
-    # @return [Boolean] 
-    def is_female?
-      return female? if respond_to?(:female?)
-      sex == gclass.sex_female_value
-    end
-
-    # @return [Boolean] 
-    def is_male?
-      return male? if respond_to?(:male?)
-      sex == gclass.sex_male_value
-    end
-
     # Genealogy thinks time in term of Date, not DateTime
     # @return [Date]
     def birth
@@ -27,6 +15,32 @@ module Genealogy
     # @return [Date]
     def death
       death_date.try(:to_date)
+    end
+
+    # returns the longest possible interval according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy
+    # @return [Range] 
+    def life_range
+      case [birth.present?,death.present?]
+      when [true,true]
+        birth..death
+      when [true,false]
+        birth..(birth + max_le)
+      when [false,true]
+        (death - max_le)..death
+      end
+    end
+
+    # returns the longest possible interval according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy and max and min procreation ages
+    # @return [Range] 
+    def fertility_range
+      case [birth.present?,death.present?]
+      when [true,true]
+        (birth + min_fpa)..([(birth + max_fpa), death].min)
+      when [true,false]
+        (birth + min_fpa)..(birth + max_fpa)
+      when [false,true]
+        (death - max_le + min_fpa)..death
+      end
     end
 
     # According to procreation ages says if self can procreate at specified time
@@ -42,38 +56,6 @@ module Genealogy
     def can_procreate_during?(period)
       fertility_range.overlaps? period if fertility_range
     end
-
-    def died_at
-      death - birth 
-    end
-
-    # If either birth or death are present it's possible to estimate a life range using the life max expectancy
-    # @return [Range] 
-    def life_range
-      case [birth.present?,death.present?]
-      when [true,true]
-        birth..death
-      when [true,false]
-        birth..(birth + max_le)
-      when [false,true]
-        (death - max_le)..death
-      end
-    end
-
-
-    # If either birth or death are present it's possible to estimate a life range using the min and max procreation ages
-    # @return [Range] 
-    def fertility_range
-      case [birth.present?,death.present?]
-      when [true,true]
-        (birth + min_fpa)..([(birth + max_fpa), death].min)
-      when [true,false]
-        (birth + min_fpa)..(birth + max_fpa)
-      when [false,true]
-        (death - max_le + min_fpa)..death
-      end
-    end
-
 
     # @!macro [attach] generate
     #   @method $1_birth_range
@@ -108,6 +90,18 @@ module Genealogy
     # @return [Symbol] 
     def opposite_ssex
       OPPOSITESEX[ssex]
+    end
+
+    # @return [Boolean] 
+    def is_female?
+      return female? if respond_to?(:female?)
+      sex == gclass.sex_female_value
+    end
+
+    # @return [Boolean] 
+    def is_male?
+      return male? if respond_to?(:male?)
+      sex == gclass.sex_male_value
     end
 
     private

@@ -11,7 +11,7 @@ module Genealogy
     # @option options [Boolean] current_spouse (false) specifies whether to track or not individual's current spouse
     # @option options [Boolean] perform_validation (true) specifies whether to perform validation or not while altering pedigree that is before updating relatives external keys
     # @option options [Boolean, Symbol] ineligibility (:pedigree) specifies ineligibility setting. If `false` ineligibility checks will be disbled and you can assign, as relative, any individuals you want. 
-    #   This can be dangerous beacause you can build nosense loop (in terms of pedigree). If pass one of symbols `:pedigree`, `:dates` or `:both` ineligibility checks will be enabled.
+    #   This can be dangerous because you can build nosense loop (in terms of pedigree). If pass one of symbols `:pedigree`, `:dates` or `:both` ineligibility checks will be enabled.
     #   More specifically with `:pedigree` (or `true`) checks will be based on pedigree topography, i.e., ineligible children will include ancestors. With `:dates` check will be based on 
     #   procreation ages (min and max, male and female) and life expectancy (male and female), i.e. an individual born 200 years before is an ineligible mother. With `:both` both kinds of check will be enabled.
     # @option options [Hash] limit_ages (min_male_procreation_age:12, max_male_procreation_age:75, min_female_procreation_age:9, max_female_procreation_age:50, max_male_life_expectancy:110, max_female_life_expectancy:110) 
@@ -89,7 +89,7 @@ module Genealogy
       include Genealogy::QueryMethods
       include Genealogy::IneligibleMethods
       include Genealogy::AlterMethods
-      include Genealogy::SpouseMethods
+      include Genealogy::CurrentSpouseMethods
 
     end
 

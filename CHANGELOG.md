@@ -32,6 +32,8 @@
 
 * eligible methods removed in favor of ineligible ones 
 
+* query methods that used to return Array with arbitrary lenght like #children or #ancestors now return ActiveRecord::Relation
+
 * add/remove_paternal/maternal_half_siblings removed for sake of semplicity/manteinance. use add/remove_siblings with options
 
 ## 1.5.0

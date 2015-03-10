@@ -47,7 +47,6 @@ module Genealogy
     end
 
     # @param [Hash] options
-    # @option options [Symbol] sex to filter result by sex: :male or :female. 
     # @option options [Object] spouse to filter children by spouse
     # @return [ActiveRecord::Relation] children
     def children(options = {})

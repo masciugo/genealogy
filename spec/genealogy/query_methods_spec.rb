@@ -22,13 +22,9 @@ describe "*** Query methods ***", :done, :query do
       context 'with argument :father' do
         specify { expect(@model.all_with(:father)).to match_array [irene, beatrix, julian, mary, peter, ruben, steve, mark, rud, titty, michelle, charlie, sam, sue, terry, paul, emily, tommy, barbara, john, paso, debby, jack] }
       end
-    end
-    describe ".all_with" do
       context 'with argument :mother' do
         specify { expect(@model.all_with(:mother)).to match_array [john, paso, mary, irene, mark, rud, titty, debby, jack, tommy, barbara, charlie, sam, sue, beatrix, julian, michelle, emily, paul, peter, steve] }
       end
-    end
-    describe ".all_with" do
       context 'with argument :parents' do
         specify { expect(@model.all_with(:parents)).to match_array [john, paso, mary, irene, mark, rud, titty, debby, jack, tommy, barbara, charlie, sam, sue, beatrix, julian, michelle, emily, paul, peter, steve] }
       end

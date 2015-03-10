@@ -1,6 +1,6 @@
 module Genealogy
-  # Module SpouseMethods provides methods to manage and query current spouse. It's included by the genealogy enabled AR model
-  module SpouseMethods
+  # Module CurrentSpouseMethods provides methods to manage and query current spouse. It's included by the genealogy enabled AR model
+  module CurrentSpouseMethods
     extend ActiveSupport::Concern
 
     include Constants
