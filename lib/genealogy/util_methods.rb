@@ -59,7 +59,7 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method $1_birth_range
-    #   If life range is definable than it's possible to estimate the $1 life range using the min and max procreation ages
+    #   If life range is estimable than it's also possible to estimate the $1 life range using the min and max procreation ages
     #   @return [Range]
     def self.generate_method_parent_birth_range(parent)
       define_method "#{parent}_birth_range" do
@@ -124,7 +124,7 @@ module Genealogy
         # puts "[#{__method__}]: #{arg} class: #{arg.class}, #{self} class: #{self.class}"
         next if relative.nil?
         check_indiv(relative)
-        if gclass.ineligibility_enabled
+        if gclass.ineligibility_level >= PEDIGREE
           if ineligibles = self.send("ineligible_#{relationship.to_s.pluralize}")
             # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
             raise IncompatibleRelationshipException, "#{relative} can't be #{relationship} of #{self}" if ineligibles.include? relative

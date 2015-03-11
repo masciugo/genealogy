@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe "*** Util methods ***", :util do
-  before { @model = get_test_model({current_spouse: true, ineligibility: :dates, limit_ages: { min_male_procreation_age: 12, max_male_procreation_age: 75, min_female_procreation_age: 9, max_female_procreation_age: 50, max_male_life_expectancy: 110, max_female_life_expectancy: 110} }) }
-  include_context "unreleted people exist with dates"
+  before { @model = get_test_model({current_spouse: true, ineligibility: :pedigree_and_dates, limit_ages: { min_male_procreation_age: 12, max_male_procreation_age: 75, min_female_procreation_age: 9, max_female_procreation_age: 50, max_male_life_expectancy: 110, max_female_life_expectancy: 110} }) }
+  
+  include_context 'unreleted people exist'
+  include_context 'individuals have dates'
 
   describe "#birth" do
     subject { louise.birth }

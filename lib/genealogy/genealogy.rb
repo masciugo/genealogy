@@ -10,10 +10,10 @@ module Genealogy
     # @param [Hash] options
     # @option options [Boolean] current_spouse (false) specifies whether to track or not individual's current spouse
     # @option options [Boolean] perform_validation (true) specifies whether to perform validation or not while altering pedigree that is before updating relatives external keys
-    # @option options [Boolean, Symbol] ineligibility (:pedigree) specifies ineligibility setting. If `false` ineligibility checks will be disbled and you can assign, as relative, any individuals you want. 
-    #   This can be dangerous because you can build nosense loop (in terms of pedigree). If pass one of symbols `:pedigree`, `:dates` or `:both` ineligibility checks will be enabled.
-    #   More specifically with `:pedigree` (or `true`) checks will be based on pedigree topography, i.e., ineligible children will include ancestors. With `:dates` check will be based on 
-    #   procreation ages (min and max, male and female) and life expectancy (male and female), i.e. an individual born 200 years before is an ineligible mother. With `:both` both kinds of check will be enabled.
+    # @option options [Boolean, Symbol] ineligibility (:pedigree) specifies ineligibility setting. If `false` ineligibility checks will be disabled and you can assign, as a relative, any individuals you want. 
+    #   This can be dangerous because you can build nosense loop (in terms of pedigree). If pass one of symbols `:pedigree` or `:pedigree_and_dates` ineligibility checks will be enabled.
+    #   More specifically with `:pedigree` (or `true`) checks will be based on pedigree topography, i.e., ineligible children will include ancestors. With `:pedigree_and_dates` check will also be based on 
+    #   procreation ages (min and max, male and female) and life expectancy (male and female), i.e. an individual born 200 years before is an ineligible mother
     # @option options [Hash] limit_ages (min_male_procreation_age:12, max_male_procreation_age:75, min_female_procreation_age:9, max_female_procreation_age:50, max_male_life_expectancy:110, max_female_life_expectancy:110) 
     #   specifies one or more limit ages different than defaults
     # @option options [Hash] column_names (sex:'sex', father_id:'father_id', mother_id:'mother_id', current_spouse_id:'current_spouse_id', birth_date:'birth_date', death_date:'death_date') specifies column names to map database individual table
@@ -27,24 +27,24 @@ module Genealogy
       class_attribute :gclass, instance_writer: false
       self.gclass = self 
       
-      class_attribute :ineligibility_enabled, :ineligibility_criteria, instance_accessor: false
-      self.ineligibility_enabled, self.ineligibility_criteria = case options[:ineligibility]
+      class_attribute :ineligibility_level, instance_accessor: false
+      self.ineligibility_level = case options[:ineligibility]
       when :pedigree
-        [true, [:pedigree]]
-      when :dates
-        [true, [:dates]]
-      when :both
-        [true, [:pedigree, :dates]]
+        PEDIGREE
+      when true
+        PEDIGREE
+      when :pedigree_and_dates
+        PEDIGREE_AND_DATES
       when false
-        [false, nil]
+        OFF
       when nil
-        [true, [:pedigree]]
+        PEDIGREE
       else
-        raise ArgumentError, "ineligibility option must be one among :pedigree, :dates, :both or false"
+        raise ArgumentError, "ineligibility option must be one among :pedigree, :pedigree_and_dates or false"
       end
 
       ## limit_ages
-      if ineligibility_enabled and ineligibility_criteria.include? :dates
+      if ineligibility_level >= PEDIGREE_AND_DATES
         DEFAULTS[:limit_ages].each do |age,v|
           class_attribute age, instance_accessor: false
           self.send("#{age}=", options[:limit_ages].try(:[],age) || v)

@@ -24,6 +24,11 @@ module Genealogy
       }
     }
 
+    # ineligibility levels
+    PEDIGREE = 1
+    PEDIGREE_AND_DATES = 2
+    OFF = 0
+
     PARENT2LINEAGE = ActiveSupport::HashWithIndifferentAccess.new({ father: :paternal, mother: :maternal })
     LINEAGE2PARENT = ActiveSupport::HashWithIndifferentAccess.new({ paternal: :father, maternal: :mother })
     PARENT2SEX = ActiveSupport::HashWithIndifferentAccess.new({ father: :male, mother: :female })
