@@ -17,7 +17,7 @@ module Genealogy
       death_date.try(:to_date)
     end
 
-    # returns the longest possible interval according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy
+    # returns the longest possible interval of life range according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy
     # @return [Range] 
     def life_range
       case [birth.present?,death.present?]
@@ -30,12 +30,22 @@ module Genealogy
       end
     end
 
-    # returns the longest possible interval according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy and max and min procreation ages
+    # returns the longest possible interval of birth range according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy
+    # @return [Range] 
+    def birth_range
+      if birth
+        birth..birth
+      elsif death
+        (death - max_le)..death
+      end
+    end
+
+    # returns the longest possible interval of fertility range according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy and max and min procreation ages
     # @return [Range] 
     def fertility_range
       case [birth.present?,death.present?]
       when [true,true]
-        (birth + min_fpa)..([(birth + max_fpa), death].min)
+        (birth + min_fpa)..([(birth + max_fpa), death].min) if death > birth + min_fpa
       when [true,false]
         (birth + min_fpa)..(birth + max_fpa)
       when [false,true]
@@ -47,19 +57,19 @@ module Genealogy
     # @param [Date] date
     # @return [Boolean] 
     def can_procreate_on?(date)
-      fertility_range.cover? date if fertility_range
+      fertility_range.cover? date if date and fertility_range
     end
 
     # According to procreation ages says if self can procreate at specified time
-    # @param [Range] period is a range of dates
+    # @param [Range] period is a range of birth dates
     # @return [Boolean] 
     def can_procreate_during?(period)
-      fertility_range.overlaps? period if fertility_range
+      fertility_range.overlaps? period if period and fertility_range
     end
 
     # @!macro [attach] generate
     #   @method $1_birth_range
-    #   If life range is estimable than it's also possible to estimate the $1 life range using the min and max procreation ages
+    #   If birth or life range is known than it's also possible to estimate the $1 birth range
     #   @return [Range]
     def self.generate_method_parent_birth_range(parent)
       define_method "#{parent}_birth_range" do
@@ -72,6 +82,20 @@ module Genealogy
     end
     generate_method_parent_birth_range(:father)
     generate_method_parent_birth_range(:mother)
+
+    # @!macro [attach] generate
+    #   @method $1_fertility_range
+    #   If $1 birth range is estimable than it's also possible to estimate the $1 fertility range 
+    #   @return [Range]
+    def self.generate_method_parent_fertility_range(parent)
+      define_method "#{parent}_fertility_range" do
+        if parent_birth_range = send("#{parent}_birth_range")
+          (parent_birth_range.begin + min_fpa(PARENT2SEX[parent]))..(parent_birth_range.end + max_fpa(PARENT2SEX[parent]))
+        end
+      end
+    end
+    generate_method_parent_fertility_range(:father)
+    generate_method_parent_fertility_range(:mother)
 
     # sex in terms of :male or :female
     # @return [Symbol] 

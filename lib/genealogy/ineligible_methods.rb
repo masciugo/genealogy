@@ -16,7 +16,7 @@ module Genealogy
           ineligibles = []
           ineligibles |= descendants | [self] | gclass.send("#{OPPOSITESEX[PARENT2SEX[parent]]}s") if gclass.ineligibility_level >= PEDIGREE
           if gclass.ineligibility_level >= PEDIGREE_AND_DATES  and life_range
-            ineligibles += (gclass.all - ineligibles).find_all do |indiv|
+            ineligibles |= (gclass.all - ineligibles).find_all do |indiv|
               if indiv.life_range
                 if birth
                   !indiv.can_procreate_on?(birth)
@@ -48,7 +48,7 @@ module Genealogy
           ineligibles = []
           ineligibles |= [parent].compact | descendants | siblings | send("#{lineage}_half_siblings") | [self] | gclass.send("#{OPPOSITESEX[PARENT2SEX[grandparent]]}s") if gclass.ineligibility_level >= PEDIGREE
           if gclass.ineligibility_level >= PEDIGREE_AND_DATES              
-            ineligibles += if parent
+            ineligibles |= if parent
               parent.send("ineligible_#{grandparent}s")
             else
               (gclass.all - ineligibles).find_all do |indiv|
@@ -75,9 +75,9 @@ module Genealogy
     def ineligible_children
       ineligibles = []
       ineligibles |= ancestors | children | siblings | [self] | gclass.all_with(SEX2PARENT[ssex]) if gclass.ineligibility_level >= PEDIGREE
-      # if gclass.ineligibility_criteria.include? :dates
-      # else
-      # end
+      if gclass.ineligibility_level >= PEDIGREE_AND_DATES and fertility_range
+        ineligibles |= (gclass.all - ineligibles).find_all{ |indiv| !can_procreate_during?(indiv.birth_range)}
+      end
       ineligibles
     end
 
@@ -90,9 +90,25 @@ module Genealogy
         ineligibles |= (father ? gclass.all_with(:father).where.not(father_id: father) : [])
         ineligibles |= (mother ? gclass.all_with(:mother).where.not(mother_id: mother) : [])
       end
-      # if gclass.ineligibility_criteria.include? :dates
-      # else
-      # end
+      if gclass.ineligibility_level >= PEDIGREE_AND_DATES 
+        # if a parent is present ineligible siblings are parent's ineligible children, otherwise try to estimate parent birth range.
+        # If it's possible ineligible siblings are all individuals whose life range overlaps parent birth range
+        [:father,:mother].each do |parent|
+          if p = send(parent)
+            ineligibles |= p.ineligible_children
+          elsif parent_fertility_range = send("#{parent}_fertility_range")
+            remainings = gclass.all - ineligibles
+            ineligibles |= remainings.find_all do |indiv|
+              if ibr = indiv.birth_range
+                !parent_fertility_range.overlaps? ibr
+              else
+                false
+              end
+            end
+          end
+        end
+      else
+      end
       ineligibles
     end
 

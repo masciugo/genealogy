@@ -50,6 +50,27 @@ describe "*** Util methods ***", :util do
     end
   end
 
+  describe "#birth_range" do
+    context 'when birth is known' do
+      subject { naomi.birth_range }
+      it { is_expected.to be_instance_of Range }
+      it "returns the birth range" do
+        is_expected.to eq Date.new(1950,11,6)..Date.new(1950,11,6)
+      end
+    end
+    context 'when only death is known' do
+      subject { titty.birth_range }
+      it { is_expected.to be_instance_of Range }
+      it "returns the birth range" do
+        is_expected.to eq Date.new(2010-110,8,6)..Date.new(2010,8,6)
+      end
+    end
+    context 'when are both unknown' do
+      subject { luis.life_range }
+      it { is_expected.to be nil }
+    end
+  end
+
   describe "#fertility_range" do
     context 'when birth and death are known' do
       subject { louise.fertility_range }
@@ -74,6 +95,14 @@ describe "*** Util methods ***", :util do
     end
     context 'when are both unknown' do
       subject { luis.fertility_range }
+      it { is_expected.to be nil }
+    end
+    context 'when receiver died before reaching max fertility age' do
+      subject { maggie.fertility_range }
+      it { is_expected.to eq Date.new(1952+9,4,17)..Date.new(1979,6,6) }
+    end
+    context 'when receiver does not reach the minimal fertility age' do
+      subject { mary.fertility_range }
       it { is_expected.to be nil }
     end
   end
@@ -118,6 +147,11 @@ describe "*** Util methods ***", :util do
       subject { luis.father_birth_range }
       it { is_expected.to be nil }
     end
+    context "when father's birth is known" do
+      it "covers father's birth" do
+        expect(irene.father_birth_range).to cover(tommy.birth)
+      end
+    end
   end
 
   describe "#mother_birth_range" do
@@ -128,6 +162,35 @@ describe "*** Util methods ***", :util do
     end
     context "when receiver's life range is not estimable" do
       subject { luis.mother_birth_range }
+      it { is_expected.to be nil }
+    end
+    context "when mother's birth is known" do
+      it "covers mother's birth" do
+        expect(irene.mother_birth_range).to cover(emily.birth)
+      end
+    end
+  end
+
+  describe "#father_fertility_range" do
+    context "when receiver's father_birth_range is estimable" do
+      subject { louise.father_fertility_range }
+      it { is_expected.to be_instance_of Range }
+      it { is_expected.to eq Date.new(1874-75+12,4,10)..Date.new(1874-12+75,4,10) }
+    end
+    context "when receiver's father_birth_range is not estimable" do
+      subject { luis.father_fertility_range }
+      it { is_expected.to be nil }
+    end
+  end
+
+  describe "#mother_fertility_range" do
+    context "when receiver's mother_birth_range is estimable" do
+      subject { louise.mother_fertility_range }
+      it { is_expected.to be_instance_of Range }
+      it { is_expected.to eq Date.new(1874-50+9,4,10)..Date.new(1874-9+50,4,10) }
+    end
+    context "when receiver's mother_birth_range is not estimable" do
+      subject { luis.mother_fertility_range }
       it { is_expected.to be nil }
     end
   end
