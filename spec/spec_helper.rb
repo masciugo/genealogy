@@ -17,7 +17,7 @@ end
 require 'rspec/its'
 
 RSpec.configure do |config|
-  config.fail_fast = true
+  # config.fail_fast = true
   # config.order = "random" # examples are are not ready for this
   config.color = true
   config.formatter = :documentation

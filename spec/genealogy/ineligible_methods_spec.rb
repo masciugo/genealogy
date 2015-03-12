@@ -386,7 +386,7 @@ describe "*** Ineligible methods ***", :ineligible do
       end
     end
 
-    describe "#ineligible_siblings", :cin do
+    describe "#ineligible_siblings" do
       # it_behaves_like "including siblings because of checks on pedigree"
       it "includes individuals too young (based on female fertility range, 41 years is the max birth year interval between siblings)" do
         expect(debby.ineligible_siblings).to include mia 
@@ -396,10 +396,26 @@ describe "*** Ineligible methods ***", :ineligible do
       end
     end
 
-    describe "#ineligible_children" do
-      it_behaves_like "including children because of checks on pedigree"
-      it "includes individuals too young"
-      it "includes individuals too old"
+    describe "#ineligible_children", :cin do
+      # it_behaves_like "including children because of checks on pedigree"
+      it "includes individuals born before parents" do
+        expect(paul.ineligible_children).to include naomi                 
+      end
+
+      it "includes individuals born after mother death" do
+        expect(irene.ineligible_children).to include mia                 
+      end
+      it "includes individuals born before parents death" do
+        expect(irene.ineligible_children).to include alison                 
+      end
+
+      it "includes individuals too young" do
+        titty.update_attributes(father_id: nil, mother_id: nil)
+        expect(debby.ineligible_children).to include mia and
+        expect(tommy.ineligible_children).to include mia and
+        expect(rosa.ineligible_children).to include titty
+      end
+      # it "includes individuals too old" non ha molto senso
     end
 
   end
