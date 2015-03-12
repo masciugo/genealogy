@@ -20,7 +20,7 @@ Genealogy takes inspiration from the simple [linkage file format](http://www.hel
     
     `rails g migration add_parents_to_<table> sex:string father_id:integer mother_id:integer [current_spouse_id:integer]`. 
 
-    Read [here](https://github.com/masciugo/genealogy#current_spouse) for optional current spouse column explanation. If necessary, all [column names can be customized](https://github.com/masciugo/genealogy#column_names)
+    Read [here](#current_spouse) for optional current spouse column explanation. If necessary, all [column names can be customized](#column_names)
     
     * Add indexes, separately and in combination, to parents columns
 
