@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors       = ["masciugo"]
   s.email         = ["masciugo@gmail.com"]
   s.homepage      = "https://github.com/masciugo/genealogy"
-  s.summary       = "Organise ActiveRecord models into a genealogical tree structure"
-  s.description   = "Genealogy is a ruby gem library which extend ActiveRecord::Base class with familiar relationships capabilities in order to build and query genealogies"
+  s.summary       = "Make ActiveRecord model act as a pedigree"
+  s.description   = "Genealogy is a ruby gem library which extends ActiveRecord models in order to make its instances act as relatives so that you can build and query genealogies"
 
   s.files         = `git ls-files app lib`.split("\n")
   s.platform      = Gem::Platform::RUBY
