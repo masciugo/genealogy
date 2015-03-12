@@ -27,7 +27,7 @@ Genealogy takes inspiration from the simple [linkage file format](http://www.hel
 3. Add `has_parents` to your model (put after the enum for sex attribute values if present)
 
 ## Usage
-Genealogized models acquire different kinds of methods: most importantly from the user point of view are *query methods* and *alter methods*, secondary *ineligible methods*, *scope methods* and *utility methods*. The following is a simple overview, please refer to [documentation](https://github.com/masciugo/genealogy#) for a better understanding.
+Genealogized models acquire different kinds of methods: most importantly from the user point of view are *query methods* and *alter methods*, secondary *ineligible methods*, *scope methods* and *utility methods*. The following is a simple overview, please go [here](#test-and-documentation-toghether) for a better understanding of the library.
 
 ### Query methods
 These self explanatory methods simply parse the tree (through parents' associations) in order to respond to relatives queries. 
@@ -52,7 +52,7 @@ Like query methods, they can take options: `paul.add_children(julian, spouse: mi
 
 * `:off` ineligibility checks are disabled. Consistency is up to the user. Mistakes can lead to unpredictable beahviors
 * `:pedigree` (default) checks are based on the pedigree (e.g., an individual cannot have ancestors as children)
-* `:pedigree_and_dates` checks are based on pedigree and on individual dates, birth and death, in combination with life expectancy ages and procreation ages (see [here](https://github.com/masciugo/genealogy#limit_ages) to change them)
+* `:pedigree_and_dates` checks are based on pedigree and on individual dates, birth and death, in combination with life expectancy ages and procreation ages (see [here](#limit_ages) to change them)
 
 When ineligibility is enabled, before altering the pedigree, ineligible methods will be run to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.eligible_fathers`.
 
@@ -83,7 +83,7 @@ This option takes a 2-elements array which by deafult is:
 They represents the value used in the db for gender.
 
 ##### `:ineligibility`
-This option takes one of symbols `:off`, `:pedigree` and `pedigree_and_dates`. See [here](https://github.com/masciugo/genealogy#ineligibility-and-ineligible-methods) for ineligibility description. Default is `:pedigree`.
+This option takes one of symbols `:off`, `:pedigree` and `pedigree_and_dates`. See [here](#ineligibility-and-ineligible-methods) for ineligibility description. Default is `:pedigree`.
 
 ##### `:limit_ages`
 This option will be taken in consideration only if ineligibility is set on `:pedigree_and_dates` level. It takes an hash which by deafult is:
