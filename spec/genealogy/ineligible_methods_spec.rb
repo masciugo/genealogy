@@ -371,7 +371,7 @@ describe "*** Ineligible methods ***", :ineligible do
       end
     end
 
-    describe "#ineligible_maternal_grandmothers", :cin do
+    describe "#ineligible_maternal_grandmothers"do
       # it_behaves_like "including maternal grandmothers because of checks on pedigree"
       # it_behaves_like "including individuals because of basic checks", :rud, :paul, :maternal_grandmother, :female
       it "includes individuals not born yet" do
@@ -386,10 +386,14 @@ describe "*** Ineligible methods ***", :ineligible do
       end
     end
 
-    describe "#ineligible_siblings" do
-      it_behaves_like "including siblings because of checks on pedigree"
-      it "includes individuals too young"
-      it "includes individuals too old"
+    describe "#ineligible_siblings", :cin do
+      # it_behaves_like "including siblings because of checks on pedigree"
+      it "includes individuals too young (based on female fertility range, 41 years is the max birth year interval between siblings)" do
+        expect(debby.ineligible_siblings).to include mia 
+      end      
+      it "includes individuals too old" do
+        expect(larry.ineligible_siblings).to include manuel         
+      end
     end
 
     describe "#ineligible_children" do
