@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe "*** Query methods ***", :done, :query do
+describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files) *** ", :done, :query do
 
-  before { @model = get_test_model({current_spouse: true, column_names: {mother_id: 'madre'}})}
+  before { @model = get_test_model({current_spouse: true})}
   include_context "pedigree exists"
 
   describe "class methods" do

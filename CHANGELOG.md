@@ -6,7 +6,13 @@
 
 * YARD docs
 
-* 
+* many query methods now return ActiveRecord::Relation 
+
+* ineligibility
+
+### enhancements
+
+* more comprehensive suite test
 
 ### bug fixes
 
@@ -14,17 +20,12 @@
 
 * eligible siblings method now excludes descendants
 
-* 
-
-* 
-
-* 
 
 ### backward incompatibilities
 
 * add_father, add_mother and add_current_spouse methods not raising a SexError anymore. IncompatibleRelationshipException will be raised
 
-* age query method removed 
+* age query method removed. Was imprecise and solution not so easy as it may appear. Use something like https://github.com/radar/dotiw for a more comprehensive tool
 
 * removed offspring* methods in favor of children* methods
 
