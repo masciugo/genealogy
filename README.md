@@ -1,6 +1,6 @@
 # Genealogy
 
-[![Build Status](https://travis-ci.org/masciugo/genealogy.svg?branch=v1.4.0)](https://travis-ci.org/masciugo/genealogy)
+[![Build Status](https://travis-ci.org/masciugo/genealogy.svg)](https://travis-ci.org/masciugo/genealogy)
 
 ## Description
 
