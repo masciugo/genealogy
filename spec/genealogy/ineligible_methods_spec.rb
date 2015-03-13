@@ -279,7 +279,7 @@ describe "*** Ineligible methods ***", :ineligible do
 
   end
 
-  context 'when ineligibility checks involve pedigree and dates', :wipp do
+  context 'when ineligibility checks involve pedigree and dates' do
 
     before { 
       @model = get_test_model({
@@ -293,105 +293,134 @@ describe "*** Ineligible methods ***", :ineligible do
     describe "#ineligible_fathers" do
       it_behaves_like "including fathers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :manuel, :father, :male
-      it "includes individuals not born yet" do
-        expect(alison.ineligible_fathers).to include mark and
-        expect(manuel.ineligible_fathers).to include paso,john
-      end
-      it "includes died individuals" do
-        expect(marcel.ineligible_fathers).to include larry      
-      end
-      it "includes individuals too young (not fertile)" do
-        expect(marcel.ineligible_fathers).to include tommy,jack and
-        expect(manuel.ineligible_fathers).to include ned
-      end
-      it "includes individuals too old (not fertile)" do
-        expect(mia.ineligible_fathers).to include jack,tommy
+      context 'when life range is estimable' do
+        it "includes individuals too young (not fertile)" do
+          expect(marcel.ineligible_fathers).to include tommy,jack and
+          expect(manuel.ineligible_fathers).to include ned
+        end
+        it "includes individuals too young (not born yet)" do
+          expect(alison.ineligible_fathers).to include mark and
+          expect(manuel.ineligible_fathers).to include paso,john
+        end
+        it "includes individuals too old (not fertile)" do
+          expect(mia.ineligible_fathers).to include jack,tommy
+        end
+        it "includes individuals too old (died)" do
+          expect(marcel.ineligible_fathers).to include larry      
+        end
       end
     end
 
     describe "#ineligible_mothers" do
       it_behaves_like "including mothers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :mia, :mother, :female
-      it "includes individuals not born yet" do
-        expect(naomi.ineligible_mothers).to include maggie,mia
+      context 'when life range is estimable' do
+        it "includes individuals too young (not fertile)" do
+          expect(larry.ineligible_mothers).to include titty
+        end
+        it "includes individuals too young (not born yet)" do
+          expect(naomi.ineligible_mothers).to include maggie,mia
+        end
+        it "includes individuals too old (not fertile)" do
+          expect(manuel.ineligible_mothers).to include rosa
+        end
+        it "includes individuals too old (died)" do
+          expect(naomi.ineligible_mothers).to include emily
+        end
+        it "does not includes individuals with birth date unknown (maybe still fertile)" do
+          titty.update_attributes(father_id: nil, mother_id: nil)
+          expect(bob.ineligible_mothers).not_to include titty
+        end  
+        it "does not includes individuals born on mother's date of death" do
+          naomi.update_attributes(death_date: Date.new(1952,4,17), birth_date: Date.new(1932,4,18))
+          expect(maggie.ineligible_mothers).not_to include naomi
+        end
       end
-      it "includes died individuals" do
-        expect(naomi.ineligible_mothers).to include emily
-      end
-      it "includes individuals too young (not fertile)" do
-        expect(larry.ineligible_mothers).to include titty
-      end
-      it "includes individuals too old (not fertile)" do
-        expect(manuel.ineligible_mothers).to include rosa
-      end
-      it "does not includes individuals with birth date unknown (maybe still fertile)" do
-        titty.update_attributes(father_id: nil, mother_id: nil)
-        expect(bob.ineligible_mothers).not_to include titty
-      end  
-      it "does not includes individuals born on mother's date of death" do
-        naomi.update_attributes(death_date: Date.new(1952,4,17), birth_date: Date.new(1932,4,18))
-        expect(maggie.ineligible_mothers).not_to include naomi
-      end
-
     end
 
     describe "#ineligible_paternal_grandfathers" do
       it_behaves_like "including paternal grandfathers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :paul, :paternal_grandfather, :male
-      it "includes individuals not born yet" do
-        expect(naomi.ineligible_paternal_grandfathers).to include paul,mark
+      context 'when has father' do
+        it "returns the same as father.ineligible_fathers" do
+          expect(terry.ineligible_paternal_grandfathers).to match_array terry.father.ineligible_fathers
+        end
       end
-      it "includes individuals too young" do
-        expect(mia.ineligible_paternal_grandfathers).to include rud
-      end
-      it "includes individuals too old" do
-        marcel.update_attributes(birth_date: Date.new(1834,4,17))
-        expect(mia.ineligible_paternal_grandfathers).to include larry,marcel
+      context 'when does not have father' do
+        it "includes individuals too young (not born yet)" do
+          expect(naomi.ineligible_paternal_grandfathers).to include rud,paul,mark
+        end
+        it "includes individuals too old" do
+          marcel.update_attributes(birth_date: Date.new(1834,4,17))
+          expect(mia.ineligible_paternal_grandfathers).to include larry,marcel
+        end
       end
     end
 
     describe "#ineligible_paternal_grandmothers" do
       it_behaves_like "including paternal grandmothers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :mia, :paternal_grandmother, :female
-      it "includes individuals not born yet" do
-        expect(naomi.ineligible_paternal_grandmothers).to include maggie,barbara
+      context 'when has father' do
+        it "returns the same as father.ineligible_mothers" do
+          expect(paul.ineligible_paternal_grandmothers).to match_array paul.father.ineligible_mothers
+        end
       end
-      it "includes individuals too young" do
-        expect(maggie.ineligible_paternal_grandmothers).to include naomi,terry,irene
-      end
-      it "includes individuals too old" do
-        rosa.update_attributes(birth_date: Date.new(183,10,6))
-        expect(mia.ineligible_paternal_grandmothers).to include rosa
+      context 'when does not have father' do
+        it "includes individuals too young (not born yet)" do
+          expect(naomi.ineligible_paternal_grandmothers).to include maggie,barbara
+        end
+        it "includes individuals too young" do
+          expect(maggie.ineligible_paternal_grandmothers).to include naomi,terry,irene
+        end
+        it "includes individuals too old" do
+          rosa.update_attributes(birth_date: Date.new(183,10,6))
+          expect(mia.ineligible_paternal_grandmothers).to include rosa
+        end
       end
     end
 
     describe "#ineligible_maternal_grandfathers" do
       it_behaves_like "including maternal grandfathers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :sam, :maternal_grandfather, :male
-      it "includes individuals not born yet" do
-        expect(naomi.ineligible_maternal_grandfathers).to include paul,mark
+      context 'when has mother' do
+        it "returns the same as mother.ineligible_fathers" do
+          expect(paso.ineligible_maternal_grandfathers).to match_array paso.mother.ineligible_fathers
+        end
       end
-      it "includes individuals too young" do
-        expect(mia.ineligible_maternal_grandfathers).to include rud
-      end
-      it "includes individuals too old" do
-        marcel.update_attributes(birth_date: Date.new(1834,4,17))
-        expect(mia.ineligible_maternal_grandfathers).to include larry,marcel
+      context 'when does not have mother' do
+        it "includes individuals too young (not born yet)" do
+          expect(naomi.ineligible_maternal_grandfathers).to include paul,mark
+        end
+        it "includes individuals too young" do
+          expect(mia.ineligible_maternal_grandfathers).to include rud
+        end
+        it "includes individuals too old" do
+          marcel.update_attributes(birth_date: Date.new(1834,4,17))
+          expect(mia.ineligible_maternal_grandfathers).to include larry,marcel
+        end
       end
     end
 
     describe "#ineligible_maternal_grandmothers"do
       it_behaves_like "including maternal grandmothers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :paul, :maternal_grandmother, :female
-      it "includes individuals not born yet" do
-        expect(naomi.ineligible_maternal_grandmothers).to include maggie,barbara
+
+      context 'when has mother' do
+        it "returns the same as mother.ineligible_mothers" do
+          expect(paul.ineligible_maternal_grandmothers).to match_array paul.mother.ineligible_mothers
+        end
       end
-      it "includes individuals too young" do
-        expect(maggie.ineligible_maternal_grandmothers).to include naomi,terry,irene
-      end
-      it "includes individuals too old" do
-        rosa.update_attributes(birth_date: Date.new(183,10,6))
-        expect(mia.ineligible_maternal_grandmothers).to include rosa
+      context 'when does not have mother' do
+        it "includes individuals too young (not born yet)" do
+          expect(naomi.ineligible_maternal_grandmothers).to include maggie,barbara
+        end
+        it "includes individuals too young" do
+          expect(maggie.ineligible_maternal_grandmothers).to include naomi,terry,irene
+        end
+        it "includes individuals too old" do
+          rosa.update_attributes(birth_date: Date.new(183,10,6))
+          expect(mia.ineligible_maternal_grandmothers).to include rosa
+        end
       end
     end
 

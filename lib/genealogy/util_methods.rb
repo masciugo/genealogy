@@ -17,66 +17,72 @@ module Genealogy
       death_date.try(:to_date)
     end
 
-    # returns the longest possible interval of life range according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy
-    # @return [Range] 
+    # optimistic (longest) estimation of life period. Calculation is based on available dates and max life expectancy
+    # @return [Range] life period or nil if cannot be computable
     def life_range
-      case [birth.present?,death.present?]
-      when [true,true]
-        birth..death
-      when [true,false]
-        birth..(birth + max_le)
-      when [false,true]
-        (death - max_le)..death
+      if birth
+        if death
+          birth..death # exact
+        else
+          birth..(birth + max_le) # estimation based on birth
+        end
+      elsif death
+        (death - max_le)..death # estimation based on death
       end
     end
 
-    # returns the longest possible interval of birth range according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy
-    # @return [Range] 
+    # optimistic (longest) estimation of birth date. Calculation is based on available dates and max life expectancy
+    # @return [Range] longest possible birth date interval or nil if cannot be computable
     def birth_range
       if birth
-        birth..birth
+        birth..birth # exact
       elsif death
-        (death - max_le)..death
+        (death - max_le)..death # estimation based on death
       end
     end
 
-    # returns the longest possible interval of fertility range according to available dates. If one or both of them are missing, an estimation will be returned based on life max expectancy and max and min procreation ages
-    # @return [Range] 
+    # optimistic (longest) estimation of fertility period. Calculation is based on available dates, max life expectancy and min and max fertility procreation ages
+    # @return [Range] fertility period, nil if cannot be computable, false if died before reaching min fertility age
     def fertility_range
-      case [birth.present?,death.present?]
-      when [true,true]
-        (birth + min_fpa)..([(birth + max_fpa), death].min) if death > birth + min_fpa
-      when [true,false]
-        (birth + min_fpa)..(birth + max_fpa)
-      when [false,true]
-        (death - max_le + min_fpa)..death
+      if birth
+        if death
+          if death > birth + min_fpa
+            (birth + min_fpa)..([(birth + max_fpa), death].min) # best estimation
+          else
+            false # died before reaching min fertility age
+          end
+        else
+          (birth + min_fpa)..(birth + max_fpa) # estimation based on birth
+        end
+      elsif death
+        (death - max_le + min_fpa)..death # estimation based on death
       end
     end
 
-    # According to procreation ages says if self can procreate at specified time
+    # It tests whether fertility range covers specified date
     # @param [Date] date
-    # @return [Boolean] 
+    # @return [Boolean] or nil if cannot be computable (#fertility_range returns nil)
     def can_procreate_on?(date)
       fertility_range.cover? date if date and fertility_range
     end
 
-    # According to procreation ages says if self can procreate at specified time
-    # @param [Range] period is a range of birth dates
-    # @return [Boolean] 
+    # It tests whether fertility range overlaps specified period
+    # @param [Range] period 
+    # @return [Boolean] or nil if cannot be computable (#fertility_range returns nil)
     def can_procreate_during?(period)
       fertility_range.overlaps? period if period and fertility_range
     end
 
     # @!macro [attach] generate
     #   @method $1_birth_range
-    #   If birth or life range is known than it's also possible to estimate the $1 birth range
-    #   @return [Range]
+    #   optimistic (longest) estimation of $1's birth date. Calculation is based on receiver's birth or #life_range, max life expectancy and min and max fertility procreation ages
+    #   @return [Range] longest possible $1's birth date interval or nil when is not computable that is when birth or life range are not available
     def self.generate_method_parent_birth_range(parent)
       define_method "#{parent}_birth_range" do
         if birth
-          (birth - max_fpa(PARENT2SEX[parent]))..(birth - min_fpa(PARENT2SEX[parent]))
+          (birth - gclass.send("max_#{PARENT2SEX[parent]}_procreation_age").years)..(birth - gclass.send("min_#{PARENT2SEX[parent]}_procreation_age").years)
         elsif life_range
-          (life_range.begin - max_fpa(PARENT2SEX[parent]))..(life_range.end - min_fpa(PARENT2SEX[parent]))
+          (life_range.begin - gclass.send("max_#{PARENT2SEX[parent]}_procreation_age").years)..(life_range.end - gclass.send("min_#{PARENT2SEX[parent]}_procreation_age").years)
         end
       end
     end
@@ -85,12 +91,12 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method $1_fertility_range
-    #   If $1 birth range is estimable than it's also possible to estimate the $1 fertility range 
-    #   @return [Range]
+    #   optimistic (longest) estimation of $1's fertility range. Calculation is based on receiver's #$1_birth_range, min and max fertility procreation ages
+    #   @return [Range] longest possible $1's fertility period or nil when is not computable that is when $1_birth_range is not computable
     def self.generate_method_parent_fertility_range(parent)
       define_method "#{parent}_fertility_range" do
         if parent_birth_range = send("#{parent}_birth_range")
-          (parent_birth_range.begin + min_fpa(PARENT2SEX[parent]))..(parent_birth_range.end + max_fpa(PARENT2SEX[parent]))
+          (parent_birth_range.begin + gclass.send("min_#{PARENT2SEX[parent]}_procreation_age").years)..(parent_birth_range.end + gclass.send("max_#{PARENT2SEX[parent]}_procreation_age").years)
         end
       end
     end
@@ -127,20 +133,26 @@ module Genealogy
       return male? if respond_to?(:male?)
       sex == gclass.sex_male_value
     end
-
-    private
-
-    def max_le(arg=nil)
-      gclass.send("max_#{arg or ssex}_life_expectancy").years
+    
+    # max life expectancy in terms of years. It depends on sex
+    # @return [Integer] 
+    def max_le
+      gclass.send("max_#{ssex}_life_expectancy").years
+    end
+    
+    # max fertility procreation age in terms of years. It depends on sex
+    # @return [Integer] 
+    def max_fpa
+      gclass.send("max_#{ssex}_procreation_age").years
+    end
+    
+    # min fertility procreation age in terms of years. It depends on sex
+    # @return [Integer] 
+    def min_fpa
+      gclass.send("min_#{ssex}_procreation_age").years
     end
 
-    def max_fpa(arg=nil)
-      gclass.send("max_#{arg or ssex}_procreation_age").years
-    end
-
-    def min_fpa(arg=nil)
-      gclass.send("min_#{arg or ssex}_procreation_age").years
-    end
+    private 
 
     def check_incompatible_relationship(*args)
       relationship = args.shift

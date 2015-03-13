@@ -23,25 +23,25 @@ describe "*** Util methods ***", :util do
   end
 
   describe "#life_range" do
-    context 'when birth and death are known' do
-      subject { louise.life_range }
-      it { is_expected.to be_instance_of Range }
-      it "returns the life range" do
-        is_expected.to eq Date.new(1874,4,10)..Date.new(1930,8,7)
-      end
-    end
-    context 'when only birth is known' do
+    context 'when birth is known' do
       subject { paul.life_range }
       it { is_expected.to be_instance_of Range }
-      it "returns the life range" do
-        is_expected.to eq Date.new(1970,3,3)..Date.new(1970+110,3,3)
+      it "returns birth..(birth + max life expectancy)" do
+        is_expected.to eq paul.birth..(paul.birth+paul.max_le)
+      end
+      context 'and death is known' do
+        subject { louise.life_range }
+        it { is_expected.to be_instance_of Range }
+        it "returns birth..death" do
+          is_expected.to eq louise.birth..louise.death
+        end
       end
     end
     context 'when only death is known' do
       subject { titty.life_range }
       it { is_expected.to be_instance_of Range }
-      it "returns the life range" do
-        is_expected.to eq Date.new(2010-110,8,6)..Date.new(2010,8,6)
+      it "returns (death - max life expectancy)..death" do
+        is_expected.to eq (titty.death-titty.max_le)..titty.death
       end
     end
     context 'when are both unknown' do
@@ -54,15 +54,15 @@ describe "*** Util methods ***", :util do
     context 'when birth is known' do
       subject { naomi.birth_range }
       it { is_expected.to be_instance_of Range }
-      it "returns the birth range" do
-        is_expected.to eq Date.new(1950,11,6)..Date.new(1950,11,6)
+      it "returns as birth..birth" do
+        is_expected.to eq naomi.birth..naomi.birth
       end
     end
     context 'when only death is known' do
       subject { titty.birth_range }
       it { is_expected.to be_instance_of Range }
-      it "returns the birth range" do
-        is_expected.to eq Date.new(2010-110,8,6)..Date.new(2010,8,6)
+      it "returns (death - max life expectancy)..death" do
+        is_expected.to eq (titty.death-titty.max_le)..titty.death
       end
     end
     context 'when are both unknown' do
@@ -72,37 +72,42 @@ describe "*** Util methods ***", :util do
   end
 
   describe "#fertility_range" do
-    context 'when birth and death are known' do
-      subject { louise.fertility_range }
-      it { is_expected.to be_instance_of Range }
-      it "returns the fertility range" do
-        is_expected.to eq Date.new(1874+9,4,10)..Date.new(1874+50,4,10)
-      end
-    end
-    context 'when only birth is known' do
+    context 'when birth is known' do
       subject { paul.fertility_range }
       it { is_expected.to be_instance_of Range }
-      it "returns the fertility range" do
-        is_expected.to eq Date.new(1970+12,3,3)..Date.new(1970+75,3,3)
+      it "returns (birth + min procreation age)..(birth + max procreation age)" do
+        is_expected.to eq (paul.birth+paul.min_fpa)..(paul.birth+paul.max_fpa)
+      end
+      context 'when death is known' do
+        context 'and happens prior to fertility period' do
+          subject { mary.fertility_range }
+          it { is_expected.to be false }
+        end
+        context 'and happens during fertility period' do
+          subject { maggie.fertility_range }
+          it { is_expected.to be_instance_of Range }
+          it "returns (birth + min procreation age)..death" do
+            is_expected.to eq (maggie.birth+maggie.min_fpa)..maggie.death
+          end
+        end
+        context 'and happens after fertility period' do
+          subject { louise.fertility_range }
+          it { is_expected.to be_instance_of Range }
+          it "returns (birth + min procreation age)..(birth + max procreation age)" do
+            is_expected.to eq (louise.birth+louise.min_fpa)..(louise.birth+louise.max_fpa)
+          end
+        end
       end
     end
     context 'when only death is known' do
       subject { titty.fertility_range }
       it { is_expected.to be_instance_of Range }
-      it "returns the fertility range" do
-        is_expected.to eq Date.new(2010-110+9,8,6)..Date.new(2010,8,6)
+      it "returns (death - max life expectancy + min procreation age)..death" do
+        is_expected.to eq (titty.death-titty.max_le+titty.min_fpa)..(titty.death)
       end
     end
     context 'when are both unknown' do
       subject { luis.fertility_range }
-      it { is_expected.to be nil }
-    end
-    context 'when receiver died before reaching max fertility age' do
-      subject { maggie.fertility_range }
-      it { is_expected.to eq Date.new(1952+9,4,17)..Date.new(1979,6,6) }
-    end
-    context 'when receiver does not reach the minimal fertility age' do
-      subject { mary.fertility_range }
       it { is_expected.to be nil }
     end
   end
@@ -138,16 +143,25 @@ describe "*** Util methods ***", :util do
   end
 
   describe "#father_birth_range" do
-    context "when receiver's life range is estimable" do
+    context "when birth is known" do
       subject { louise.father_birth_range }
       it { is_expected.to be_instance_of Range }
-      it { is_expected.to eq Date.new(1874-75,4,10)..Date.new(1874-12,4,10) }
+      it "returns (birth - max male fertility procreation age)..(birth - min male fertility procreation age)" do
+        is_expected.to eq (louise.birth-@model.max_male_procreation_age.years)..(louise.birth-@model.min_male_procreation_age.years)
+      end
+    end
+    context "when exact birth is unknown but life range is estimable" do
+      subject { titty.father_birth_range }
+      it { is_expected.to be_instance_of Range }
+      it "returns (begin of life range - max male fertility procreation age)..(end of life range - min male fertility procreation age)" do
+        is_expected.to eq (titty.life_range.begin-@model.max_male_procreation_age.years)..(titty.life_range.end-@model.min_male_procreation_age.years)
+      end
     end
     context "when receiver's life range is not estimable" do
       subject { luis.father_birth_range }
       it { is_expected.to be nil }
     end
-    context "when father's birth is known" do
+    context "when actual father's birth is known" do
       it "covers father's birth" do
         expect(irene.father_birth_range).to cover(tommy.birth)
       end
@@ -155,31 +169,48 @@ describe "*** Util methods ***", :util do
   end
 
   describe "#mother_birth_range" do
-    context "when receiver's life range is estimable" do
+    context "when birth is known" do
       subject { louise.mother_birth_range }
       it { is_expected.to be_instance_of Range }
-      it { is_expected.to eq Date.new(1874-50,4,10)..Date.new(1874-9,4,10) }
+      it "returns (birth - max female fertility procreation age)..(birth - min female fertility procreation age)" do
+        is_expected.to eq (louise.birth-@model.max_female_procreation_age.years)..(louise.birth-@model.min_female_procreation_age.years)
+      end
+    end
+    context "when exact birth is unknown but life range is estimable" do
+      subject { titty.mother_birth_range }
+      it { is_expected.to be_instance_of Range }
+      it "returns (begin of life range - max female fertility procreation age)..(end of life range - min female fertility procreation age)" do
+        is_expected.to eq (titty.life_range.begin-@model.max_female_procreation_age.years)..(titty.life_range.end-@model.min_female_procreation_age.years)
+      end
     end
     context "when receiver's life range is not estimable" do
       subject { luis.mother_birth_range }
       it { is_expected.to be nil }
     end
-    context "when mother's birth is known" do
+    context "when actual mother's birth is known" do
       it "covers mother's birth" do
         expect(irene.mother_birth_range).to cover(emily.birth)
       end
     end
   end
 
+
   describe "#father_fertility_range" do
     context "when receiver's father_birth_range is estimable" do
       subject { louise.father_fertility_range }
       it { is_expected.to be_instance_of Range }
-      it { is_expected.to eq Date.new(1874-75+12,4,10)..Date.new(1874-12+75,4,10) }
+      it "returns (begin of father's birth range + male's min procreation age)..(end of father's birth range + male's max procreation age)" do
+        is_expected.to eq (louise.father_birth_range.begin+@model.min_male_procreation_age.years)..(louise.father_birth_range.end+@model.max_male_procreation_age.years)
+      end
     end
     context "when receiver's father_birth_range is not estimable" do
       subject { luis.father_fertility_range }
       it { is_expected.to be nil }
+    end
+    context "when actual father exists and his fertility range is estimable" do
+      it "covers father's fertility range" do
+        expect(irene.father_fertility_range).to include(tommy.fertility_range)
+      end
     end
   end
 
@@ -187,11 +218,18 @@ describe "*** Util methods ***", :util do
     context "when receiver's mother_birth_range is estimable" do
       subject { louise.mother_fertility_range }
       it { is_expected.to be_instance_of Range }
-      it { is_expected.to eq Date.new(1874-50+9,4,10)..Date.new(1874-9+50,4,10) }
+      it "returns (begin of mother's birth range + female's min procreation age)..(end of mother's birth range + female's max procreation age)" do
+        is_expected.to eq (louise.mother_birth_range.begin+@model.min_female_procreation_age.years)..(louise.mother_birth_range.end+@model.max_female_procreation_age.years)
+      end
     end
     context "when receiver's mother_birth_range is not estimable" do
       subject { luis.mother_fertility_range }
       it { is_expected.to be nil }
+    end
+    context "when actual mother exists and his fertility range is estimable" do
+      it "covers mother's fertility range" do
+        expect(irene.mother_fertility_range).to include(emily.fertility_range)
+      end
     end
   end
 
