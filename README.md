@@ -63,7 +63,7 @@ Scope methods are class methods of your *genealogized* model and return list of 
 Utility methods are mainly used internally but many of them are public.
 
 ## Customization through *has_parents* options
-##### `:column_names`
+### `:column_names`
 This option takes an hash which by default is:
 
     column_names: {
@@ -76,16 +76,16 @@ This option takes an hash which by default is:
     }
 Pass different values to map legacy db.
 
-##### `:sex_values`
+### `:sex_values`
 This option takes a 2-elements array which by default is:
 
     sex_values: ['M','F']
 They represents the value used in the db for gender.
 
-##### `:ineligibility`
+### `:ineligibility`
 This option takes one of symbols `:off`, `:pedigree` and `pedigree_and_dates`. See [here](#ineligibility-and-ineligible-methods) for ineligibility description. Default is `:pedigree`.
 
-##### `:limit_ages`
+### `:limit_ages`
 This option will be taken in consideration only if ineligibility is set on `:pedigree_and_dates` level. It takes an hash which by default is:
 
     limit_ages: {
@@ -97,10 +97,10 @@ This option will be taken in consideration only if ineligibility is set on `:ped
         max_female_life_expectancy: 110
     }
 
-##### `:current_spouse`
+### `:current_spouse`
 Other than father and mother also individuals' current spouse can be tracked. To do that just provide option `current_spouse: true` and make sure that the corresponding foreign key column is present. Do not confuse *current_spouse* with *spouse*, which is intended to refer the individual with whom someone have a child. An individual can have many spouses but only a current spouse.
 
-##### `:perform_validation`
+### `:perform_validation`
 This option let you specify whether perform validation or not during *alter methods*. Default is `true`.
 
 ## Test and documentation, together
