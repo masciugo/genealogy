@@ -104,7 +104,7 @@ Other than father and mother also individuals' current spouse can be tracked. To
 This option let you specify whether perform validation or not during *alter methods*. Default is `true`.
 
 ## Test and documentation, together
-A rich amount of test examples were written using the RSpec 3 suite. Beyond the canonical testing purpose, I tried to make the test outcome as much explanatory as possible so that can be used as an auxiliary documentation, along with the [standard documentation](). Give it a try simply running `rake` and get behavior description of all methods in a pleasant format. In particular query methods spec is based on [this pedigree](https://github.com/masciugo/genealogy/blob/master/spec/sample_pedigree.pdf). Run it separately with `rake specfile[spec/genealogy/query_methods_spec.rb]`
+A rich amount of test examples were written using the RSpec 3 suite. Beyond the canonical testing purpose, I tried to make the test outcome as much explanatory as possible so that can be used as an auxiliary documentation, along with the [standard documentation](http://www.rubydoc.info/gems/genealogy). Give it a try simply running `rake` and get behavior description of all methods in a pleasant format. In particular query methods spec is based on [this pedigree](https://github.com/masciugo/genealogy/blob/master/spec/sample_pedigree.pdf). Run it separately with `rake specfile[spec/genealogy/query_methods_spec.rb]`
 
 ## Contributing
 
