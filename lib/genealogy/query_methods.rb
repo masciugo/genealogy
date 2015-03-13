@@ -51,10 +51,10 @@ module Genealogy
     # @return [ActiveRecord::Relation] children
     def children(options = {})
       raise SexError, "Sex value not valid for #{self}. It's needed to look for children" unless gclass.sex_values.include? sex
-      result = gclass.where(SEX2PARENT[ssex] => self)
+      result = gclass.where("#{SEX2PARENT[ssex]}_id" => self)
       if options.keys.include? :spouse
         check_indiv(spouse = options[:spouse],opposite_ssex)
-        result = result.where(SEX2PARENT[opposite_ssex] => spouse ) if spouse
+        result = result.where("#{SEX2PARENT[opposite_ssex]}_id" => spouse ) if spouse
       end
       result
     end
@@ -73,8 +73,7 @@ module Genealogy
     # @return [ActiveRecord::Relation] list of fullsiblings and/or halfsiblings
     def siblings(options = {})
       spouse = options[:spouse]
-
-      result = gclass.where.not(id: id)
+      result = gclass.where("id is not ?",id)
       case options[:half]
       when nil # only full siblings
         result.all_with(:parents).where(father_id: father, mother_id: mother)
@@ -84,7 +83,7 @@ module Genealogy
           check_indiv(spouse, :female)
           result.where(mother_id: spouse)
         elsif mother
-          result.where("#{gclass.mother_id_column} != ? or #{gclass.mother_id_column} is ?", mother_id, nil)
+          result.where("mother_id != ? or mother_id is ?", mother_id, nil)
         else
           result
         end
@@ -94,7 +93,7 @@ module Genealogy
           check_indiv(spouse, :male)
           result.where(father_id: spouse)
         elsif father
-          result.where("#{gclass.father_id_column} != ? or #{gclass.father_id_column} is ?", father_id, nil)
+          result.where("father_id != ? or father_id is ?", father_id, nil)
         else
           result
         end
@@ -102,7 +101,7 @@ module Genealogy
         ids = siblings(half: :father).pluck(:id) | siblings(half: :mother).pluck(:id)
         result.where(id: ids)
       when :include # including half siblings
-        result.where("#{gclass.father_id_column} == ? or #{gclass.mother_id_column} == ?", father_id, mother_id)
+        result.where("father_id == ? or mother_id == ?", father_id, mother_id)
       else
         raise ArgumentError, "Admitted values for :half options are: :father, :mother, false, true or nil"
       end
@@ -300,11 +299,11 @@ module Genealogy
       def all_with(role)
         case role
         when :father
-          where.not(father_id: nil)
+          where('father_id is not ?',nil)
         when :mother
-          where.not(mother_id: nil)
+          where('mother_id is not ?',nil)
         when :parents
-          where.not(mother_id: nil,father_id: nil)
+          where('father_id is not ? and mother_id is not ?',nil,nil)
         end
       end
 
