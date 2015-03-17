@@ -21,7 +21,13 @@ module Genealogy
     # @return [void] 
     def has_parents options = {}
 
-      check_options(options)
+      include Genealogy::UtilMethods
+      include Genealogy::QueryMethods
+      include Genealogy::IneligibleMethods
+      include Genealogy::AlterMethods
+      include Genealogy::CurrentSpouseMethods
+
+      check_has_parents_options(options)
 
       # keep track of the original extend class to prevent wrong scopes in query method in case of STI
       class_attribute :gclass, instance_writer: false
@@ -85,33 +91,6 @@ module Genealogy
       has_many :children_as_father, class_name: self, foreign_key: self.father_id_column, dependent: :nullify
       has_many :children_as_mother, class_name: self, foreign_key: self.mother_id_column, dependent: :nullify
 
-      include Genealogy::UtilMethods
-      include Genealogy::QueryMethods
-      include Genealogy::IneligibleMethods
-      include Genealogy::AlterMethods
-      include Genealogy::CurrentSpouseMethods
-
-    end
-
-    private
-
-    def check_options(options)
-
-      raise ArgumentError, "Hash expected, #{options.class} given." unless options.is_a? Hash
-
-      # column names
-      options[:column_names] ||= {}
-      raise ArgumentError, "Hash expected for :column_names option, #{options[:column_names].class} given." unless options[:column_names].is_a? Hash
-
-      # sex
-      if array = options[:sex_values]
-        raise ArgumentError, ":sex_values option must be an array of length 2: [:male_value, :female_value]" unless array.is_a?(Array) and array.size == 2
-      end
-
-      # booleans
-      options.slice(:perform_validation, :current_spouse).each do |k,v|
-        raise ArgumentError, "Boolean expected for #{k} option, #{v.class} given." unless !!v == v
-      end
     end
 
   end

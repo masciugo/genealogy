@@ -176,5 +176,28 @@ module Genealogy
       raise SexError, "Expected a #{arg_sex} as argument. Got a #{arg.ssex}" if arg_sex and arg.ssex != arg_sex
     end
 
+    module ClassMethods
+
+      def check_has_parents_options(options)
+
+        raise ArgumentError, "Hash expected, #{options.class} given." unless options.is_a? Hash
+
+        # column names
+        options[:column_names] ||= {}
+        raise ArgumentError, "Hash expected for :column_names option, #{options[:column_names].class} given." unless options[:column_names].is_a? Hash
+
+        # sex
+        if array = options[:sex_values]
+          raise ArgumentError, ":sex_values option must be an array of length 2: [:male_value, :female_value]" unless array.is_a?(Array) and array.size == 2
+        end
+
+        # booleans
+        options.slice(:perform_validation, :current_spouse).each do |k,v|
+          raise ArgumentError, "Boolean expected for #{k} option, #{v.class} given." unless !!v == v
+        end
+      end
+
+    end
+
   end
 end
