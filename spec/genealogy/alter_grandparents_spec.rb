@@ -84,7 +84,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         specify { expect { peter.add_paternal_grandparents(manuel,terry) }.to raise_error(Genealogy::LineageGapException)}
         it "does not affect receiver grandparents" do
           peter.add_paternal_grandparents(manuel,terry) rescue nil
-          expect(peter.paternal_grandparents).to be nil
+          expect(peter.paternal_grandparents).to eq [nil,nil]
         end
       end
       context "when receiver has father" do
