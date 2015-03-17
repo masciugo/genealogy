@@ -33,6 +33,25 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
 
   describe "peter" do
     subject {peter}
+    context "if he hadn't parents" do
+      before { peter.remove_parents }
+      its(:parents) { is_expected.to match_array [nil, nil]}
+      its(:paternal_grandfather) {is_expected.to be_nil}
+      its(:paternal_grandmother) {is_expected.to be_nil}
+      its(:maternal_grandfather) {is_expected.to be_nil}
+      its(:maternal_grandmother) {is_expected.to be_nil}
+      its(:grandparents) {is_expected.to match_array [nil, nil, nil, nil]}
+      its(:siblings) {is_expected.to be_empty}
+      its(:paternal_grandparents) {is_expected.to match_array [nil, nil]}
+      its(:maternal_grandparents) {is_expected.to match_array [nil, nil]}
+      its(:half_siblings) {is_expected.to be_empty}
+      its(:ancestors) {is_expected.to be_empty}
+      its(:uncles) {is_expected.to be_empty}
+      its(:maternal_uncles) {is_expected.to be_empty}
+      its(:paternal_uncles) {is_expected.to be_empty}
+      its(:great_grandparents) {is_expected.to match_array [nil, nil, nil, nil, nil, nil, nil, nil]}
+      its(:family) {is_expected.to be_empty}
+    end
     its(:parents) { is_expected.to match_array [paul, titty]}
     its(:paternal_grandfather) {is_expected.to eq manuel}
     its(:paternal_grandmother) {is_expected.to eq terry}
@@ -46,12 +65,12 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:ancestors) {is_expected.to match_array [paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison]}
     its(:uncles) {is_expected.to match_array [mark, rud]}
     its(:maternal_uncles) {is_expected.to match_array [mark, rud]}
-    its(:paternal_uncles) {is_expected.to match_array []}
+    its(:paternal_uncles) {is_expected.to be_empty}
     its(:great_grandparents) {is_expected.to match_array [nil, nil, marcel, nil, jack, alison, tommy, emily]}
     describe "cousins" do
       it { expect(peter.cousins).to match_array([sam, charlie, sue])}
       context "with options lineage: :paternal" do
-        specify { expect(peter.cousins(lineage: :paternal)).to  match_array [] }
+        specify { expect(peter.cousins(lineage: :paternal)).to  be_empty }
       end
       context "with options lineage: :maternal" do
         specify { expect(peter.cousins(lineage: :maternal)).to  match_array [sam,charlie,sue] }
@@ -105,7 +124,6 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
         specify { expect { peter.family_hash(half: :bar) }.to raise_error(ArgumentError)}
       end
     end
-
     describe "family" do
       it { expect(peter.family).to match_array([paul, titty, steve])}
       context "with options half: :include" do
@@ -208,7 +226,7 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
         specify { expect(barbara.cousins(lineage: :paternal)).to  match_array [titty,rud,mark] }
       end
       context "with options lineage: :maternal" do
-        specify { expect(barbara.cousins(lineage: :maternal)).to  match_array [] }
+        specify { expect(barbara.cousins(lineage: :maternal)).to  be_empty }
       end
     end
   end
@@ -218,7 +236,7 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:children) {is_expected.to match_array [titty, rud, mark]}
     its(:descendants) {is_expected.to match_array [titty, peter, steve, rud, mark, sam, charlie, sue]}
     its(:aunts) {is_expected.to match_array [debby]}
-    its(:maternal_aunts) {is_expected.to match_array []}
+    its(:maternal_aunts) {is_expected.to be_empty}
     its(:paternal_aunts) {is_expected.to match_array [debby]}
     describe "family_hash" do
       it { expect( paso.family_hash ).to match_family({
@@ -287,7 +305,7 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:uncles_and_aunts) {is_expected.to match_array [john] }
     its(:uncles) {is_expected.to match_array [john] }
     its(:paternal_uncles) {is_expected.to match_array [john] }
-    its(:maternal_uncles) {is_expected.to match_array [] }
+    its(:maternal_uncles) {is_expected.to be_empty }
     its(:nieces_and_nephews) {is_expected.to match_array [sam,charlie,sue]}
     its(:nephews) {is_expected.to match_array [sam, charlie]}
     its(:nieces) {is_expected.to match_array [sue]}
@@ -297,7 +315,7 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
         specify { expect(titty.cousins(lineage: :paternal)).to  match_array [barbara] }
       end
       context "with options lineage: :maternal" do
-        specify { expect(titty.cousins(lineage: :maternal)).to  match_array [] }
+        specify { expect(titty.cousins(lineage: :maternal)).to  be_empty }
       end
     end
     its(:family) {is_expected.to match_array [peter,steve,rud,mark,irene,paso]}

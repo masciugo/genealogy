@@ -28,12 +28,12 @@ module Genealogy
 
     # @return [2-elements Array] paternal_grandfather and paternal_grandmother 
     def paternal_grandparents
-      father && father.parents
+      (father && father.parents) || [nil,nil]
     end
 
     # @return [2-elements Array] maternal_grandfather and maternal_grandmother
     def maternal_grandparents
-      mother && mother.parents
+      (mother && mother.parents) || [nil,nil]
     end
 
     # @return [4-elements Array] paternal_grandfather, paternal_grandmother, maternal_grandfather, maternal_grandmother
