@@ -87,8 +87,8 @@ module Genealogy
       ineligibles = []
       if gclass.ineligibility_level >= PEDIGREE
         ineligibles |= ancestors | descendants | siblings | [self]
-        ineligibles |= (father ? gclass.all_with(:father).where("father_id is not ?", father) : [])
-        ineligibles |= (mother ? gclass.all_with(:mother).where("mother_id is not ?", mother) : [])
+        ineligibles |= (father ? gclass.all_with(:father).where("father_id != ?", father) : [])
+        ineligibles |= (mother ? gclass.all_with(:mother).where("mother_id != ?", mother) : [])
       end
       if gclass.ineligibility_level >= PEDIGREE_AND_DATES 
         # if a parent is present ineligible siblings are parent's ineligible children, otherwise try to estimate parent birth range.
