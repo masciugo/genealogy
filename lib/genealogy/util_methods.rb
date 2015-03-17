@@ -172,7 +172,7 @@ module Genealogy
     end
 
     def check_indiv(arg, arg_sex=nil)
-      raise ArgumentError, "Expected #{self.gclass} object. Got #{arg.class}" unless arg.class.equal? self.gclass
+      raise ArgumentError, "Expected #{self.gclass} object. Got #{arg.class}" unless arg.is_a? self.gclass
       raise SexError, "Expected a #{arg_sex} as argument. Got a #{arg.ssex}" if arg_sex and arg.ssex != arg_sex
     end
 
