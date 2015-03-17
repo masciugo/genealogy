@@ -23,9 +23,11 @@
 
 ### backward incompatibilities
 
+* options for *has_parents* completely rewritten
+
 * add_father, add_mother and add_current_spouse methods not raising a SexError anymore. IncompatibleRelationshipException will be raised
 
-* age query method removed. Was imprecise and solution not so easy as it may appear. Use something like https://github.com/radar/dotiw for a more comprehensive tool
+* age query method removed. It was imprecise and solution is not so easy as it may appear. Use something like https://github.com/radar/dotiw for a more comprehensive tool
 
 * removed offspring* methods in favor of children* methods
 
