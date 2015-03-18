@@ -70,10 +70,10 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       context "when specify spouse too" do
         subject { paul.add_children(julian, spouse: michelle) }
         it { is_expected.to build_the_trio(julian, paul, michelle) }
-      end
-
-      describe "when specify spouse but spouse is ineligible" do 
-        specify { expect { paul.add_children(peter, spouse: john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
+        context "when spouse is ineligible" do
+          specify { expect { paul.add_children(peter, spouse: john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
+          specify { expect { paul.add_children(michelle,spouse: michelle) }.to raise_error(Genealogy::IncompatibleRelationshipException)}
+        end
       end
 
     end
