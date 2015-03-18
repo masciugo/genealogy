@@ -8,24 +8,18 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method ineligible_$1s
-    #   list of individual who cannot be $1 
+    #   list of individual who cannot be $1 according to the ineligibility level in use.
+    #   At pedigree level it returns theirself, descendants and all individuals with unexpected sex.
+    #   At pedigree and dates level it also includes all individuals who were not fertile during receiver's birth date range.
     #   @return [Array,NilClass] Return nil if $1 already assigned
     def self.generate_method_ineligibles_parent(parent)
       define_method "ineligible_#{parent}s" do
         unless self.send(parent) 
           ineligibles = []
           ineligibles |= descendants | [self] | gclass.send("#{OPPOSITESEX[PARENT2SEX[parent]]}s") if gclass.ineligibility_level >= PEDIGREE
-          if gclass.ineligibility_level >= PEDIGREE_AND_DATES  and life_range
+          if gclass.ineligibility_level >= PEDIGREE_AND_DATES  and birth_range
             ineligibles |= (gclass.all - ineligibles).find_all do |indiv|
-              if indiv.life_range
-                if birth
-                  !indiv.can_procreate_on?(birth)
-                else
-                  !indiv.can_procreate_during?(life_range)
-                end
-              else
-                false
-              end
+              !indiv.can_procreate_during?(birth_range)
             end
           end
           ineligibles
@@ -38,8 +32,10 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method ineligible_$1_grand$2(grandparent)
-    #   list of individual who cannot be $1 grand$2 
-    #   @return [Array,NilClass] Return nil if $$1 grand$2 already assigned
+    #   list of individual who cannot be $1 grand$2 according to the ineligibility level in use.
+    #   At pedigree level it returns theirself, their $1 parent, descendants, full siblings, $1 half siblings and all individuals with unexpected sex.
+    #   At pedigree and dates level it also includes their $1 parent's ineligible $2s or, if that parent is unknown, all individuals who were not fertile during receiver's $1 parent birth date range.
+    #   @return [Array,NilClass] Return nil if $1 grand$2 already assigned
     def self.generate_method_ineligible_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "ineligible_#{relationship}s" do
@@ -52,11 +48,7 @@ module Genealogy
               parent.send("ineligible_#{grandparent}s")
             else
               (gclass.all - ineligibles).find_all do |indiv|
-                if indiv.life_range
-                  !indiv.can_procreate_during?(send("#{LINEAGE2PARENT[lineage]}_birth_range"))
-                else
-                  false
-                end
+                !indiv.can_procreate_during?(send("#{LINEAGE2PARENT[lineage]}_birth_range"))
               end
             end
           end
@@ -70,7 +62,9 @@ module Genealogy
     generate_method_ineligible_grandparent(:maternal,:father)
     generate_method_ineligible_grandparent(:maternal,:mother)
 
-    # list of individual who cannot be children: ancestors, children, full siblings, theirself and all individuals with father or mother according to self's sex
+    # list of individual who cannot be children according to the ineligibility level in use. 
+    # At pedigree level it returns theirself, ancestors, children, full siblings and all individuals that already have father (if male) or mother (if female).
+    # At pedigree and dates level it also includes all individuals who was born outside receiver's fertility range.
     # @return [Array]
     def ineligible_children
       ineligibles = []
@@ -81,7 +75,10 @@ module Genealogy
       ineligibles
     end
 
-    # list of individual who cannot be full siblings: ancestors, descendants, siblings, theirself and all individuals with different father or mother
+    # list of individual who cannot be children according to the ineligibility level in use. 
+    # At pedigree level it returns theirself, full siblings, ancestors, descendants and all individuals with different father or mother.
+    # At pedigree and dates level it also includes all individuals who cannot be siblings for age reasons. For each known parent, 
+    # ineligible siblings are parent's ineligible children, otherwise it tries to estimate parent birth range. If it's possible ineligible siblings are all individuals whose life range overlaps parent birth range.
     # @return [Array]
     def ineligible_siblings
       ineligibles = []

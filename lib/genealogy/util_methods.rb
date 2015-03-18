@@ -63,14 +63,14 @@ module Genealogy
     # @param [Date] date
     # @return [Boolean] or nil if cannot be computable (#fertility_range returns nil)
     def can_procreate_on?(date)
-      fertility_range.cover? date if date and fertility_range
+      fertility_range.cover? date if (date and fertility_range)
     end
 
     # It tests whether fertility range overlaps specified period
     # @param [Range] period 
     # @return [Boolean] or nil if cannot be computable (#fertility_range returns nil)
     def can_procreate_during?(period)
-      fertility_range.overlaps? period if period and fertility_range
+      fertility_range.overlaps? period if (period and fertility_range)
     end
 
     # @!macro [attach] generate

@@ -13,15 +13,12 @@ Genealogy takes inspiration from the simple [linkage file format](http://www.hel
 1. Install
     1. Add to Gemfile: gem ‘genealogy’ or, if you want to be on the edge, gem 'genealogy', git: "https://github.com/masciugo/genealogy.git"
     2. Install required gems: bundle install
-
 2. Alter model table
-    
     * Add required columns to your table if they not exists: For example:
-    
-    `rails g migration add_parents_to_<table> sex:string father_id:integer mother_id:integer [current_spouse_id:integer]`. 
+
+    `rails g migration add_parents_to_<table> sex:string father_id:integer mother_id:integer [current_spouse_id:integer]`
 
     Read [here](#current_spouse) for optional current spouse column explanation. If necessary, all [column names can be customized](#column_names)
-    
     * Add indexes, separately and in combination, to parents columns
 
 3. Add `has_parents` to your model (put after the enum for sex attribute values if present)
@@ -48,13 +45,13 @@ Like query methods, they can take options: `paul.add_children(julian, spouse: mi
 
 
 #### Ineligibility and ineligible methods
-*Genealogy* makes use of the concept of *ineligibility*: it blocks role-incompatible individuals in order to prevent meaningless relationships like females as father or loops (e.g. peter son of paul and paul son of peter). To suit the desired compromise between performances and consistency there are three levels of ineligibility:
+*Genealogy* makes use of the concept of *ineligibility*: while using alter methods it blocks role-incompatible individuals in order to prevent meaningless relationships like females as father or loops (e.g. peter son of paul and paul son of peter). To suit the desired compromise between performances and consistency there are three levels of ineligibility:
 
-* `:off` ineligibility checks are disabled. Consistency is up to the user. Mistakes can lead to unpredictable behaviors
-* `:pedigree` (default) checks are based on the pedigree (e.g., an individual cannot have ancestors as children)
-* `:pedigree_and_dates` checks are based on pedigree and on individual dates, birth and death, in combination with life expectancy ages and procreation ages (see [here](#limit_ages) to change them)
+* **Level 0.** ineligibility checks are disabled. Consistency is up to the user. Mistakes can lead to unpredictable behaviors. Initilize with option `{ineligibility: false}`
+* **Level 1.** (default) checks are based on the pedigree (e.g., an individual cannot have ancestors as children). Leave it blank or initilize with option `{ineligibility: :pedigree}` 
+* **Level 2.** checks are based on pedigree and on individual dates, birth and death, in combination with life expectancy ages and procreation ages (see [here](#limit_ages) to change them). Initilize with option `{ineligibility: :pedigree_and_dates}`
 
-When ineligibility is enabled, before altering the pedigree, ineligible methods will be run to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.eligible_fathers`. **Be aware to the fact that ineligibles methods help users to avoid many conceptual errors but not all: besides their output list some other individuals may be ineligibles according to other and more complex lines of reasoning.** 
+When ineligibility is enabled, before altering the pedigree, ineligible methods will be invoked to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.ineligible_fathers`. **Be aware that ineligibles methods help users to avoid many conceptual errors but not all: besides their output list some other individuals may be ineligibles according to other and more complex lines of reasoning.** 
 
 ### Scope methods
 Scope methods are class methods of your *genealogized* model and return list of individuals. `YourModel.males`, for example, returns all males individuals and `YourModel.all_with(:father)` returns all individuals that have a known father.
@@ -83,7 +80,7 @@ This option takes a 2-elements array which by default is:
 They represents the value used in the db for gender.
 
 ### `:ineligibility`
-This option takes one of symbols `:off`, `:pedigree` and `pedigree_and_dates`. See [here](#ineligibility-and-ineligible-methods) for ineligibility description. Default is `:pedigree`.
+This option takes one value among `false`, `:pedigree` and `pedigree_and_dates`. See [here](#ineligibility-and-ineligible-methods) for ineligibility description. Default is `:pedigree`.
 
 ### `:limit_ages`
 This option will be taken in consideration only if ineligibility is set on `:pedigree_and_dates` level. It takes an hash which by default is:
