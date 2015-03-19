@@ -9,19 +9,19 @@ module Genealogy
     def parents
       [father,mother]
     end
-    # @return [ActiveRecord] 
+    # @return [ActiveRecord, NilClass] 
     def paternal_grandfather
       father && father.father
     end
-    # @return [ActiveRecord] 
+    # @return [ActiveRecord, NilClass] 
     def paternal_grandmother
       father && father.mother
     end
-    # @return [ActiveRecord] 
+    # @return [ActiveRecord, NilClass] 
     def maternal_grandfather
       mother && mother.father
     end
-    # @return [ActiveRecord] 
+    # @return [ActiveRecord, NilClass] 
     def maternal_grandmother
       mother && mother.mother
     end

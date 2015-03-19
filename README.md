@@ -14,7 +14,7 @@ Genealogy takes inspiration from the simple [linkage file format](http://www.hel
     1. Add to Gemfile: gem ‘genealogy’ or, if you want to be on the edge, gem 'genealogy', git: "https://github.com/masciugo/genealogy.git"
     2. Install required gems: bundle install
 2. Alter model table
-    * Add required columns to your table if they not exists: For example:
+    * Add required columns to your table if they do not exist. For example:
 
     `rails g migration add_parents_to_<table> sex:string father_id:integer mother_id:integer [current_spouse_id:integer]`
 
@@ -51,7 +51,7 @@ Like query methods, they can take options: `paul.add_children(julian, spouse: mi
 * **Level 1.** (default) checks are based on the pedigree (e.g., an individual cannot have ancestors as children). Leave it blank or initilize with option `{ineligibility: :pedigree}` 
 * **Level 2.** checks are based on pedigree and on individual dates, birth and death, in combination with life expectancy ages and procreation ages (see [here](#limit_ages) to change them). Initilize with option `{ineligibility: :pedigree_and_dates}`
 
-When ineligibility is enabled, before altering the pedigree, ineligible methods will be invoked to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.ineligible_fathers`. **Be aware that ineligibles methods help users to avoid many conceptual errors but not all: besides their output list some other individuals may be ineligibles according to other and more complex lines of reasoning.** 
+When ineligibility is enabled, before altering the pedigree, ineligible methods will be invoked to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.ineligible_fathers`. Please read [here](http://www.rubydoc.info/github/masciugo/genealogy/master/Genealogy/IneligibleMethods#ineligible_children-instance_method) for a detailed description of each ineligible method and/or run `rake spec[ineligible]`. **Be aware that ineligibles methods help users to avoid many conceptual errors but not all: besides their output list some other individuals may be ineligibles according to other and more complex lines of reasoning.** 
 
 ### Scope methods
 Scope methods are class methods of your *genealogized* model and return list of individuals. `YourModel.males`, for example, returns all males individuals and `YourModel.all_with(:father)` returns all individuals that have a known father.
