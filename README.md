@@ -103,6 +103,8 @@ This option let you specify whether perform validation or not during *alter meth
 ## Test and documentation, together
 A rich amount of test examples were written using the RSpec 3 suite. Beyond the canonical testing purpose, I tried to make the test outcome as much explanatory as possible so that can be used as an auxiliary documentation, along with the [standard documentation](http://www.rubydoc.info/github/masciugo/genealogy/master). Give it a try simply running `rake` and get behavior description of all methods in a pleasant format. In particular query methods spec is based on [this pedigree](https://github.com/masciugo/genealogy/blob/master/spec/sample_pedigree.pdf). Run it separately with `rake specfile[spec/genealogy/query_methods_spec.rb]`
 
+Change adapter by environment `GENEALOGY_DB=myslq rake` (create the db *genealogy_test* if not exists)
+
 ## Contributing
 
 ### TODO's

@@ -20,7 +20,7 @@ end
 require 'rspec/its'
 
 RSpec.configure do |config|
-  # config.fail_fast = true
+  config.fail_fast = true
   # config.order = "random" # examples are are not ready for this
   config.color = true
   config.formatter = :documentation
@@ -36,7 +36,9 @@ Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 def connect_to_database
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
   ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
-  ActiveRecord::Base.establish_connection(config['sqlite3'])
+  db_config = config[(ENV['GENEALOGY_DB_TEST'] or 'sqlite3')]
+  puts "connecting to #{db_config['adapter']}"
+  ActiveRecord::Base.establish_connection(db_config)
 end
 
 def get_test_model has_parents_opts = {}

@@ -113,13 +113,13 @@ shared_examples "including siblings because of checks on pedigree" do
   end
   context 'when mother is unset' do
     it "includes all individuals with father already set but different" do
-      expect(ruben.ineligible_siblings).to include *@model.all_with(:father).where("father_id is not ?", ruben.father)
+      expect(ruben.ineligible_siblings).to include *@model.all_with(:father).where("father_id != ?", ruben.father)
     end
   end
   context 'when father is unset' do
     before { peter.update_attributes(father_id: nil) }
     it "includes all individuals with mother already set but different" do
-      expect(peter.ineligible_siblings).to include *@model.all_with(:mother).where("mother_id is not ?", peter.mother.id)
+      expect(peter.ineligible_siblings).to include *@model.all_with(:mother).where("mother_id != ?", peter.mother.id)
     end
   end
 end
