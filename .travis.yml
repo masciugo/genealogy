@@ -16,3 +16,5 @@ matrix:
   allow_failures:
     - rvm: jruby-19mode
     - rvm: rbx-2
+before_script:
+  - mysql -e 'create database genealogy_test;'

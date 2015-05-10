@@ -5,9 +5,15 @@ sqlite3:
 mysql:
   adapter: mysql2
   encoding: utf8
-  reconnect: false
   database: genealogy_test
-  pool: 5
   username: root
-  password:
-  socket: /tmp/mysql.sock
+
+# mysql:
+#   adapter: mysql2
+#   encoding: utf8
+#   reconnect: false
+#   database: genealogy_test
+#   pool: 5
+#   username: root
+#   password:
+#   socket: /tmp/mysql.sock
