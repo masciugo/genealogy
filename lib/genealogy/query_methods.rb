@@ -131,10 +131,25 @@ module Genealogy
     # @return [ActiveRecord::Relation] list of ancestors
     def ancestors(options = {})
       ids = []
-      remaining_ids = parents.compact.map(&:id)
-      until remaining_ids.empty?
-        ids << remaining_ids.shift
-        remaining_ids += gclass.find(ids.last).parents.compact.map(&:id)
+      if options[:generations]
+        generation_count = 0
+        generation_ids = parents.compact.map(&:id)
+        while (generation_count < num_generations) && (generation_ids.length > 0)
+          next_gen_ids = []
+          ids += generation_ids
+          until generation_ids.empty?
+            ids.unshift(generation_ids.shift)
+            next_gen_ids += gclass.find(ids.first).parents.compact.map(&:id)
+          end
+          generation_ids = next_gen_ids
+          generation_count += 1
+        end
+      else
+        remaining_ids = parents.compact.map(&:id)
+        until remaining_ids.empty?
+          ids << remaining_ids.shift
+          remaining_ids += gclass.find(ids.last).parents.compact.map(&:id)
+        end
       end
       gclass.where(id: ids)
     end
