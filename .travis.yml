@@ -9,8 +9,8 @@ gemfile:
   - gemfiles/rails_3.gemfile
   - gemfiles/rails_4.gemfile
 env:
-  - GENEALOGY_DB_TEST=mysql
-  - GENEALOGY_DB_TEST=sqlite
+  - GENEALOGY_TEST_DB=mysql
+  - GENEALOGY_TEST_DB=sqlite
 matrix:
   # fast_finish: true
   allow_failures:

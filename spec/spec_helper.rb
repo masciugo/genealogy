@@ -36,7 +36,7 @@ Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 def connect_to_database
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
   ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
-  db_config = config[(ENV['GENEALOGY_DB_TEST'] or 'sqlite3')]
+  db_config = config[(ENV['GENEALOGY_TEST_DB'] or 'sqlite')]
   puts "connecting to #{db_config['adapter']}"
   ActiveRecord::Base.establish_connection(db_config)
 end

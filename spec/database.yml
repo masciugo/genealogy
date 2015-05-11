@@ -1,4 +1,4 @@
-sqlite3:
+sqlite:
   adapter: sqlite3
   database: spec/test.sqlite3.db
 
