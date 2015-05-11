@@ -111,7 +111,7 @@ Change db adapter by  environment variable `GENEALOGY_DB=myslq rake` and setting
 
 * improve performances
 * optional usage of current spouse (if defined) for more concise alter methods. For example adding a children to an individual will also add it to the current spouse of the receiver
-* adding more complex query methods like minimal ancestors
+* adding more complex query methods like minimal ancestors. See [PedHunter](http://www.ncbi.nlm.nih.gov/CBBresearch/Schaffer/pedhunter.html) tool.
 
 ### Steps
 
