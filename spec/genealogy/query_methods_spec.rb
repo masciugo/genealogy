@@ -62,11 +62,19 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:paternal_grandparents) {is_expected.to match_array [manuel, terry]}
     its(:maternal_grandparents) {is_expected.to match_array [paso, irene]}
     its(:half_siblings) {is_expected.to match_array [ruben, mary, julian, beatrix]}
-    its(:ancestors) {is_expected.to match_array [paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison]}
     its(:uncles) {is_expected.to match_array [mark, rud]}
     its(:maternal_uncles) {is_expected.to match_array [mark, rud]}
     its(:paternal_uncles) {is_expected.to be_empty}
     its(:great_grandparents) {is_expected.to match_array [nil, nil, marcel, nil, jack, alison, tommy, emily]}
+    describe "ancestors" do
+      it {expect(peter.ancestors).to match_array([paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison])}
+      context "with options generations: 1" do
+        specify { expect(peter.ancestors(generations: 1)).to  match_array([paul, titty])}
+      end
+      context "with options generations: 2" do
+        specify { expect(peter.ancestors(generations: 2)).to  match_array([paul, titty, manuel, terry, paso, irene])}
+      end
+    end
     describe "cousins" do
       it { expect(peter.cousins).to match_array([sam, charlie, sue])}
       context "with options lineage: :paternal" do
