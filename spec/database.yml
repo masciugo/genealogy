@@ -2,12 +2,7 @@ sqlite:
   adapter: sqlite3
   database: spec/test.sqlite3.db
 
-mysql:
-  adapter: mysql2
-  encoding: utf8
-  database: genealogy_test
-  username: root
-
+## developer local
 # mysql:
 #   adapter: mysql2
 #   encoding: utf8
@@ -17,3 +12,15 @@ mysql:
 #   username: root
 #   password:
 #   socket: /tmp/mysql.sock
+
+## travis specific
+mysql:
+  adapter: mysql2
+  encoding: utf8
+  database: genealogy_test
+  username: root
+
+postgres:
+  adapter: postgresql
+  database: genealogy_test
+  username: postgres
