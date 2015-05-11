@@ -134,7 +134,7 @@ module Genealogy
       if options[:generations]
         generation_count = 0
         generation_ids = parents.compact.map(&:id)
-        while (generation_count < num_generations) && (generation_ids.length > 0)
+        while (generation_count < options[:generations]) && (generation_ids.length > 0)
           next_gen_ids = []
           ids += generation_ids
           until generation_ids.empty?
