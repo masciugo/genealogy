@@ -128,7 +128,8 @@ module Genealogy
 
     # get list of known ancestrors iterateing over parents
     # @param [Hash] options
-    # @return [ActiveRecord::Relation] list of ancestors
+    # @option options [Symbol] generations lets you limit how many generations will be included in the output.
+    # @return [ActiveRecord::Relation] list of ancestors (limited by a number of generations if so indicated)
     def ancestors(options = {})
       ids = []
       if options[:generations]
