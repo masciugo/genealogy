@@ -293,7 +293,18 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
         specify { expect(louise.children(spouse: larry)).to match_array [tommy] }
       end
     end
-    its(:descendants) {is_expected.to match_array [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie, sue]}
+    describe "descendants" do
+      specify { expect(louise.descendants).to match_array [tommy, irene, titty, peter, jack, john, barbara, mary, debby, steve, paso, rud, mark, sam, charlie, sue] }
+      context 'with option generations: 0' do
+        specify { expect(louise.descendants(generations: 0)).to match_array []  }
+      end
+      context 'with option generations: 1' do
+        specify { expect(louise.descendants(generations: 1)).to match_array [tommy, jack, debby]  }
+      end
+      context 'with option generations: 2' do
+        specify { expect(louise.descendants(generations: 2)).to match_array [tommy, jack, debby, irene, john, paso]  }
+      end
+    end
     its(:ancestors) {is_expected.to be_empty}
     its(:great_grandchildren) {is_expected.to match_array [titty, rud, mark, barbara]}
     its(:great_grandparents) {is_expected.to match_array [nil, nil, nil, nil, nil, nil, nil, nil]}
