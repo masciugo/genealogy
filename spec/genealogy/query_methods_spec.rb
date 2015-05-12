@@ -68,6 +68,9 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:great_grandparents) {is_expected.to match_array [nil, nil, marcel, nil, jack, alison, tommy, emily]}
     describe "ancestors" do
       it {expect(peter.ancestors).to match_array([paul, titty, manuel, terry, paso, irene, tommy, emily, larry, louise, luis, rosa, marcel, bob, jack, alison])}
+      context "with options generations: 0" do
+        specify { expect(peter.ancestors(generations: 0)).to  match_array([])}
+      end
       context "with options generations: 1" do
         specify { expect(peter.ancestors(generations: 1)).to  match_array([paul, titty])}
       end
