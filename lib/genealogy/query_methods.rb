@@ -157,14 +157,31 @@ module Genealogy
 
 
     # get list of known descendants iterateing over children ...
-    # @return [ActiveRecord::Relation] list of descendants
-    def descendants
+    # @param [Hash] options
+    # @option options [Symbol] generations lets you limit how many generations will be included in the output.
+    # @return [ActiveRecord::Relation] list of descendants (limited by a number of generations if so indicated)
+    def descendants(options = {})
       ids = []
-      remaining_ids = children.map(&:id)
-      until remaining_ids.empty?
-        ids << remaining_ids.shift
-        remaining_ids += gclass.find(ids.last).children.pluck(:id)
-        # break if (remaining_ids - ids).empty? can be necessary in case of loop. Idem for ancestors method
+      if options[:generations]
+        generation_count = 0
+        generation_ids = children.map(&:id)
+        while (generation_count < options[:generations]) && (generation_ids.length > 0)
+          next_gen_ids = []
+          ids += generation_ids
+          until generation_ids.empty?
+            ids.unshift(generation_ids.shift)
+            next_gen_ids += gclass.find(ids.first).children.map(&:id)
+          end
+          generation_ids = next_gen_ids
+          generation_count += 1
+        end
+      else
+        remaining_ids = children.map(&:id)
+        until remaining_ids.empty?
+          ids << remaining_ids.shift
+          remaining_ids += gclass.find(ids.last).children.pluck(:id)
+          # break if (remaining_ids - ids).empty? can be necessary in case of loop. Idem for ancestors method
+        end
       end
       gclass.where(id: ids)
     end
