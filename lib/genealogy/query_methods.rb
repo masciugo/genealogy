@@ -133,6 +133,7 @@ module Genealogy
     def ancestors(options = {})
       ids = []
       if options[:generations]
+        raise ArgumentError, ":generations option must be an Integer" unless options[:generations].is_a? Integer
         generation_count = 0
         generation_ids = parents.compact.map(&:id)
         while (generation_count < options[:generations]) && (generation_ids.length > 0)

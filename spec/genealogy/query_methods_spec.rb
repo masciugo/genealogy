@@ -77,6 +77,9 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
       context "with options generations: 2" do
         specify { expect(peter.ancestors(generations: 2)).to  match_array([paul, titty, manuel, terry, paso, irene])}
       end
+      context "with wrong options generations: 'foo'" do
+        specify { expect { peter.ancestors(generations: 'foo') }.to raise_error(ArgumentError) }
+      end
     end
     describe "cousins" do
       it { expect(peter.cousins).to match_array([sam, charlie, sue])}
