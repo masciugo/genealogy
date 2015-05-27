@@ -40,6 +40,9 @@ describe "*** Complex Query methods (based on spec/genealogy/sample_pedigree*.pd
       context "with rosa" do
         specify { expect(irene.least_common_ancestor(rosa)).to match_array([rosa])}
       end
+      context "with bad input" do
+        specify { expect{irene.least_common_ancestor('17')}.to raise_error(ArgumentError)}
+      end
     end
   end
 end

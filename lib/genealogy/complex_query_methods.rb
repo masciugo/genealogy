@@ -4,6 +4,7 @@ module Genealogy
     include Constants
 
     def least_common_ancestor(other_person)
+      raise ArgumentError, "argument must be an instance of the #{gclass} class" unless other_person.is_a? gclass
       self_parent_ids = [self.id]
       other_parent_ids = [other_person.id]
 
