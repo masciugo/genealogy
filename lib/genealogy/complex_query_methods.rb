@@ -3,6 +3,12 @@ module Genealogy
     extend ActiveSupport::Concern
     include Constants
 
+    # @return [ActiveRecord::Relation] of the first individual(s) to show up in the ancestors of two given people. 
+    # It moves up one generation at a time for each individual, stopping when there is a shared ancestor id or when there are no more ancestors
+    # If called on two full siblings, it will return both parents, as they appears in the same generation
+    # If called on two half siblings, it will return only the shared parent
+    # If one individual is the ancestor of the other, it will return that individual as the least common shared ancestors
+    # If none are found, it will return an empty AR relation.
     def least_common_ancestor(other_person)
       raise ArgumentError, "argument must be an instance of the #{gclass} class" unless other_person.is_a? gclass
       self_parent_ids = [self.id]
