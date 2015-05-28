@@ -14,8 +14,8 @@ module Genealogy
       other_ancestor_record_ids = [other_person.id]
 
       while self_parent_ids.length > 0 || other_parent_ids.length > 0
-        self_next_gen = gclass.select(:father_id, :mother_id).where(id: self_parent_ids).pluck(:father_id, :mother_id).flatten.compact
-        other_next_gen = gclass.select(:father_id, :mother_id).where(id: other_parent_ids).pluck(:father_id, :mother_id).flatten.compact
+        self_next_gen = gclass.where(id: self_parent_ids).pluck(:father_id, :mother_id).flatten.compact
+        other_next_gen = gclass.where(id: other_parent_ids).pluck(:father_id, :mother_id).flatten.compact
 
         self_ancestor_record_ids += self_next_gen
         self_parent_ids = self_next_gen
