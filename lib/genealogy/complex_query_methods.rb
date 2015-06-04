@@ -32,6 +32,5 @@ module Genealogy
       gclass.where(id: nil)
     end
 
-
   end
 end
