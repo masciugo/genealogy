@@ -33,6 +33,9 @@ Some of them return a single AR object, like `father` and `paternal_grandfather`
 
 Some query methods can take options: `siblings(half: :mother)` returns maternal half-siblings (same mother). `paul.children(spouse: :titty)` returns all individuals that have paul as father and titty as mother.
 
+### Complex Query methods
+Inspired by the [PedHunter](http://www.ncbi.nlm.nih.gov/CBBresearch/Schaffer/pedhunter.html) tool, currently only the `least_common_ancestor`has been started. It returns an *ActiveRecord::Relation* of the first individuals to appear in the family tree of two individuals.
+
 ### Alter methods
 They change the genealogy updating parent external keys of one ore more individuals. The individuals that are actually modified may differ from the receiver: 
 * `peter.add_father(paul)` alters the receiver, peter's *father_id* gets updated
