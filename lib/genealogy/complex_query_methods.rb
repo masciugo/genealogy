@@ -20,7 +20,7 @@ module Genealogy
         generation_count = 1
 
         while parent_ids_temp.select{|array_of_ids| array_of_ids.length > 0}.length > 0
-          next_gen_ids = parent_ids_temp.map{|ids| gclass.where(id: ids).pluck(:father_id, :mother_id).flatten.compact}
+          next_gen_ids = parent_ids_temp.map{|ids| gclass.where(id: ids).select([:father_id, :mother_id]).map{|result| [result.father_id, result.mother_id]}.flatten.compact}
 
           next_gen_ids.each_with_index do |ids, index|
             parent_ids_store[index] += ids
