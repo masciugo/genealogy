@@ -19,6 +19,7 @@ module Genealogy
     # @option options [Hash] column_names (sex:'sex', father_id:'father_id', mother_id:'mother_id', current_spouse_id:'current_spouse_id', birth_date:'birth_date', death_date:'death_date') specifies column names to map database individual table
     # @option options [Array] sex_values (['M','F']) specifies values used in database sex column
     # @return [void]
+
     def has_parents options = {}
 
       include Genealogy::UtilMethods
@@ -28,11 +29,14 @@ module Genealogy
       include Genealogy::AlterMethods
       include Genealogy::CurrentSpouseMethods
 
+
       check_has_parents_options(options)
 
       # keep track of the original extend class to prevent wrong scopes in query method in case of STI
       class_attribute :gclass, instance_writer: false
       self.gclass = self
+
+      self.extend(Genealogy::ComplexQueryMethods::ClassMethods)
 
       class_attribute :ineligibility_level, instance_accessor: false
       self.ineligibility_level = case options[:ineligibility]
