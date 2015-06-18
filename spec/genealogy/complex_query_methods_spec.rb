@@ -9,13 +9,14 @@ describe "*** Complex Query methods (based on spec/genealogy/sample_pedigree*.pd
     describe "lowest common ancestors" do
       context "with mary" do
         specify { expect(peter.lowest_common_ancestors(mary)).to match_array([paul])}
+        specify { expect(peter.class.lowest_common_ancestors(peter, mary)).to match_array([paul])}
       end
       context "with steve" do
         specify { expect(peter.lowest_common_ancestors(steve)).to match_array([paul, titty])}
       end
       context "with sue" do
         specify { expect(peter.lowest_common_ancestors(sue)).to match_array([irene, paso])}
-    end
+      end
       context "with michelle" do
         specify { expect(peter.lowest_common_ancestors(michelle)).to match_array([])}
       end

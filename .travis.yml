@@ -17,6 +17,8 @@ matrix:
   allow_failures:
     - rvm: jruby-19mode
     - rvm: rbx-2
+    - gemfile: gemfiles/rails_3.gemfile
+
 before_script:
   - mysql -e 'create database genealogy_test;'
   - psql -c 'create database genealogy_test;' -U postgres

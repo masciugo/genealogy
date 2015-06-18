@@ -4,7 +4,7 @@
 
 ## Description
 
-Genealogy is a ruby gem library which extends ActiveRecord models in order to make its instances act as relatives so that you can build and query genealogies. To do that every instance need to keep track of its mother and father, so just add the two external key columns to the underlying database table (e.g.: *father_id* and *mother_id*) and make the model call *:has_parents*. This macro will provide it with the two fundamental self-join associations, *father* and *mother*, which all genealogy functionalities depend on.
+Genealogy is a ruby gem library which extends ActiveRecord (~> 4.0) models in order to make its instances act as relatives so that you can build and query genealogies. To do that every instance need to keep track of its mother and father, so just add the two external key columns to the underlying database table (e.g.: *father_id* and *mother_id*) and make the model call *:has_parents*. This macro will provide it with the two fundamental self-join associations, *father* and *mother*, which all genealogy functionalities depend on.
 
 Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represents genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically, the only **primitive** familiar relationships are associations father and mother, all the others relationships, like grandparents, siblings or children, are **derived**. This means that all methods in charge of alter the genealogy (adding/removing relatives) will end up to execute one or more `add_parent` or `remove_parent` on the right objects.
 
@@ -114,7 +114,7 @@ Change db adapter by  environment variable `GENEALOGY_DB=myslq rake` and setting
 
 * improve performances
 * optional usage of current spouse (if defined) for more concise alter methods. For example adding a children to an individual will also add it to the current spouse of the receiver
-* adding more complex query methods like minimal ancestors. See [PedHunter](http://www.ncbi.nlm.nih.gov/CBBresearch/Schaffer/pedhunter.html) tool.
+* adding more complex query methods like lowest minimal ancestors. See [PedHunter](http://www.ncbi.nlm.nih.gov/CBBresearch/Schaffer/pedhunter.html) tool.
 
 ### Steps
 
