@@ -4,7 +4,7 @@
 
 ## Description
 
-Genealogy is a ruby gem library which extends ActiveRecord (~> 4.0) models in order to make its instances act as relatives so that you can build and query genealogies. To do that every instance need to keep track of its mother and father, so just add the two external key columns to the underlying database table (e.g.: *father_id* and *mother_id*) and make the model call *:has_parents*. This macro will provide it with the two fundamental self-join associations, *father* and *mother*, which all genealogy functionalities depend on. 
+Genealogy is a ruby gem library which extends ActiveRecord (~> 4.0) models in order to make its instances act as relatives so that you can build and query genealogies. To do that every instance need to keep track of its mother and father, so just add the two external key columns to the underlying database table (e.g.: *father_id* and *mother_id*) and make the model call *:has_parents*. This macro will provide it with the two fundamental self-join associations, *father* and *mother*, which all genealogy functionalities depend on.
 
 Genealogy takes inspiration from the simple [linkage file format](http://www.helsinki.fi/~tsjuntun/autogscan/pedigreefile.html) which represents genealogies in terms of set of trios: *individual_id*, *father_id*, *mother_id*. Basically, the only **primitive** familiar relationships are associations father and mother, all the others relationships, like grandparents, siblings or children, are **derived**. This means that all methods in charge of alter the genealogy (adding/removing relatives) will end up to execute one or more `add_parent` or `remove_parent` on the right objects.
 
@@ -27,31 +27,34 @@ Genealogy takes inspiration from the simple [linkage file format](http://www.hel
 *Genealogized* models acquire different kinds of methods: from the user point of view the most important are *query methods* and *alter methods*, secondary *ineligible methods*, *scope methods* and *utility methods*. The following is a simple overview, please go [here](#test-and-documentation-together) for a better understanding of the library.
 
 ### Query methods
-These self explanatory methods simply parse the tree (through parents' associations) in order to respond to relatives queries. 
+These self explanatory methods simply parse the tree (through parents' associations) in order to respond to relatives queries.
 
 Some of them return a single AR object, like `father` and `paternal_grandfather`, or nil if is missing. Some other return multiple records. In particular some of them, like `parents` and `grandparents`, return a sorted and fixed lenght *Array* that may include nils, while other like `children` or `siblings` return *ActiveRecord::Relation* as they can be of any length. This let you combine their outcome with other scopes:  `children.males` returns all male children.
 
 Some query methods can take options: `siblings(half: :mother)` returns maternal half-siblings (same mother). `paul.children(spouse: :titty)` returns all individuals that have paul as father and titty as mother.
 
+### Complex Query methods
+Inspired by the [PedHunter](http://www.ncbi.nlm.nih.gov/CBBresearch/Schaffer/pedhunter.html) tool, currently only the `lowest_common_ancestors`has been started. It returns an *ActiveRecord::Relation* of the first individuals to appear in the family trees of the provided individuals.
+
 ### Alter methods
-They change the genealogy updating parent external keys of one ore more individuals. The individuals that are actually modified may differ from the receiver: 
+They change the genealogy updating parent external keys of one ore more individuals. The individuals that are actually modified may differ from the receiver:
 * `peter.add_father(paul)` alters the receiver, peter's *father_id* gets updated
 * `paul.add_children(julian,mark)` alters the arguments, julian mark's *father_id* gets updated
 * `peter.add_paternal_grandfather(manuel)` alters neither the receiver nor the argument, paul's (peter's father) *father_id* gets updated
 
 These methods call internally *save!* so all validations and callbacks are regularly run before completing the operation. Methods that involves updates of two or more instances use transactions to ensure the good outcome of the whole operation. For example `peter.remove_grandparents` raises an exception and no one of peter's parents get updated if one of peter's parents is invalid for any reason.
 
-Like query methods, they can take options: `paul.add_children(julian, spouse: michelle)` will also update julian's mother to michelle and `julian.add_siblings(peter, half: :father)` will add peter as a paternal half-sibling, that is only peter's father will be updated not mother. 
+Like query methods, they can take options: `paul.add_children(julian, spouse: michelle)` will also update julian's mother to michelle and `julian.add_siblings(peter, half: :father)` will add peter as a paternal half-sibling, that is only peter's father will be updated not mother.
 
 
 #### Ineligibility and ineligible methods
 *Genealogy* makes use of the concept of *ineligibility*: while using alter methods it blocks role-incompatible individuals in order to prevent meaningless relationships like females as father or loops (e.g. peter son of paul and paul son of peter). To suit the desired compromise between performances and consistency there are three levels of ineligibility:
 
 * **Level 0.** ineligibility checks are disabled. Consistency is up to the user. Mistakes can lead to unpredictable behaviors. Initilize with option `{ineligibility: false}`
-* **Level 1.** (default) checks are based on the pedigree (e.g., an individual cannot have ancestors as children). Leave it blank or initilize with option `{ineligibility: :pedigree}` 
+* **Level 1.** (default) checks are based on the pedigree (e.g., an individual cannot have ancestors as children). Leave it blank or initilize with option `{ineligibility: :pedigree}`
 * **Level 2.** checks are based on pedigree and on individual dates, birth and death, in combination with life expectancy ages and procreation ages (see [here](#limit_ages) to change them). Initilize with option `{ineligibility: :pedigree_and_dates}`
 
-When ineligibility is enabled, before altering the pedigree, ineligible methods will be invoked to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.ineligible_fathers`. Please read [here](http://www.rubydoc.info/github/masciugo/genealogy/master/Genealogy/IneligibleMethods#ineligible_children-instance_method) for a detailed description of each ineligible method and/or run `rake spec[ineligible]`. **Be aware that ineligibles methods help users to avoid many conceptual errors but not all: besides their output list some other individuals may be ineligibles according to other and more complex lines of reasoning.** 
+When ineligibility is enabled, before altering the pedigree, ineligible methods will be invoked to get the list of ineligibles individuals. For example during `peter.add_father(paul)` genealogy checks that paul is not among the list returned by `peter.ineligible_fathers`. Please read [here](http://www.rubydoc.info/github/masciugo/genealogy/master/Genealogy/IneligibleMethods#ineligible_children-instance_method) for a detailed description of each ineligible method and/or run `rake spec[ineligible]`. **Be aware that ineligibles methods help users to avoid many conceptual errors but not all: besides their output list some other individuals may be ineligibles according to other and more complex lines of reasoning.**
 
 ### Scope methods
 Scope methods are class methods of your *genealogized* model and return list of individuals. `YourModel.males`, for example, returns all males individuals and `YourModel.all_with(:father)` returns all individuals that have a known father.
