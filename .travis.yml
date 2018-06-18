@@ -6,8 +6,8 @@ rvm:
   - rbx-2
   - 2.1.5
 gemfile:
-  - gemfiles/rails_3.gemfile
   - gemfiles/rails_4.gemfile
+  - gemfiles/rails_5.gemfile
 env:
   - GENEALOGY_TEST_DB=mysql
   - GENEALOGY_TEST_DB=sqlite
@@ -17,7 +17,6 @@ matrix:
   allow_failures:
     - rvm: jruby-19mode
     - rvm: rbx-2
-    - gemfile: gemfiles/rails_3.gemfile
 
 before_script:
   - mysql -e 'create database genealogy_test;'

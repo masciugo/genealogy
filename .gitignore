@@ -18,3 +18,4 @@ spec/debug.log
 spec/test.sqlite3.db
 logfile
 *.lock
+.ruby-version

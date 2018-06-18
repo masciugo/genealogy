@@ -1,5 +1,5 @@
 shared_context 'unreleted people exist' do
-  
+
   people = [
     {name: "alison", sex: "F"},
     {name: "barbara", sex: "F"},
@@ -37,7 +37,7 @@ shared_context 'unreleted people exist' do
     {name: "titty", sex: "F"},
     {name: "tommy", sex: "M"}
   ]
-  people.each{|person| let(person[:name]) { @model.my_find_by_name(person[:name])} }
+  people.each{|person| let(person[:name]) { @model.find_by(name: person[:name])} }
 
   before do
     DatabaseCleaner.clean

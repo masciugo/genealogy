@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
   s.date        = Time.now
   s.licenses    = ["MIT"]
 
-  s.add_dependency('activerecord', '~> 4.0')
-  s.add_dependency('activesupport', '~> 4.0')
+  s.add_dependency('activerecord', '> 4.0')
+  s.add_dependency('activesupport', '> 4.0')
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'mysql2'
@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   when /^2/
     "byebug"
   else
-    raise  
+    raise
   end
 
 
