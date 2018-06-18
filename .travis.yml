@@ -2,22 +2,21 @@
 language: ruby
 rvm:
   - 1.9.3
-  - jruby-19mode
-  - rbx-2
-  - 2.1.5
+  - 2.5.1
 gemfile:
-  - gemfiles/rails_3.gemfile
   - gemfiles/rails_4.gemfile
+  - gemfiles/rails_5.gemfile
 env:
   - GENEALOGY_TEST_DB=mysql
-  - GENEALOGY_TEST_DB=sqlite
   - GENEALOGY_TEST_DB=postgres
 matrix:
+  exclude:
+    - rvm: 1.9.3
+      gemfile: gemfiles/rails_5.gemfile
   # fast_finish: true
   allow_failures:
-    - rvm: jruby-19mode
-    - rvm: rbx-2
-    - gemfile: gemfiles/rails_3.gemfile
+    - rvm: 2.5.1
+      gemfile: gemfiles/rails_4.gemfile
 
 before_script:
   - mysql -e 'create database genealogy_test;'

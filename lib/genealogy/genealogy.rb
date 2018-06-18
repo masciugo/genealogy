@@ -90,11 +90,11 @@ module Genealogy
       tracked_relatives = [:father, :mother]
       tracked_relatives << :current_spouse if current_spouse_enabled
       tracked_relatives.each do |k|
-        belongs_to k, class_name: self, foreign_key: self.send("#{k}_id_column")
+        belongs_to k, class_name: self.name, foreign_key: self.send("#{k}_id_column")
       end
 
-      has_many :children_as_father, class_name: self, foreign_key: self.father_id_column, dependent: :nullify
-      has_many :children_as_mother, class_name: self, foreign_key: self.mother_id_column, dependent: :nullify
+      has_many :children_as_father, class_name: self.name, foreign_key: self.father_id_column, dependent: :nullify
+      has_many :children_as_mother, class_name: self.name, foreign_key: self.mother_id_column, dependent: :nullify
 
     end
 

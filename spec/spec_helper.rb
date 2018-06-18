@@ -14,7 +14,7 @@ when /^1.9/
 when /^2/
   require "byebug"
 else
-  raise  
+  raise
 end
 
 require 'rspec/its'
@@ -46,20 +46,7 @@ def get_test_model has_parents_opts = {}
   klass = Class.new(ActiveRecord::Base) do
     self.table_name = 'test_records'
 
-    has_parents has_parents_opts
-
     validate :check_invalid
-
-    def self.my_find_by_name(name)
-      case  Gem::Specification.find_by_name('activerecord').version.to_s
-      when /^3/
-        self.find_by_name(name)
-      when /^4/
-        self.find_by(name: name)
-      else
-        raise 'unknown activerecord version'
-      end
-    end
 
     def inspect
       # "[#{id}]-#{name }"
@@ -84,6 +71,14 @@ def get_test_model has_parents_opts = {}
 
   end
 
+  klass_name = "TestModel#{rand(10000000000)}"
+
+  # puts "defining #{klass_name} (with options #{has_parents_opts}) as ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s} "
+  Genealogy.const_set klass_name, klass
+
+  klass.has_parents has_parents_opts
+
+  # db setup
   cn = ActiveRecord::Base.connection
   cn.drop_table 'test_records' if cn.table_exists?('test_records')
 
@@ -97,17 +92,14 @@ def get_test_model has_parents_opts = {}
     table.integer klass.father_id_column
     table.integer klass.mother_id_column
     table.datetime klass.birth_date_column
-    table.datetime klass.death_date_column 
+    table.datetime klass.death_date_column
     table.integer klass.current_spouse_id_column if klass.current_spouse_enabled?
     table.boolean 'isinvalid'
   end
-
   klass.reset_column_information
 
-  klass_name = "TestModel#{rand(10000000000)}"
 
-  # puts "defining #{klass_name} (with options #{has_parents_opts}) as ActiveRecord version #{Gem::Specification.find_by_name('activerecord').version.to_s} "
-  Genealogy.const_set klass_name, klass
+  klass
 end
 
 connect_to_database
