@@ -14,6 +14,9 @@ matrix:
     - rvm: 1.9.3
       gemfile: gemfiles/rails_5.gemfile
   # fast_finish: true
+  allow_failures:
+    - rvm: 2.5.1
+      gemfile: gemfiles/rails_4.gemfile
 
 before_script:
   - mysql -e 'create database genealogy_test;'
