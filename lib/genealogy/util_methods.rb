@@ -67,7 +67,7 @@ module Genealogy
     end
 
     # It tests whether fertility range overlaps specified period
-    # @param [Range] period 
+    # @param [Range] period
     # @return [Boolean] or nil if cannot be computable (#fertility_range returns nil)
     def can_procreate_during?(period)
       fertility_range.overlaps? period if (period and fertility_range)
@@ -104,9 +104,9 @@ module Genealogy
     generate_method_parent_fertility_range(:mother)
 
     # sex in terms of :male or :female
-    # @return [Symbol] 
+    # @return [Symbol]
     def ssex
-      case sex
+      case sex_before_type_cast
       when gclass.sex_male_value
         :male
       when gclass.sex_female_value
@@ -117,42 +117,42 @@ module Genealogy
     end
 
     # opposite sex in terms of :male or :female
-    # @return [Symbol] 
+    # @return [Symbol]
     def opposite_ssex
       OPPOSITESEX[ssex]
     end
 
-    # @return [Boolean] 
+    # @return [Boolean]
     def is_female?
       return female? if respond_to?(:female?)
-      sex == gclass.sex_female_value
+      sex_before_type_cast == gclass.sex_female_value
     end
 
-    # @return [Boolean] 
+    # @return [Boolean]
     def is_male?
       return male? if respond_to?(:male?)
-      sex == gclass.sex_male_value
+      sex_before_type_cast == gclass.sex_male_value
     end
-    
+
     # max life expectancy in terms of years. It depends on sex
-    # @return [Integer] 
+    # @return [Integer]
     def max_le
       gclass.send("max_#{ssex}_life_expectancy").years
     end
-    
+
     # max fertility procreation age in terms of years. It depends on sex
-    # @return [Integer] 
+    # @return [Integer]
     def max_fpa
       gclass.send("max_#{ssex}_procreation_age").years
     end
-    
+
     # min fertility procreation age in terms of years. It depends on sex
-    # @return [Integer] 
+    # @return [Integer]
     def min_fpa
       gclass.send("min_#{ssex}_procreation_age").years
     end
 
-    private 
+    private
 
     def check_incompatible_relationship(*args)
       relationship = args.shift
