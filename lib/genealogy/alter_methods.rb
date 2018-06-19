@@ -7,10 +7,10 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method add_$1(parent)
-    #   Add $1 
+    #   Add $1
     #   @param [Object] parent
     #   @raise [Exception] if perform validation is enabled and self is invalid
-    #   @return [Boolean] 
+    #   @return [Boolean]
     def self.generate_method_add_parent(parent)
       define_method "add_#{parent}" do |relative|
         check_incompatible_relationship(parent,relative)
@@ -29,7 +29,7 @@ module Genealogy
     #   @method remove_$1
     #   remove $1. Foreign_key set to nil
     #   @raise [Exception] if perform validation is enabled and self is invalid
-    #   @return [Boolean] 
+    #   @return [Boolean]
     def self.generate_method_remove_parent(parent)
       define_method "remove_#{parent}" do
         if gclass.perform_validation_enabled
@@ -48,7 +48,7 @@ module Genealogy
     # @param [Object] mother
     # @see #add_father
     # @see #add_mother
-    # @return [Boolean] 
+    # @return [Boolean]
     def add_parents(father,mother)
       transaction do
         add_father(father)
@@ -59,7 +59,7 @@ module Genealogy
     # remove both parents calling #remove_father and #remove_mother in a transaction
     # @see #remove_father
     # @see #remove_mother
-    # @return [Boolean] 
+    # @return [Boolean]
     def remove_parents
       transaction do
         remove_father
@@ -69,10 +69,10 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method add_$1_grand$2(grandparent)
-    #   Add $1 grand$2 
+    #   Add $1 grand$2
     #   @param [Object] gp grandparent
     #   @raise [Exception] if perform validation is enabled and self is invalid
-    #   @return [Boolean] 
+    #   @return [Boolean]
     def self.generate_method_add_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "add_#{relationship}" do |gp|
@@ -89,9 +89,9 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method remove_$1_grand$2
-    #   remove $1 grand$2 
+    #   remove $1 grand$2
     #   @raise [Exception] if perform validation is enabled and self is invalid
-    #   @return [Boolean] 
+    #   @return [Boolean]
     def self.generate_method_remove_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "remove_#{relationship}" do
@@ -107,11 +107,11 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method add_$1_grandparents
-    #   Add $1 grandparents 
+    #   Add $1 grandparents
     #   @param [Object] gf grandfather
     #   @param [Object] gm grandmother
     #   @raise [Exception] if perform validation is enabled and self is invalid
-    #   @return [Boolean] 
+    #   @return [Boolean]
     def self.generate_method_add_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
       define_method "add_#{relationship}" do |gf,gm|
@@ -125,12 +125,12 @@ module Genealogy
 
     # @!macro [attach] generate
     #   @method remove_$1_grandparents
-    #   remove $1 grandparents 
+    #   remove $1 grandparents
     #   @raise [Exception] if perform validation is enabled and self is invalid
-    #   @return [Boolean] 
+    #   @return [Boolean]
     def self.generate_method_remove_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
-      define_method "remove_#{relationship}" do 
+      define_method "remove_#{relationship}" do
         parent = LINEAGE2PARENT[lineage]
         raise_if_gap_on(parent)
         send(parent).send("remove_parents")
@@ -147,7 +147,7 @@ module Genealogy
     # @param [Object] mgm maternal grandmother
     # @see #add_paternal_grandparents
     # @see #add_maternal_grandparents
-    # @return [Boolean] 
+    # @return [Boolean]
     def add_grandparents(pgf,pgm,mgf,mgm)
       transaction do
         add_paternal_grandparents(pgf,pgm)
@@ -158,7 +158,7 @@ module Genealogy
     # remove all grandparents calling #remove_paternal_grandparents and #remove_maternal_grandparents in a transaction
     # @see #remove_paternal_grandparents
     # @see #remove_maternal_grandparents
-    # @return [Boolean] 
+    # @return [Boolean]
    def remove_grandparents
       transaction do
         remove_paternal_grandparents
@@ -172,7 +172,7 @@ module Genealogy
     #   @param [Hash] options
     #   @option options [Symbol] half :father for paternal half siblings and :mother for maternal half siblings
     #   @option options [Object] spouse if specified, passed individual will be used as mother in case of half sibling
-    # @return [Boolean] 
+    # @return [Boolean]
     def add_siblings(*args)
       options = args.extract_options!
       check_incompatible_relationship(:sibling, *args)
@@ -203,8 +203,8 @@ module Genealogy
       add_siblings(sibling,options)
     end
 
-    
-    # remove siblings by nullifying parents of passed individuals 
+
+    # remove siblings by nullifying parents of passed individuals
     # @overload remove_siblings(*siblings,options={})
     #   @param [Object] siblings list of siblings
     #   @param [Hash] options
@@ -230,7 +230,7 @@ module Genealogy
             sib.remove_mother
           when nil
             sib.remove_parents
-          end  
+          end
         end
       end
       !resulting_indivs.empty? #returned value must be true if self has at least a siblings to affect
@@ -246,21 +246,21 @@ module Genealogy
     #   @param [Object] children list of children
     #   @param [Hash] options
     #   @option options [Object] spouse if specified, children will have that spouse
-    # @return [Boolean] 
+    # @return [Boolean]
     def add_children(*args)
       options = args.extract_options!
       raise_if_sex_undefined
       check_incompatible_relationship(:children, *args)
       transaction do
         args.inject(true) do |res,child|
-          res &= case sex
+          res &= case sex_before_type_cast
           when gclass.sex_male_value
             child.add_mother(options[:spouse]) if options[:spouse]
             child.add_father(self)
           when gclass.sex_female_value
             child.add_father(options[:spouse]) if options[:spouse]
             child.add_mother(self)
-          else 
+          else
             raise SexError, "Sex value not valid for #{self}"
           end
         end
@@ -294,14 +294,14 @@ module Genealogy
           if options[:remove_other_parent] == true
             child.remove_parents
           else
-            case sex
+            case sex_before_type_cast
             when gclass.sex_male_value
               child.remove_father
             when gclass.sex_female_value
               child.remove_mother
-            else 
+            else
               raise SexError, "Sex value not valid for #{self}"
-            end  
+            end
           end
         end
       end

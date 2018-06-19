@@ -5,28 +5,28 @@ module Genealogy
 
     include Constants
 
-    # @return [2-elements Array] father and mother 
+    # @return [2-elements Array] father and mother
     def parents
       [father,mother]
     end
-    # @return [ActiveRecord, NilClass] 
+    # @return [ActiveRecord, NilClass]
     def paternal_grandfather
       father && father.father
     end
-    # @return [ActiveRecord, NilClass] 
+    # @return [ActiveRecord, NilClass]
     def paternal_grandmother
       father && father.mother
     end
-    # @return [ActiveRecord, NilClass] 
+    # @return [ActiveRecord, NilClass]
     def maternal_grandfather
       mother && mother.father
     end
-    # @return [ActiveRecord, NilClass] 
+    # @return [ActiveRecord, NilClass]
     def maternal_grandmother
       mother && mother.mother
     end
 
-    # @return [2-elements Array] paternal_grandfather and paternal_grandmother 
+    # @return [2-elements Array] paternal_grandfather and paternal_grandmother
     def paternal_grandparents
       (father && father.parents) || [nil,nil]
     end
@@ -50,7 +50,7 @@ module Genealogy
     # @option options [Object] spouse to filter children by spouse
     # @return [ActiveRecord::Relation] children
     def children(options = {})
-      raise SexError, "Sex value not valid for #{self}. It's needed to look for children" unless gclass.sex_values.include? sex
+      raise SexError, "Sex value not valid for #{self}. It's needed to look for children" unless gclass.sex_values.include? sex_before_type_cast
       result = gclass.where("#{SEX2PARENT[ssex]}_id" => self)
       if options.keys.include? :spouse
         check_indiv(spouse = options[:spouse],opposite_ssex)
@@ -79,7 +79,7 @@ module Genealogy
         result.all_with(:parents).where(father_id: father, mother_id: mother)
       when :father # common father
         result = result.all_with(:father).where(father_id: father)
-        if spouse 
+        if spouse
           check_indiv(spouse, :female)
           result.where(mother_id: spouse)
         elsif mother
@@ -109,7 +109,7 @@ module Genealogy
     end
 
     # siblings with option half: :only
-    # @see #siblings 
+    # @see #siblings
     def half_siblings(options = {})
       siblings(options.merge(half: :only))
     end
@@ -196,7 +196,7 @@ module Genealogy
     def great_grandchildren
       result = grandchildren.compact.inject([]){|memo,grandchild| memo |= grandchild.children}
     end
-    
+
     # list of uncles and aunts iterating through parents' siblings
     # @param [Hash] options
     # @option options [Symbol] lineage to filter by lineage: :paternal or :maternal
@@ -275,7 +275,7 @@ module Genealogy
     # family hash with roles as keys? :spouse and individuals as values. Defaults roles are :father, :mother, :children, :siblings and current_spouse if enabled
     # @option options [Symbol] half to filter siblings (see #siblings)
     # @option options [Boolean] extended to include roles for grandparents, grandchildren, uncles, aunts, nieces, nephews and cousins
-    # @return [Hash] family hash with roles as keys? :spouse and individuals as values. 
+    # @return [Hash] family hash with roles as keys? :spouse and individuals as values.
     def family_hash(options = {})
       roles = [:father, :mother, :children, :siblings]
       roles += [:current_spouse] if self.class.current_spouse_enabled
@@ -303,7 +303,7 @@ module Genealogy
 
     # family individuals
     # @return [Array]
-    # @see #family_hash 
+    # @see #family_hash
     def family(options = {})
       hash = family_hash(options)
       hash.keys.inject([]){|tot,k| tot << hash[k] }.compact.flatten
@@ -319,17 +319,17 @@ module Genealogy
 
     module ClassMethods
       # all male individuals
-      # @return [ActiveRecord::Relation] 
+      # @return [ActiveRecord::Relation]
       def males
         where(sex: sex_male_value)
       end
       # all female individuals
-      # @return [ActiveRecord::Relation] 
+      # @return [ActiveRecord::Relation]
       def females
         where(sex: sex_female_value)
       end
       # all individuals individuals having relative with specified role
-      # @return [ActiveRecord, ActiveRecord::Relation] 
+      # @return [ActiveRecord, ActiveRecord::Relation]
       def all_with(role)
         case role
         when :father
