@@ -284,12 +284,14 @@ module Genealogy
           []
         when :include
           [:half_siblings]
+        when :include_separately
+          [:paternal_half_siblings, :maternal_half_siblings]
         when :father
           [:paternal_half_siblings]
         when :mother
           [:maternal_half_siblings]
         else
-          raise ArgumentError, "Admitted values for :half options are: :father, :mother, :include, nil"
+          raise ArgumentError, "Admitted values for :half options are: :father, :mother, :include, :include_separately, nil"
       end
       roles += [:paternal_grandfather, :paternal_grandmother, :maternal_grandfather, :maternal_grandmother, :grandchildren, :uncles_and_aunts, :nieces_and_nephews, :cousins] if options[:extended] == true
       roles.inject({}){|res,role| res.merge!({role => self.send(role)})}

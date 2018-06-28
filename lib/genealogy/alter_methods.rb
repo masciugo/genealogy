@@ -203,6 +203,22 @@ module Genealogy
       add_siblings(sibling,options)
     end
 
+    # @see #add_siblings
+    def add_paternal_half_siblings(*args)
+      options = args.extract_options!
+      options[:half] = :father
+      add_siblings(*args,options)
+    end
+
+    # @see #add_siblings
+    def add_maternal_half_siblings(*args)
+      options = args.extract_options!
+      options[:half] = :mother
+      add_siblings(*args,options)
+    end
+
+    alias :add_paternal_half_sibling :add_paternal_half_siblings
+    alias :add_maternal_half_sibling :add_maternal_half_siblings
 
     # remove siblings by nullifying parents of passed individuals
     # @overload remove_siblings(*siblings,options={})
