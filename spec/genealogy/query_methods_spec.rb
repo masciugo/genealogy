@@ -95,6 +95,9 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
       context "with options half: :include" do
         specify { expect(peter.family_hash(half: :include)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, half_siblings: [ruben, mary, julian, beatrix] })}
       end
+      context "with options half: :include_separately" do
+        specify { expect(peter.family_hash(half: :include_separately)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, paternal_half_siblings: [ruben, mary, julian, beatrix], maternal_half_siblings: [] })}
+      end
       context "with options half: :father" do
         specify { expect(peter.family_hash(half: :father)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, paternal_half_siblings: [ruben, mary, julian, beatrix] })}
       end
@@ -103,34 +106,34 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
       end
       context "with options extended: true" do
         specify { expect(peter.family_hash(extended: true)).to match_family(
-          :father=>paul, 
-          :mother=>titty, 
-          :children=>[], 
-          :siblings=>[steve], 
+          :father=>paul,
+          :mother=>titty,
+          :children=>[],
+          :siblings=>[steve],
           :current_spouse=>nil,
           :paternal_grandfather=>manuel,
           :paternal_grandmother=>terry,
           :maternal_grandfather=>paso,
           :maternal_grandmother=>irene,
-          :grandchildren=>[], 
-          :uncles_and_aunts=>[rud, mark], 
-          :nieces_and_nephews=>[], 
+          :grandchildren=>[],
+          :uncles_and_aunts=>[rud, mark],
+          :nieces_and_nephews=>[],
           :cousins=>[sam, sue, charlie])}
       end
       context "with options extended: true, half: :include" do
         specify { expect(peter.family_hash(extended: true, half: :include)).to match_family(
-          :father=>paul, 
-          :mother=>titty, 
-          :children=>[], 
-          :siblings=>[steve], 
+          :father=>paul,
+          :mother=>titty,
+          :children=>[],
+          :siblings=>[steve],
           :current_spouse=>nil,
           :paternal_grandfather=>manuel,
           :paternal_grandmother=>terry,
           :maternal_grandfather=>paso,
           :maternal_grandmother=>irene,
-          :grandchildren=>[], 
-          :uncles_and_aunts=>[rud, mark], 
-          :nieces_and_nephews=>[], 
+          :grandchildren=>[],
+          :uncles_and_aunts=>[rud, mark],
+          :nieces_and_nephews=>[],
           :cousins=>[sam, sue, charlie],
           :half_siblings=>[ruben, mary, julian, beatrix])}
       end
@@ -254,34 +257,34 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:paternal_aunts) {is_expected.to match_array [debby]}
     describe "family_hash" do
       it { expect( paso.family_hash ).to match_family({
-        father: jack, 
-        mother: alison, 
-        children: [titty,rud,mark], 
-        siblings: [john], 
+        father: jack,
+        mother: alison,
+        children: [titty,rud,mark],
+        siblings: [john],
         current_spouse: irene}) }
       context "with options half: :include" do
         specify { expect(paso.family_hash(half: :include)).to match_family({
-          father: jack, 
-          mother: alison, 
-          children: [titty,rud,mark], 
-          siblings: [john], 
+          father: jack,
+          mother: alison,
+          children: [titty,rud,mark],
+          siblings: [john],
           current_spouse: irene,
           half_siblings: [] })}
       end
       context "with options extended: true" do
         specify { expect(paso.family_hash(extended: true)).to match_family(
-          father: jack, 
-          mother: alison, 
-          children: [titty,rud,mark], 
-          siblings: [john], 
+          father: jack,
+          mother: alison,
+          children: [titty,rud,mark],
+          siblings: [john],
           current_spouse: irene,
           :paternal_grandfather=>bob,
           :paternal_grandmother=>louise,
           :maternal_grandfather=>nil,
           :maternal_grandmother=>nil,
-          :grandchildren=>[peter,steve,sue,sam,charlie], 
-          :uncles_and_aunts=>[debby], 
-          :nieces_and_nephews=>[], 
+          :grandchildren=>[peter,steve,sue,sam,charlie],
+          :uncles_and_aunts=>[debby],
+          :nieces_and_nephews=>[],
           :cousins=>[])}
       end
     end
@@ -347,25 +350,25 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
     its(:extended_family) {is_expected.to match_array [peter,steve,rud,mark,irene,paso,sam,charlie,emily,sue,tommy,jack,alison,john, barbara]}
     describe "family_hash" do
       it { expect( titty.family_hash ).to match_family({
-        father: paso, 
-        mother: irene, 
-        children: [peter,steve], 
-        siblings: [rud,mark], 
+        father: paso,
+        mother: irene,
+        children: [peter,steve],
+        siblings: [rud,mark],
         current_spouse: nil}) }
       context "with options extended: true" do
         specify { expect(titty.family_hash(extended: true)).to match_family(
-          father: paso, 
-          mother: irene, 
-          children: [peter,steve], 
-          siblings: [rud,mark], 
+          father: paso,
+          mother: irene,
+          children: [peter,steve],
+          siblings: [rud,mark],
           current_spouse: nil,
           :paternal_grandfather=>tommy,
           :paternal_grandmother=>emily,
           :maternal_grandfather=>jack,
           :maternal_grandmother=>alison,
-          :grandchildren=>[], 
-          :uncles_and_aunts=>[], 
-          :nieces_and_nephews=>[sue,sam,charlie], 
+          :grandchildren=>[],
+          :uncles_and_aunts=>[],
+          :nieces_and_nephews=>[sue,sam,charlie],
           :cousins=>[barbara])}
       end
     end

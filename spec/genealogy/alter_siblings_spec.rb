@@ -2,9 +2,9 @@ require 'spec_helper'
 
 shared_examples 'raising error and not affecting the trio' do |error,trio|
   specify { expect { subject }.to error ? raise_error(error) : raise_error}
-  specify { 
-    subject rescue nil 
-    expect(trio.map{|sym| send(sym) if sym }).to remain_a_trio 
+  specify {
+    subject rescue nil
+    expect(trio.map{|sym| send(sym) if sym }).to remain_a_trio
   }
 end
 
@@ -13,7 +13,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
   context "when taking account validation (default options for has_parents)" do
     before { @model = get_test_model({}) }
-  
+
     include_context 'unreleted people exist'
 
     describe "#add_siblings" do
@@ -39,7 +39,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         subject { peter.add_siblings(steve) }
         it { is_expected.to be true }
         it "argument and receiver become siblings" do
-          subject 
+          subject
           expect([peter,steve]).to be_siblings
         end
 
@@ -47,9 +47,9 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           subject { peter.add_siblings(steve,julian) }
           it { is_expected.to be true }
           it "arguments and receiver become siblings" do
-            subject 
+            subject
             expect([peter,steve]).to be_siblings and
-            expect([peter,julian]).to be_siblings 
+            expect([peter,julian]).to be_siblings
           end
 
         end
@@ -63,7 +63,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           before { steve.update_attributes(father_id: paul.id, mother_id: titty.id) }
           it_behaves_like "raising error and not affecting the trio", Genealogy::IncompatibleRelationshipException, [:steve,:paul,:titty]
         end
-          
+
         context "when argument is invalid" do
           before { steve.mark_invalid! }
           it_behaves_like "raising error and not affecting the trio", nil, [:steve,nil,nil]
@@ -73,8 +73,8 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           before { args.map!{|p| eval(p.to_s)} }
           it { is_expected.to be true }
           it "involved individuals become paternal half siblings" do
-            subject 
-            expect(args).to be_paternal_half_siblings 
+            subject
+            expect(args).to be_paternal_half_siblings
           end
         end
 
@@ -83,11 +83,12 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           it_behaves_like "a method which add paternal half siblings", :peter, :julian
         end
 
+
         context "when specify option half: :father and :spouse" do
           subject { peter.add_siblings(julian, half: :father, spouse: michelle) }
           it_behaves_like "a method which add paternal half siblings", :peter, :julian do
             it "updates argument's mother with provided spouse" do
-              subject 
+              subject
               expect(julian.mother).to be michelle
             end
           end
@@ -111,10 +112,10 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
       end
       context 'when receiver has some full siblings, paternal and maternal half siblings ' do
         include_context "connect people" do
-          before { 
+          before {
             sue.update_attributes(father_id: paul.id, mother_id: titty.id) # extra full sibling
             rud.update_attributes(father_id: nil, mother_id: titty.id) # extra maternal half sibling
-          } 
+          }
         end
         it { is_expected.to be true }
         it "makes receiver to not have full siblings" do
@@ -190,6 +191,29 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
     end
 
+    describe '#add_paternal_half_siblings' do
+      context 'when receiver has parents' do
+        before { peter.update_attributes(father_id: paul.id, mother_id: titty.id) }
+        subject { peter.add_paternal_half_siblings(steve) }
+        it { is_expected.to be true }
+        it "argument and receiver become half siblings" do
+          subject
+          expect(peter.father).to eq(steve.father)
+        end
+      end
+    end
+
+    describe '#add_maternal_half_siblings' do
+      context 'when receiver has parents' do
+        before { peter.update_attributes(father_id: paul.id, mother_id: titty.id) }
+        subject { peter.add_maternal_half_siblings(steve) }
+        it { is_expected.to be true }
+        it "argument and receiver become half siblings" do
+          subject
+          expect(peter.mother).to eq(steve.mother)
+        end
+      end
+    end
 
   end
 
@@ -204,7 +228,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         subject { peter.add_siblings(manuel) }
         specify { expect { subject }.not_to raise_error }
         it "argument and receiver become siblings" do
-          subject 
+          subject
           expect([peter,manuel]).to be_siblings
         end
       end
@@ -213,7 +237,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         subject { peter.add_siblings(steve) }
         specify { expect { subject }.not_to raise_error }
         it "argument and receiver are still siblings" do
-          subject 
+          subject
           expect([peter,steve]).to be_siblings
         end
       end
@@ -228,7 +252,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
 
       describe "#add_siblings" do
         include_context 'unreleted people exist' do
-          before { 
+          before {
             peter.update_attributes(father_id: paul.id, mother_id: titty.id)
             steve.mark_invalid!
           }
@@ -236,7 +260,7 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
         subject { peter.add_siblings(steve) }
         specify { expect { subject }.not_to raise_error }
         it "argument and receiver become siblings" do
-          subject 
+          subject
           expect([peter,steve]).to be_siblings
         end
       end
