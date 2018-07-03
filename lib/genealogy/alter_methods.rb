@@ -257,6 +257,24 @@ module Genealogy
       remove_siblings(sib,options)
     end
 
+    # @see #remove_siblings
+    def remove_paternal_half_siblings(*args)
+      options = args.extract_options!
+      options[:half] = :father
+      remove_siblings(*args,options)
+    end
+
+    # @see #remove_siblings
+    def remove_maternal_half_siblings(*args)
+      options = args.extract_options!
+      options[:half] = :mother
+      remove_siblings(*args,options)
+    end
+
+    alias :remove_paternal_half_sibling :remove_paternal_half_siblings
+    alias :remove_maternal_half_sibling :remove_maternal_half_siblings
+
+
     # add children by assigning self as parent
     # @overload add_children(*children,options={})
     #   @param [Object] children list of children

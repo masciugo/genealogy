@@ -10,7 +10,7 @@ shared_examples "including individuals because of basic checks" do |indiv_with,i
   end
   it "does not return nil if #{relationship} is not set" do
     expect(iwo.send(method)).not_to be nil
-  end  
+  end
   it "includes theirself" do
     expect(iwo.send(method)).to include iwo
   end
@@ -157,7 +157,7 @@ end
 describe "*** Ineligible methods ***", :ineligible do
 
   context 'when ineligibility checks involve only pedigree (default)' do
-    before { @model = get_test_model({current_spouse: true }) }  
+    before { @model = get_test_model({current_spouse: true }) }
     include_context "pedigree exists" #all following examples are based on sample pedigree
 
     describe "#ineligible_fathers" do
@@ -221,7 +221,7 @@ describe "*** Ineligible methods ***", :ineligible do
       it "does not include paternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
         michelle.update_attributes(father_id: nil)
         expect(julian.ineligible_maternal_grandfathers).not_to include ruben,peter,steve
-      end      
+      end
     end
 
     describe "#ineligible_maternal_grandmothers" do
@@ -233,7 +233,7 @@ describe "*** Ineligible methods ***", :ineligible do
       it "does not include paternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
         michelle.update_attributes(mother_id: nil)
         expect(julian.ineligible_maternal_grandmothers).not_to include mary
-      end      
+      end
     end
 
     describe "#ineligible_siblings" do
@@ -281,12 +281,12 @@ describe "*** Ineligible methods ***", :ineligible do
 
   context 'when ineligibility checks involve pedigree and dates' do
 
-    before { 
+    before {
       @model = get_test_model({
-        current_spouse: true, 
-        ineligibility: :pedigree_and_dates, 
+        current_spouse: true,
+        ineligibility: :pedigree_and_dates,
         limit_ages: { min_male_procreation_age: 12, max_male_procreation_age: 75, min_female_procreation_age: 9, max_female_procreation_age: 50, max_male_life_expectancy: 110, max_female_life_expectancy: 110}
-      }) 
+      })
     }
     include_context "pedigree exists with dates" #all following examples are based on sample pedigree with dates
 
@@ -306,7 +306,7 @@ describe "*** Ineligible methods ***", :ineligible do
           expect(mia.ineligible_fathers).to include jack,tommy
         end
         it "includes individuals too old (died)" do
-          expect(marcel.ineligible_fathers).to include larry      
+          expect(marcel.ineligible_fathers).to include larry
         end
       end
     end
@@ -330,7 +330,7 @@ describe "*** Ineligible methods ***", :ineligible do
         it "does not includes individuals with birth date unknown (maybe still fertile)" do
           titty.update_attributes(father_id: nil, mother_id: nil)
           expect(bob.ineligible_mothers).not_to include titty
-        end  
+        end
         it "does not includes individuals born on mother's date of death" do
           naomi.update_attributes(death_date: Date.new(1952,4,17), birth_date: Date.new(1932,4,18))
           expect(maggie.ineligible_mothers).not_to include naomi
@@ -452,7 +452,7 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(paul.ineligible_children).to include naomi,ned,maggie,alison
       end
       it "includes individuals born after death" do
-        expect(irene.ineligible_children).to include mia,ruben 
+        expect(irene.ineligible_children).to include mia,ruben
       end
       it "includes individuals born after max fertility age" do
         michelle.update_attributes(mother_id:nil)
