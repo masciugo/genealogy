@@ -215,6 +215,50 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
       end
     end
 
+    describe '#remove_paternal_half_siblings' do
+      context 'when receiver has some full siblings, paternal and maternal half siblings ' do
+        include_context "connect people"
+        it 'removes all paternal half siblings' do
+          peter.remove_paternal_half_siblings
+          expect(peter.paternal_half_siblings).to be_empty
+        end
+        context 'when specify a sibling as argument' do
+          it 'removes it keepeing their mother' do
+            peter.remove_paternal_half_siblings(beatrix)
+            expect(peter.paternal_half_siblings).to match_array([julian, mary, ruben])
+          end
+        end
+         context 'when specify a sibling as argument and remove_other_parent: true' do
+          it 'removes their mother too' do
+            peter.remove_paternal_half_siblings(beatrix, remove_other_parent: true)
+            expect(beatrix.mother).to be_nil
+          end
+        end
+      end
+    end
+
+    describe '#remove_maternal_half_siblings' do
+      context 'when receiver has some full siblings, maternal and maternal half siblings ' do
+        include_context "connect people"
+        it 'removes all maternal half siblings' do
+          jack.remove_maternal_half_siblings
+          expect(jack.maternal_half_siblings).to be_empty
+        end
+        context 'when specify a sibling as argument' do
+          it 'removes it keepeing their father' do
+            jack.remove_maternal_half_siblings(tommy)
+            expect(jack.maternal_half_siblings).to be_empty
+          end
+        end
+         context 'when specify a sibling as argument and remove_other_parent: true' do
+          it 'removes their father too' do
+            jack.remove_maternal_half_siblings(tommy, remove_other_parent: true)
+            expect(tommy.father).to be_nil
+          end
+        end
+      end
+    end
+
   end
 
   context 'when ignoring ineligibility (options for has_parents: {ineligibility: false})' do
