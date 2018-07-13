@@ -259,6 +259,46 @@ describe "*** Ineligible methods ***", :ineligible do
       end
     end
 
+    describe '#ineligible_paternal_half_siblings' do
+      it "includes theirself" do
+        expect(rud.ineligible_paternal_half_siblings).to include rud
+      end
+      it "includes their own father" do
+        paso.update_attributes(father_id: nil)
+        expect(rud.ineligible_paternal_half_siblings).to include paso
+      end
+      it 'includes individuals with different father' do
+        expect(paul.ineligible_paternal_half_siblings).to include peter,steve,mary,julian,beatrix,sue,sam,charlie
+      end
+      it 'does not include too young people' do
+        expect(tommy.ineligible_paternal_half_siblings).not_to include mia
+      end
+      it 'does not includes mother in case of incest' do
+        terry.update_attributes(father_id: nil)
+        expect(paul.ineligible_paternal_half_siblings).not_to include terry
+      end
+      it 'includes maternal half_siblings' do
+        steve.update_attributes(father_id: nil)
+        expect(peter.ineligible_paternal_half_siblings).to include steve
+      end
+    end
+
+    describe '#ineligible_maternal_half_siblings' do
+      it "includes theirself" do
+        expect(rud.ineligible_maternal_half_siblings).to include rud
+      end
+      it "includes their own mother" do
+        expect(paul.ineligible_maternal_half_siblings).to include terry
+      end
+      it 'includes individuals with different mother' do
+        expect(paul.ineligible_maternal_half_siblings).to include peter,steve,mary,julian,beatrix,sue,sam,charlie
+      end
+      it 'includes paternal half_siblings' do
+        expect(peter.ineligible_maternal_half_siblings).to include ruben
+      end
+    end
+
+
     describe "#ineligible_children" do
       it "includes theirself" do
         expect(paul.ineligible_children).to include paul
@@ -445,6 +485,27 @@ describe "*** Ineligible methods ***", :ineligible do
         end
       end
     end
+
+    describe '#ineligible_paternal_half_siblings' do
+      it 'includes too old people' do
+        terry.update_attributes(father_id: nil)
+        expect(paul.ineligible_paternal_half_siblings).to include terry
+      end
+      it 'includes too young people' do
+        expect(tommy.ineligible_paternal_half_siblings).to include mia
+      end
+    end
+
+    describe '#ineligible_maternal_half_siblings' do
+      it 'includes too old people' do
+        expect(steve.ineligible_maternal_half_siblings).to include alison
+      end
+      it 'includes too young people' do
+        expect(tommy.ineligible_maternal_half_siblings).to include ruben
+      end
+
+    end
+
 
     describe "#ineligible_children" do
       it_behaves_like "including children because of checks on pedigree"
