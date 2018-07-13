@@ -175,7 +175,15 @@ module Genealogy
     # @return [Boolean]
     def add_siblings(*args)
       options = args.extract_options!
-      check_incompatible_relationship(:sibling, *args)
+      case options[:half]
+      when :father
+        check_incompatible_relationship(:paternal_half_sibling, *args)
+      when :mother
+        check_incompatible_relationship(:maternal_half_sibling, *args)
+      when nil
+        check_incompatible_relationship(:sibling, *args)
+      end
+
       transaction do
         args.inject(true) do |res,sib|
           res &= case options[:half]
