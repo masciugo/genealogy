@@ -281,6 +281,9 @@ describe "*** Ineligible methods ***", :ineligible do
         steve.update_attributes(father_id: nil)
         expect(peter.ineligible_paternal_half_siblings).to include steve
       end
+      it 'includes other paternal half_siblings' do
+        expect(steve.ineligible_paternal_half_siblings).to include ruben
+      end
     end
 
     describe '#ineligible_maternal_half_siblings' do
