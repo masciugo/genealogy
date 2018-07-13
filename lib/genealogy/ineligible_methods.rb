@@ -111,7 +111,7 @@ module Genealogy
     # @!macro [attach] generate_method_ineligibles_half_siblings_with_docs
     #   @method ineligible_$1_half_siblings
     #   list of individual who cannot be $1 half_sibling according to the ineligibility level in use.
-    #   At `:pedigree` level it returns `self` along with siblings, other lineage halfsiblngs and all individuals with differnt $2
+    #   At `:pedigree` level it returns $2 ineligible children, other lineage halfsiblings and all individuals with $2 set
     #   At `:pedigree_and_dates` level it also includes all individuals who cannot be siblings for age reasons. If $2 is known it includes $2's ineligible children,
     #   otherwise it tries to estimate $2's fertility period: if it's possible it includes all individuals whose estimated birth period doesn't overlap $2's fertility period.
     #   @return [Array]
@@ -121,9 +121,9 @@ module Genealogy
         parent = LINEAGE2PARENT[lineage]
         p = send(parent)
         if gclass.ineligibility_level >= PEDIGREE
-          ineligibles |= siblings | [self,p]
+          ineligibles |= p.ineligible_children
           ineligibles |= send("#{OPPOSITELINEAGE[lineage]}_half_siblings") # other lineage half siblings would become full siblings so they cannot be current lineage half sibling
-          ineligibles |= gclass.all_with(parent).where("#{parent}_id != ?", p) if p
+          ineligibles |= gclass.all_with(parent)
         end
         if gclass.ineligibility_level >= PEDIGREE_AND_DATES
           if p
