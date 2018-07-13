@@ -201,6 +201,14 @@ describe "*** Alter siblings methods ***", :done, :alter_s do
           expect(peter.father).to eq(steve.father)
         end
       end
+      context "when argument is ineligible" do
+        before {
+          paul.update_attributes(father_id: manuel.id, mother_id: terry.id)
+          mark.update_attributes(father_id: paso.id)
+        }
+        subject { paul.add_paternal_half_siblings(mark) }
+        it_behaves_like "raising error and not affecting the trio", Genealogy::IncompatibleRelationshipException, [:mark,:paso,nil]
+      end
     end
 
     describe '#add_maternal_half_siblings' do
