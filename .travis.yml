@@ -10,12 +10,6 @@ gemfile:
 env:
   - GENEALOGY_TEST_DB=mysql
   - GENEALOGY_TEST_DB=postgres
-matrix:
-  exclude:
-  # fast_finish: true
-  allow_failures:
-    - rvm: 2.5.1
-      gemfile: gemfiles/rails_4.gemfile
 services:
   - mysql
   - postgresql
