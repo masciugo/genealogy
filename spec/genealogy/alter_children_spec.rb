@@ -2,10 +2,10 @@ require 'spec_helper'
 
 shared_context 'paul has some children' do
   before do
-    peter.update_attributes(father_id: paul.id, mother_id: titty.id)
-    steve.update_attributes(father_id: paul.id, mother_id: titty.id)
-    julian.update_attributes(father_id: paul.id, mother_id: michelle.id)
-    ruben.update_attributes(father_id: paul.id)
+    peter.update(father_id: paul.id, mother_id: titty.id)
+    steve.update(father_id: paul.id, mother_id: titty.id)
+    julian.update(father_id: paul.id, mother_id: michelle.id)
+    ruben.update(father_id: paul.id)
   end
 end
 
@@ -14,7 +14,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
 
   context "when taking account validation (default options for has_parents)" do
     before { @model = get_test_model({}) }
-  
+
     include_context 'unreleted people exist'
 
     describe "#add_children" do
@@ -24,7 +24,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it { is_expected.to be true }
         it "updates child's parent, keeping the other unaffected" do
           subject
-          expect([peter, paul, nil]).to be_a_trio 
+          expect([peter, paul, nil]).to be_a_trio
         end
       end
 
@@ -36,17 +36,17 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it "updates children's parent, keeping the other unaffected" do
           subject
           expect([peter, paul, nil]).to be_a_trio and
-          expect([steve, paul, nil]).to be_a_trio 
+          expect([steve, paul, nil]).to be_a_trio
         end
 
         context "when one child is invalid" do
           before { steve.mark_invalid! }
           subject { paul.add_children(peter,steve) }
-          specify { expect { subject }.to raise_error }
+          specify { expect { subject }.to raise_error(ActiveRecord::RecordInvalid) }
           it "children remain unaffected" do
             subject rescue nil
             expect([peter, nil, nil]).to be_a_trio and
-            expect([steve, nil, nil]).to be_a_trio 
+            expect([steve, nil, nil]).to be_a_trio
           end
         end
 
@@ -66,7 +66,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         before { paul.sex = nil }
         specify { expect { paul.add_children(peter) }.to raise_error(Genealogy::SexError) }
       end
-      
+
       context "when specify spouse too" do
         subject { paul.add_children(julian, spouse: michelle) }
         it { is_expected.to build_the_trio(julian, paul, michelle) }
@@ -131,7 +131,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       context "when one child is invalid" do
         before { steve.mark_invalid! }
         subject { paul.remove_children }
-        specify { expect { subject }.to raise_error }
+        specify { expect { subject }.to raise_error(ActiveRecord::RecordInvalid) }
         it "children remain unaffected" do
           subject rescue nil
           expect([peter, paul, titty]).to be_a_trio and
@@ -154,7 +154,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
       context 'when child argument already has parent' do
         before { peter.update_attribute(:father_id, rud.id) }
         subject { paul.add_children(peter) }
-        specify { expect { subject }.not_to raise_error}
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to be true }
         it "updates child's parent" do
           subject
@@ -164,7 +164,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
 
       context "when child argument is an ancestor" do
         subject { paul.add_children(manuel) }
-        specify { expect { subject }.not_to raise_error}
+        specify { expect { subject }.not_to raise_error }
         it { is_expected.to be true }
         it "updates child's parent" do
           subject
@@ -189,7 +189,7 @@ describe "*** Alter children methods ***", :done, :alter_c  do
         it "updates children's parent, keeping the other unaffected" do
           subject
           expect([peter, paul, nil]).to be_a_trio and
-          expect([steve, paul, nil]).to be_a_trio 
+          expect([steve, paul, nil]).to be_a_trio
         end
       end
 

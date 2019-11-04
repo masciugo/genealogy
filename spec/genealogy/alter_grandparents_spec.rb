@@ -4,7 +4,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
 
   context "when taking account validation and ineligibility by pedigree (default)" do
     before { @model = get_test_model({}) }
-  
+
     include_context 'unreleted people exist'
 
     describe "#add_paternal_grandfather" do
@@ -12,7 +12,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         specify { expect { peter.add_paternal_grandfather(manuel) }.to raise_error(Genealogy::LineageGapException)}
       end
       context "when receiver has father" do
-        before { peter.update_attributes(father_id: paul.id) }
+        before { peter.update(father_id: paul.id) }
         subject { peter.add_paternal_grandfather(manuel) }
         it { is_expected.to be true }
         it { is_expected.to build_the_trio(paul, manuel, nil) }
@@ -22,7 +22,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         end
         context "when father becomes invalid" do
           before { paul.mark_invalid! }
-          specify { expect { subject }.to raise_error }
+          specify { expect { subject }.to raise_error(ActiveRecord::RecordInvalid) }
           describe "resulting trios" do
             subject { peter.add_paternal_grandfather(manuel) rescue true }
             specify { is_expected.to keep_the_trio(paul, nil, nil) }
@@ -44,7 +44,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         specify { expect { peter.add_paternal_grandmother(manuel) }.to raise_error(Genealogy::LineageGapException)}
       end
       context "when receiver has father" do
-        before { peter.update_attributes(father_id: paul.id) }
+        before { peter.update(father_id: paul.id) }
         subject { peter.add_paternal_grandmother(terry) }
         it { is_expected.to be true }
         it { is_expected.to build_the_trio(paul, nil, terry) }
@@ -54,7 +54,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         end
         context "when father becomes invalid" do
           before { paul.mark_invalid! }
-          specify { expect { subject }.to raise_error }
+          specify { expect { subject }.to raise_error(ActiveRecord::RecordInvalid) }
           describe "resulting trios" do
             subject { peter.add_paternal_grandmother(terry) rescue true }
             specify { is_expected.to keep_the_trio(paul, nil, nil) }
@@ -88,7 +88,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
         end
       end
       context "when receiver has father" do
-        before { peter.update_attributes(father_id: paul.id) }
+        before { peter.update(father_id: paul.id) }
         subject { peter.add_paternal_grandparents(manuel,terry) }
         it { is_expected.to be true }
         it { is_expected.to build_the_trio(paul, manuel, terry) }
@@ -117,7 +117,7 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
 
     describe "#add_grandparents" do
       context "when receiver has both parents" do
-        before { peter.update_attributes(father_id: paul.id, mother_id: titty.id) }
+        before { peter.update(father_id: paul.id, mother_id: titty.id) }
         subject { peter.add_grandparents(manuel,terry,paso,irene) }
         it { is_expected.to be true }
         it { is_expected.to build_the_trio(paul, manuel, terry, "father with his parents") }
@@ -186,9 +186,9 @@ describe "*** Alter grandparents methods ***", :done, :alter_gp  do
       describe "#add_paternal_grandfather" do
         include_context 'unreleted people exist'
         subject { peter.add_paternal_grandfather(manuel) }
-        before { 
+        before {
           paul.mark_invalid!
-          peter.update_attributes(father_id: paul.id) 
+          peter.update(father_id: paul.id)
         }
         specify { expect { subject }.not_to raise_error }
         it { is_expected.to build_the_trio(peter, paul, nil) }
