@@ -7,7 +7,7 @@ describe "*** Model lifecycle ***", :done, :model do
   include_context 'unreleted people exist'
 
   context "when peter is son of paul and titty" do
-    before { peter.update_attributes(father_id: paul.id, mother_id: titty.id) }
+    before { peter.update(father_id: paul.id, mother_id: titty.id) }
 
     context "when destroying paul" do
       before { paul.destroy }

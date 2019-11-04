@@ -39,11 +39,11 @@ shared_examples "including paternal grandfathers because of checks on pedigree" 
     expect(jack.ineligible_paternal_grandfathers).to include rud,mark,sam,charlie,peter,steve
   end
   it "includes full siblings" do
-    paul.update_attributes(father_id: nil)
+    paul.update(father_id: nil)
     expect(peter.ineligible_paternal_grandfathers).to include steve
   end
   it "includes paternal half siblings" do
-    paul.update_attributes(father_id: nil)
+    paul.update(father_id: nil)
     expect(peter.ineligible_paternal_grandfathers).to include julian,ruben
   end
 end
@@ -53,11 +53,11 @@ shared_examples "including paternal grandmothers because of checks on pedigree" 
     expect(jack.ineligible_paternal_grandmothers).to include barbara,mary
   end
   it "includes full siblings" do
-    paul.update_attributes(mother_id: nil)
+    paul.update(mother_id: nil)
     expect(julian.ineligible_paternal_grandmothers).to include beatrix
   end
   it "includes paternal half siblings" do
-    paul.update_attributes(mother_id: nil)
+    paul.update(mother_id: nil)
     expect(julian.ineligible_paternal_grandmothers).to include mary
   end
 end
@@ -82,7 +82,7 @@ shared_examples "including maternal grandmothers because of checks on pedigree" 
     expect(jack.ineligible_maternal_grandmothers).to include barbara,mary
   end
   it "includes full siblings" do
-    michelle.update_attributes(mother_id: nil)
+    michelle.update(mother_id: nil)
     expect(julian.ineligible_maternal_grandmothers).to include beatrix
   end
   it "includes maternal half siblings" do
@@ -117,7 +117,7 @@ shared_examples "including siblings because of checks on pedigree" do
     end
   end
   context 'when father is unset' do
-    before { peter.update_attributes(father_id: nil) }
+    before { peter.update(father_id: nil) }
     it "includes all individuals with mother already set but different" do
       expect(peter.ineligible_siblings).to include *@model.all_with(:mother).where("mother_id != ?", peter.mother.id)
     end
@@ -139,7 +139,7 @@ shared_examples "including children because of checks on pedigree" do
       expect(manuel.ineligible_children).to include *@model.all_with(:father)
     end
     it "includes maternal half siblings with father" do
-      sam.update_attributes(father_id: rud.id)
+      sam.update(father_id: rud.id)
       expect(charlie.ineligible_children).to include sam
     end
   end
@@ -164,11 +164,11 @@ describe "*** Ineligible methods ***", :ineligible do
       it_behaves_like "including fathers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :manuel, :father, :male
       it "does not include male ancestors (e.g., maternal grandfather)" do
-        rud.update_attributes(father_id: nil)
+        rud.update(father_id: nil)
         expect(rud.ineligible_fathers).not_to include luis,larry,tommy
       end
       it "does not include male maternal half siblings" do
-        steve.update_attributes(father_id: nil)
+        steve.update(father_id: nil)
         expect(steve.ineligible_fathers).not_to include peter
       end
     end
@@ -177,7 +177,7 @@ describe "*** Ineligible methods ***", :ineligible do
       it_behaves_like "including mothers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :mia, :mother, :female
       it "does not include female ancestors (e.g., paternal grandmother)" do
-        rud.update_attributes(mother_id: nil)
+        rud.update(mother_id: nil)
         expect(rud.ineligible_mothers).not_to include alison
       end
       it "does not include female paternal half siblings" do
@@ -192,8 +192,8 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(paul.ineligible_paternal_grandfathers).not_to include marcel
       end
       it "does not include maternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
-        paul.update_attributes(father_id: nil)
-        ruben.update_attributes(father_id: nil, mother_id: titty)
+        paul.update(father_id: nil)
+        ruben.update(father_id: nil, mother_id: titty)
         expect(peter.ineligible_paternal_grandfathers).not_to include ruben
       end
     end
@@ -202,12 +202,12 @@ describe "*** Ineligible methods ***", :ineligible do
       it_behaves_like "including paternal grandmothers because of checks on pedigree"
       it_behaves_like "including individuals because of basic checks", :rud, :mia, :paternal_grandmother, :female
       it "does not include maternal female ancestors" do
-        paso.update_attributes(mother_id: nil)
+        paso.update(mother_id: nil)
         expect(rud.ineligible_paternal_grandmothers).not_to include irene,emily,rosa
       end
       it "does not include maternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
-        paso.update_attributes(mother_id: nil)
-        titty.update_attributes(father_id: nil, mother_id: irene)
+        paso.update(mother_id: nil)
+        titty.update(father_id: nil, mother_id: irene)
         expect(rud.ineligible_paternal_grandmothers).not_to include titty
       end
     end
@@ -219,7 +219,7 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(barbara.ineligible_maternal_grandfathers).not_to include jack,bob
       end
       it "does not include paternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
-        michelle.update_attributes(father_id: nil)
+        michelle.update(father_id: nil)
         expect(julian.ineligible_maternal_grandfathers).not_to include ruben,peter,steve
       end
     end
@@ -231,7 +231,7 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(barbara.ineligible_maternal_grandmothers).not_to include alison,louise
       end
       it "does not include paternal half siblings (it might happen when a grandparent have a child with their child-in-law)" do
-        michelle.update_attributes(mother_id: nil)
+        michelle.update(mother_id: nil)
         expect(julian.ineligible_maternal_grandmothers).not_to include mary
       end
     end
@@ -246,14 +246,14 @@ describe "*** Ineligible methods ***", :ineligible do
       end
       context 'when mother is unset' do
         it "does not include individuals without father, except ancestors, descendants and siblings" do
-          sam.update_attributes(father_id: nil)
+          sam.update(father_id: nil)
           expect(ruben.ineligible_siblings).not_to include sam,ned,naomi,luis,rosa,larry,louise,bob,alison,maggie,mia
         end
       end
       context 'when father is unset' do
-        before { peter.update_attributes(father_id: nil) }
+        before { peter.update(father_id: nil) }
         it "does not include individuals without mother, except ancestors, descendants and siblings" do
-          sam.update_attributes(mother_id: nil)
+          sam.update(mother_id: nil)
           expect(peter.ineligible_siblings).not_to include sam,ned,naomi,maggie,mia
         end
       end
@@ -264,7 +264,7 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(rud.ineligible_paternal_half_siblings).to include rud
       end
       it "includes their own father" do
-        paso.update_attributes(father_id: nil)
+        paso.update(father_id: nil)
         expect(rud.ineligible_paternal_half_siblings).to include paso
       end
       it 'includes individuals with different father' do
@@ -274,11 +274,11 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(tommy.ineligible_paternal_half_siblings).not_to include mia
       end
       it 'does not includes mother in case of incest' do
-        terry.update_attributes(father_id: nil)
+        terry.update(father_id: nil)
         expect(paul.ineligible_paternal_half_siblings).not_to include terry
       end
       it 'includes maternal half_siblings' do
-        steve.update_attributes(father_id: nil)
+        steve.update(father_id: nil)
         expect(peter.ineligible_paternal_half_siblings).to include steve
       end
       it 'includes other paternal half_siblings' do
@@ -309,7 +309,7 @@ describe "*** Ineligible methods ***", :ineligible do
       it_behaves_like "including children because of checks on pedigree"
       context 'when receiver is male' do
         it "does not include maternal half siblings without father (i.e., the father can be the receiver itself)" do
-          sam.update_attributes(father_id: nil)
+          sam.update(father_id: nil)
           expect(charlie.ineligible_children).not_to include sam
         end
       end
@@ -371,11 +371,11 @@ describe "*** Ineligible methods ***", :ineligible do
           expect(naomi.ineligible_mothers).to include emily
         end
         it "does not includes individuals with birth date unknown (maybe still fertile)" do
-          titty.update_attributes(father_id: nil, mother_id: nil)
+          titty.update(father_id: nil, mother_id: nil)
           expect(bob.ineligible_mothers).not_to include titty
         end
         it "does not includes individuals born on mother's date of death" do
-          naomi.update_attributes(death_date: Date.new(1952,4,17), birth_date: Date.new(1932,4,18))
+          naomi.update(death_date: Date.new(1952,4,17), birth_date: Date.new(1932,4,18))
           expect(maggie.ineligible_mothers).not_to include naomi
         end
       end
@@ -394,7 +394,7 @@ describe "*** Ineligible methods ***", :ineligible do
           expect(naomi.ineligible_paternal_grandfathers).to include rud,paul,mark
         end
         it "includes individuals too old" do
-          marcel.update_attributes(birth_date: Date.new(1834,4,17))
+          marcel.update(birth_date: Date.new(1834,4,17))
           expect(mia.ineligible_paternal_grandfathers).to include larry,marcel
         end
       end
@@ -416,7 +416,7 @@ describe "*** Ineligible methods ***", :ineligible do
           expect(maggie.ineligible_paternal_grandmothers).to include naomi,terry,irene
         end
         it "includes individuals too old" do
-          rosa.update_attributes(birth_date: Date.new(183,10,6))
+          rosa.update(birth_date: Date.new(183,10,6))
           expect(mia.ineligible_paternal_grandmothers).to include rosa
         end
       end
@@ -438,7 +438,7 @@ describe "*** Ineligible methods ***", :ineligible do
           expect(mia.ineligible_maternal_grandfathers).to include rud
         end
         it "includes individuals too old" do
-          marcel.update_attributes(birth_date: Date.new(1834,4,17))
+          marcel.update(birth_date: Date.new(1834,4,17))
           expect(mia.ineligible_maternal_grandfathers).to include larry,marcel
         end
       end
@@ -461,7 +461,7 @@ describe "*** Ineligible methods ***", :ineligible do
           expect(maggie.ineligible_maternal_grandmothers).to include naomi,terry,irene
         end
         it "includes individuals too old" do
-          rosa.update_attributes(birth_date: Date.new(183,10,6))
+          rosa.update(birth_date: Date.new(183,10,6))
           expect(mia.ineligible_maternal_grandmothers).to include rosa
         end
       end
@@ -491,7 +491,7 @@ describe "*** Ineligible methods ***", :ineligible do
 
     describe '#ineligible_paternal_half_siblings' do
       it 'includes too old people' do
-        terry.update_attributes(father_id: nil)
+        terry.update(father_id: nil)
         expect(paul.ineligible_paternal_half_siblings).to include terry
       end
       it 'includes too young people' do
@@ -519,7 +519,7 @@ describe "*** Ineligible methods ***", :ineligible do
         expect(irene.ineligible_children).to include mia,ruben
       end
       it "includes individuals born after max fertility age" do
-        michelle.update_attributes(mother_id:nil)
+        michelle.update(mother_id:nil)
         expect(debby.ineligible_children).to include mia,ruben and
         expect(alison.ineligible_children).to include mia,michelle and
         expect(tommy.ineligible_children).to include mia

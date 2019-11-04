@@ -61,7 +61,7 @@ module Genealogy
 
     # @return [ActiveRecord::Relation] list of individuals with whom has had children
     def spouses
-      gclass.where(id: children.pluck("#{SEX2PARENT[opposite_ssex]}_id".to_sym).compact.uniq)
+      gclass.where(id: children.pluck("#{SEX2PARENT[opposite_ssex]}_id".to_sym).compact.uniq) | (self.class.current_spouse_enabled ? [] : [current_spouse])
     end
 
     # @param [Hash] options

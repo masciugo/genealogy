@@ -23,16 +23,16 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
 
   context "when enabling current spouse traking and taking account validation and ineligibility by pedigree (options for has_parents: {current_spouse: true})" do
 
-    before { @model = get_test_model({current_spouse: true}) }      
+    before { @model = get_test_model({current_spouse: true}) }
 
-    include_context 'unreleted people exist'  
-    
+    include_context 'unreleted people exist'
+
     describe "#add_current_spouse" do
       subject { paul.add_current_spouse(titty) }
       it { is_expected.to build_the_couple(paul,titty) }
       context "when receiver becomes invalid" do
         before { paul.mark_invalid! }
-        specify { expect { subject  }.to raise_error }
+        specify { expect { subject  }.to raise_error(ActiveRecord::RecordInvalid) }
         it 'receiver and argument remain singles' do
           subject rescue nil
           expect(paul).to remain_single and expect(john).to remain_single
@@ -40,7 +40,7 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
       end
       context "when argument becomes invalid" do
         before { titty.mark_invalid! }
-        specify { expect { subject  }.to raise_error }
+        specify { expect { subject  }.to raise_error(ActiveRecord::RecordInvalid) }
         it 'receiver and argument remain singles' do
           subject rescue nil
           expect(paul).to remain_single and expect(john).to remain_single
@@ -68,12 +68,12 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
       end
       context "when receiver becomes invalid" do
         before { paul.mark_invalid! }
-        specify { expect { subject }.to raise_error }
+        specify { expect { subject }.to raise_error(ActiveRecord::RecordInvalid) }
         it 'receiver and argument remain a couple' do
           subject rescue nil
           expect([paul,titty]).to remain_a_couple
         end
-      end 
+      end
 
     end
 
@@ -111,12 +111,12 @@ describe "*** Alter current_spouse methods ***", :done, :spouse do
       @model = get_test_model({current_spouse: true, perform_validation: false})
     end
 
-    include_context 'unreleted people exist'  
-          
+    include_context 'unreleted people exist'
+
     context "when receiver becomes invalid" do
-      
+
       before { paul.mark_invalid! }
-          
+
       describe "#add_current_spouse" do
         subject { paul.add_current_spouse(titty) }
         specify { expect { subject }.not_to raise_error }

@@ -4,7 +4,7 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
 
   context "when taking account validation and ineligibility by pedigree (default)" do
     before { @model = get_test_model({}) }
-  
+
     include_context 'unreleted people exist'
 
     describe "#add_father" do
@@ -20,15 +20,15 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
           specify { expect { peter.add_father(titty) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
         end
         context 'when passing an ineligible individual, for example a descendant' do
-          before { 
-            paul.update_attributes(father_id: manuel.id) 
-            julian.update_attributes(father_id: paul.id) 
+          before {
+            paul.update(father_id: manuel.id)
+            julian.update(father_id: paul.id)
           }
           specify { expect { manuel.add_father(julian) }.to raise_error Genealogy::IncompatibleRelationshipException }
         end
       end
       context 'when father is already set' do
-        before { peter.update_attributes(father_id: paul.id) }
+        before { peter.update(father_id: paul.id) }
         specify { expect { peter.add_father(paso) }.to raise_error Genealogy::IncompatibleRelationshipException }
       end
     end
@@ -46,19 +46,19 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
           specify { expect { peter.add_mother(john) }.to raise_error(Genealogy::IncompatibleRelationshipException) }
         end
         context 'when mother is already set' do
-          before { peter.update_attributes(mother_id: titty.id) }
+          before { peter.update(mother_id: titty.id) }
           specify { expect { peter.add_mother(titty) }.to raise_error Genealogy::IncompatibleRelationshipException }
         end
         context 'when argument is an ineligible individual, for example a descendant' do
-          before { 
-            paul.update_attributes(father_id: manuel.id) 
-            beatrix.update_attributes(father_id: paul.id) 
+          before {
+            paul.update(father_id: manuel.id)
+            beatrix.update(father_id: paul.id)
           }
           specify { expect { manuel.add_mother(beatrix) }.to raise_error Genealogy::IncompatibleRelationshipException }
         end
       end
       context 'when mother is already set' do
-        before { peter.update_attributes(mother_id: titty.id) }
+        before { peter.update(mother_id: titty.id) }
         specify { expect { peter.add_mother(irene) }.to raise_error Genealogy::IncompatibleRelationshipException }
       end
     end
@@ -85,7 +85,7 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
       end
       context "when receiver becomes invalid" do
         before { peter.mark_invalid! }
-        specify { expect { peter.add_parents(paul,titty) }.to raise_error }
+        specify { expect { peter.add_parents(paul,titty) }.to raise_error(ActiveRecord::RecordInvalid) }
         describe "resulting trios" do
           subject { peter.add_parents(paul,titty) rescue true }
           it { is_expected.to keep_the_trio(peter, nil, nil) }
@@ -114,7 +114,7 @@ describe "*** Alter parents methods ***", :done, :alter_p  do
       it { is_expected.to build_the_trio(peter, nil, nil) }
       context "when receiver becomes invalid" do
         before { peter.mark_invalid! }
-        specify { expect { peter.remove_parents }.to raise_error }
+        specify { expect { peter.remove_parents }.to raise_error(ActiveRecord::RecordInvalid) }
         describe "resulting trios" do
           subject { peter.remove_parents rescue true }
           it { is_expected.to keep_the_trio(peter, paul, titty) }

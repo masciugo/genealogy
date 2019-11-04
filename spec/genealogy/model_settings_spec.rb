@@ -61,7 +61,7 @@ describe 'TestModel', :model do
     its(:perform_validation_enabled) { is_expected.to be false }
   end
 
-  context "initialized with default options"  do
+  context "initialized with default options", wip: true  do
     before(:context) { @model = get_test_model }
     ['father_id', 'mother_id'].each do |col_name|
       class_attribute = "#{col_name}_column"
@@ -77,7 +77,7 @@ describe 'TestModel', :model do
     its(:ineligibility_level) { is_expected.to be Genealogy::Constants::PEDIGREE }
     [:min_male_procreation_age, :max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
       describe age do
-        specify { expect { @model.send(age) }.to raise_error}
+        specify { expect { @model.send(age) }.to raise_error NoMethodError}
       end
     end
   end

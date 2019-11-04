@@ -3,9 +3,11 @@ language: ruby
 rvm:
   - 1.9.3
   - 2.5.1
+  - 2.6.5
 gemfile:
   - gemfiles/rails_4.gemfile
   - gemfiles/rails_5.gemfile
+  - gemfiles/rails_6.gemfile
 env:
   - GENEALOGY_TEST_DB=mysql
   - GENEALOGY_TEST_DB=postgres
@@ -13,6 +15,8 @@ matrix:
   exclude:
     - rvm: 1.9.3
       gemfile: gemfiles/rails_5.gemfile
+    - rvm: 1.9.3
+      gemfile: gemfiles/rails_6.gemfile
   # fast_finish: true
   allow_failures:
     - rvm: 2.5.1
