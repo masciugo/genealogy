@@ -7,7 +7,7 @@ module Genealogy
 
     # add current spouse updating receiver and argument individuals foreign_key in a transaction
     # @param [Object] spouse
-    # @return [Boolean] 
+    # @return [Boolean]
     def add_current_spouse(spouse)
 
       raise_unless_current_spouse_enabled
@@ -30,7 +30,7 @@ module Genealogy
     end
 
     # remove current spouse resetting receiver and argument individuals foreign_key in a transaction
-    # @return [Boolean] 
+    # @return [Boolean]
     def remove_current_spouse
       raise_unless_current_spouse_enabled
       if gclass.perform_validation_enabled
@@ -59,7 +59,7 @@ module Genealogy
     private
 
     def raise_unless_current_spouse_enabled
-      raise FeatureNotEnabled, "Spouse tracking not enabled. Enable it with option 'current_spouse_enabled: true' for has_parents method}" unless self.class.current_spouse_enabled
+      raise FeatureNotEnabled, "Spouse tracking not enabled. Enable it with option 'current_spouse: true' for has_parents method}" unless self.class.current_spouse_enabled
     end
 
   end
