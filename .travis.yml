@@ -16,6 +16,9 @@ matrix:
   allow_failures:
     - rvm: 2.5.1
       gemfile: gemfiles/rails_4.gemfile
+services:
+  - mysql
+  - postgresql
 
 before_script:
   - mysql -e 'create database genealogy_test;'

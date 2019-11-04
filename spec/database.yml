@@ -18,7 +18,7 @@ mysql:
   adapter: mysql2
   encoding: utf8
   database: genealogy_test
-  username: root
+  username: travis
 
 postgres:
   adapter: postgresql
