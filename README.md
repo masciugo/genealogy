@@ -18,7 +18,7 @@ Genealogy takes inspiration from the simple [linkage file format](http://www.hel
 
     `rails g migration add_parents_to_<table> sex:string father_id:integer mother_id:integer [current_spouse_id:integer]`
 
-    Read [here](#current_spouse) for optional current spouse column explanation. If necessary, all [column names can be customized](#column_names)
+    Read [here](#current_spouse) for optional current spouse column explanation. If necessary, all [column names can be customized](#column_names). All relatives columns must be of the same type of the primary key column 
     * Add indexes, separately and in combination, to parents columns
 
 3. Add `has_parents` to your model (put after the enum for sex attribute values if present)

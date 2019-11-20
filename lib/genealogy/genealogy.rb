@@ -36,6 +36,8 @@ module Genealogy
       class_attribute :gclass, instance_writer: false
       self.gclass = self
 
+      alias_attribute :id, self.primary_key.to_sym if self.primary_key != 'id'
+
       self.extend(Genealogy::ComplexQueryMethods::ClassMethods)
 
       class_attribute :ineligibility_level, instance_accessor: false
