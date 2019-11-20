@@ -73,7 +73,7 @@ module Genealogy
     # @return [ActiveRecord::Relation] list of fullsiblings and/or halfsiblings
     def siblings(options = {})
       spouse = options[:spouse]
-      result = gclass.where("id != ?",id)
+      result = gclass.where.not(id: id)
       case options[:half]
       when nil # only full siblings
         result.all_with(:parents).where(father_id: father, mother_id: mother)
