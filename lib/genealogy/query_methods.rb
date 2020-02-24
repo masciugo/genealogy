@@ -3,8 +3,6 @@ module Genealogy
   module QueryMethods
     extend ActiveSupport::Concern
 
-    include Constants
-
     # @return [2-elements Array] father and mother
     def parents
       [father,mother]
@@ -51,17 +49,17 @@ module Genealogy
     # @return [ActiveRecord::Relation] children
     def children(options = {})
       raise SexError, "Sex value not valid for #{self}. It's needed to look for children" unless gclass.sex_values.include? sex_before_type_cast
-      result = gclass.where("#{SEX2PARENT[ssex]}_id" => self)
+      result = gclass.where("#{gclass::SEX2PARENT[ssex]}_id" => self)
       if options.keys.include? :spouse
         check_indiv(spouse = options[:spouse],opposite_ssex)
-        result = result.where("#{SEX2PARENT[opposite_ssex]}_id" => spouse ) if spouse
+        result = result.where("#{gclass::SEX2PARENT[opposite_ssex]}_id" => spouse ) if spouse
       end
       result
     end
 
     # @return [ActiveRecord::Relation] list of individuals with whom has had children
     def spouses
-      gclass.where(id: children.pluck("#{SEX2PARENT[opposite_ssex]}_id".to_sym).compact.uniq) | (self.class.current_spouse_enabled ? [] : [current_spouse])
+      gclass.where(id: children.pluck("#{gclass::SEX2PARENT[opposite_ssex]}_id".to_sym).compact.uniq) | (self.class.current_spouse_enabled ? [] : [current_spouse])
     end
 
     # @param [Hash] options
@@ -275,6 +273,7 @@ module Genealogy
     # family hash with roles as keys? :spouse and individuals as values. Defaults roles are :father, :mother, :children, :siblings and current_spouse if enabled
     # @option options [Symbol] half to filter siblings (see #siblings)
     # @option options [Boolean] extended to include roles for grandparents, grandchildren, uncles, aunts, nieces, nephews and cousins
+    # @option options [Boolean] singular_role to use singularized role as keys
     # @return [Hash] family hash with roles as keys? :spouse and individuals as values.
     def family_hash(options = {})
       roles = [:father, :mother, :children, :siblings]
@@ -294,7 +293,42 @@ module Genealogy
           raise ArgumentError, "Admitted values for :half options are: :father, :mother, :include, :include_separately, nil"
       end
       roles += [:paternal_grandfather, :paternal_grandmother, :maternal_grandfather, :maternal_grandmother, :grandchildren, :uncles_and_aunts, :nieces_and_nephews, :cousins] if options[:extended] == true
-      roles.inject({}){|res,role| res.merge!({role => self.send(role)})}
+      res = roles.inject({}){|res,role| res.merge!({role => self.send(role)})}
+      if options[:singular_role] == true
+        res2 = {
+          father: res[:father],
+          mother: res[:mother],
+          daughter: res[:children].females,
+          son: res[:children].males,
+          sister: res[:siblings].females,
+          brother: res[:siblings].males
+        }
+
+        res2[:current_spouse] = res[:current_spouse] if res.has_key? :current_spouse
+
+        res2.merge!({
+          paternal_grandfather: res[:paternal_grandfather],
+          paternal_grandmother: res[:paternal_grandmother],
+          maternal_grandfather: res[:maternal_grandfather],
+          maternal_grandmother: res[:maternal_grandmother],
+          grandchild: res[:grandchildren],
+          uncle: res[:uncles_and_aunts].males,
+          aunts: res[:uncles_and_aunts].females,
+          nephew: res[:nieces_and_nephews].males,
+          niece: res[:nieces_and_nephews].females,
+          cousin: res[:cousins]
+        }) if options[:extended] == true
+
+        res2.merge!({
+          paternal_half_brother: res[:paternal_half_siblings].males,
+          paternal_half_sister: res[:paternal_half_siblings].females,
+          maternal_half_brother: res[:maternal_half_siblings].males,
+          maternal_half_sister: res[:maternal_half_siblings].females,
+        }) if options[:half] == :include_separately
+
+        res = res2
+      end
+      res
     end
 
     # family_hash with option extended: :true
@@ -307,8 +341,13 @@ module Genealogy
     # @return [Array]
     # @see #family_hash
     def family(options = {})
-      hash = family_hash(options)
-      hash.keys.inject([]){|tot,k| tot << hash[k] }.compact.flatten
+      family_hash(options).inject([]) do |memo, r|
+        [r.last].compact.flatten.each do |relative|
+          relative.role_as_relative = r.first.to_s.singularize.to_sym
+          memo << relative
+        end
+        memo
+      end
     end
 
     # family with option extended: :true

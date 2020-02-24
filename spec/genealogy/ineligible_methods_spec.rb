@@ -1,10 +1,12 @@
 require 'spec_helper'
 
+include Genealogy::Constants
+
 shared_examples "including individuals because of basic checks" do |indiv_with,indiv_without,relationship,expected_sex|
   let(:iw) { eval(indiv_with.to_s) }
   let(:iwo) { eval(indiv_without.to_s) }
   method = "ineligible_#{relationship.to_s.pluralize}"
-  unexpected_sex = Genealogy::Constants::OPPOSITESEX[expected_sex].to_s.pluralize
+  unexpected_sex = OPPOSITESEX[expected_sex].to_s.pluralize
   it "returns nil if #{relationship} already set" do
     expect(iw.send(method)).to be nil
   end

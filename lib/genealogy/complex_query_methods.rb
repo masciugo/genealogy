@@ -1,7 +1,6 @@
 module Genealogy
   module ComplexQueryMethods
     extend ActiveSupport::Concern
-    include Constants
 
     module ClassMethods
 

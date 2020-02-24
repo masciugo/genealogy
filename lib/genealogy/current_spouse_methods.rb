@@ -3,8 +3,6 @@ module Genealogy
   module CurrentSpouseMethods
     extend ActiveSupport::Concern
 
-    include Constants
-
     # add current spouse updating receiver and argument individuals foreign_key in a transaction
     # @param [Object] spouse
     # @return [Boolean]

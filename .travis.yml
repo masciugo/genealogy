@@ -3,10 +3,15 @@ language: ruby
 rvm:
   - 2.5.1
   - 2.6.5
+  - 2.7.0
 gemfile:
   - gemfiles/rails_4.gemfile
   - gemfiles/rails_5.gemfile
   - gemfiles/rails_6.gemfile
+jobs:
+  exclude:
+    - rvm: 2.7.0
+      gemfile: gemfiles/rails_4.gemfile
 env:
   - GENEALOGY_TEST_DB=mysql
   - GENEALOGY_TEST_DB=postgres
