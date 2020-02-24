@@ -8,15 +8,6 @@ require "database_cleaner"
 
 DatabaseCleaner.strategy = :truncation
 
-case RUBY_VERSION
-when /^1.9/
-  require "debugger"
-when /^2/
-  require "byebug"
-else
-  raise
-end
-
 require 'rspec/its'
 
 RSpec.configure do |config|

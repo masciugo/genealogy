@@ -35,15 +35,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'github-markup'
   s.add_development_dependency 'gem-release'
   s.add_development_dependency 'appraisal'
-
-  s.add_development_dependency case RUBY_VERSION
-  when /^1.9/
-    "debugger"
-  when /^2/
-    "byebug"
-  else
-    raise
-  end
+  s.add_development_dependency 'byebug'
 
 
 end
