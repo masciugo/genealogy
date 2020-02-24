@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files) *** ", :done, :query do
+describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files) *** ", :done, :query, :wip do
 
   before { @model = get_test_model({current_spouse: true})}
   include_context "pedigree exists"
@@ -97,6 +97,21 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
       end
       context "with options half: :include_separately" do
         specify { expect(peter.family_hash(half: :include_separately)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, paternal_half_siblings: [ruben, mary, julian, beatrix], maternal_half_siblings: [] })}
+        context 'and singular_role: true' do
+          specify { expect(peter.family_hash(singular_role: true, half: :include_separately)).to match_family(
+            father: paul,
+            mother: titty,
+            daughter: [],
+            son: [],
+            brother: [steve],
+            sister: [],
+            current_spouse: nil,
+            paternal_half_brother: [ruben, julian],
+            paternal_half_sister: [mary, beatrix],
+            maternal_half_brother: [],
+            maternal_half_sister: []
+          )}
+        end
       end
       context "with options half: :father" do
         specify { expect(peter.family_hash(half: :father)).to match_family({father: paul, mother: titty, children: [], siblings: [steve], :current_spouse=>nil, paternal_half_siblings: [ruben, mary, julian, beatrix] })}
@@ -367,9 +382,42 @@ describe "*** Query methods (based on spec/genealogy/sample_pedigree*.pdf files)
           :maternal_grandfather=>jack,
           :maternal_grandmother=>alison,
           :grandchildren=>[],
-          :uncles_and_aunts=>[],
+          :uncles_and_aunts=>[john],
           :nieces_and_nephews=>[sue,sam,charlie],
           :cousins=>[barbara])}
+        context 'and singular_role: true' do
+          specify { expect(titty.family_hash(extended: true, singular_role: true)).to match_family(
+            father: paso,
+            mother: irene,
+            daughter: [],
+            son: [peter,steve],
+            brother: [rud,mark],
+            sister: [],
+            current_spouse: nil,
+            paternal_grandfather: tommy,
+            paternal_grandmother: emily,
+            maternal_grandfather: jack,
+            maternal_grandmother: alison,
+            grandchild: [],
+            uncle: [john],
+            aunts: [],
+            niece: [sue],
+            nephew: [sam,charlie],
+            cousin: [barbara]
+          )}
+
+        end
+      end
+      context 'with options singular_role: true' do
+        specify { expect(titty.family_hash(singular_role: true)).to match_family(
+          father: paso,
+          mother: irene,
+          daughter: [],
+          son: [peter,steve],
+          brother: [rud,mark],
+          sister: [],
+          current_spouse: nil
+        )}
       end
     end
 

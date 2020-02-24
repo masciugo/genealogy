@@ -3,8 +3,6 @@ module Genealogy
   module UtilMethods
     extend ActiveSupport::Concern
 
-    include Constants
-
     # Genealogy thinks time in term of Date, not DateTime
     # @return [Date]
     def birth
@@ -80,9 +78,9 @@ module Genealogy
     def self.generate_method_parent_birth_range(parent)
       define_method "#{parent}_birth_range" do
         if birth
-          (birth - gclass.send("max_#{PARENT2SEX[parent]}_procreation_age").years)..(birth - gclass.send("min_#{PARENT2SEX[parent]}_procreation_age").years)
+          (birth - gclass.send("max_#{gclass::PARENT2SEX[parent]}_procreation_age").years)..(birth - gclass.send("min_#{gclass::PARENT2SEX[parent]}_procreation_age").years)
         elsif life_range
-          (life_range.begin - gclass.send("max_#{PARENT2SEX[parent]}_procreation_age").years)..(life_range.end - gclass.send("min_#{PARENT2SEX[parent]}_procreation_age").years)
+          (life_range.begin - gclass.send("max_#{gclass::PARENT2SEX[parent]}_procreation_age").years)..(life_range.end - gclass.send("min_#{gclass::PARENT2SEX[parent]}_procreation_age").years)
         end
       end
     end
@@ -96,7 +94,7 @@ module Genealogy
     def self.generate_method_parent_fertility_range(parent)
       define_method "#{parent}_fertility_range" do
         if parent_birth_range = send("#{parent}_birth_range")
-          (parent_birth_range.begin + gclass.send("min_#{PARENT2SEX[parent]}_procreation_age").years)..(parent_birth_range.end + gclass.send("max_#{PARENT2SEX[parent]}_procreation_age").years)
+          (parent_birth_range.begin + gclass.send("min_#{gclass::PARENT2SEX[parent]}_procreation_age").years)..(parent_birth_range.end + gclass.send("max_#{gclass::PARENT2SEX[parent]}_procreation_age").years)
         end
       end
     end
@@ -119,7 +117,7 @@ module Genealogy
     # opposite sex in terms of :male or :female
     # @return [Symbol]
     def opposite_ssex
-      OPPOSITESEX[ssex]
+      gclass::OPPOSITESEX[ssex]
     end
 
     # @return [Boolean]
@@ -160,7 +158,7 @@ module Genealogy
         # puts "[#{__method__}]: #{arg} class: #{arg.class}, #{self} class: #{self.class}"
         next if relative.nil?
         check_indiv(relative)
-        if gclass.ineligibility_level >= PEDIGREE
+        if gclass.ineligibility_level >= gclass::PEDIGREE
           if ineligibles = self.send("ineligible_#{relationship.to_s.pluralize}")
             # puts "[#{__method__}]: checking if #{relative} can be #{relationship} of #{self}"
             raise IncompatibleRelationshipException, "#{relative} can't be #{relationship} of #{self}" if ineligibles.include? relative

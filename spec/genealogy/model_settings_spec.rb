@@ -61,7 +61,7 @@ describe 'TestModel', :model do
     its(:perform_validation_enabled) { is_expected.to be false }
   end
 
-  context "initialized with default options", wip: true  do
+  context "initialized with default options" do
     before(:context) { @model = get_test_model }
     ['father_id', 'mother_id'].each do |col_name|
       class_attribute = "#{col_name}_column"
@@ -74,7 +74,7 @@ describe 'TestModel', :model do
     its(:perform_validation_enabled) { is_expected.to be true }
     its(:column_names) { is_expected.not_to include("current_spouse_id") }
     its(:current_spouse_enabled) { is_expected.to be false }
-    its(:ineligibility_level) { is_expected.to be Genealogy::Constants::PEDIGREE }
+    its(:ineligibility_level) { is_expected.to be PEDIGREE }
     [:min_male_procreation_age, :max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
       describe age do
         specify { expect { @model.send(age) }.to raise_error NoMethodError}
@@ -90,15 +90,15 @@ describe 'TestModel', :model do
   opts10 = {ineligibility: :pedigree}
   context "initialized with options: #{opts10}"  do
     before(:context) { @model = get_test_model(opts10) }
-    its(:ineligibility_level) { is_expected.to be Genealogy::Constants::PEDIGREE }
+    its(:ineligibility_level) { is_expected.to be PEDIGREE }
   end
 
   opts11 = {ineligibility: :pedigree_and_dates, limit_ages: {min_male_procreation_age: 12}}
   context "initialized with options: #{opts11}"  do
     before(:context) { @model = get_test_model(opts11) }
-    its(:ineligibility_level) { is_expected.to be Genealogy::Constants::PEDIGREE_AND_DATES }
+    its(:ineligibility_level) { is_expected.to be PEDIGREE_AND_DATES }
     [:max_male_procreation_age, :min_female_procreation_age, :max_female_procreation_age, :max_male_life_expectancy, :max_female_life_expectancy].each do |age|
-      its(age) { is_expected.to eq Genealogy::Constants::DEFAULTS[:limit_ages][age] }
+      its(age) { is_expected.to eq DEFAULTS[:limit_ages][age] }
     end
     its(:min_male_procreation_age) { is_expected.to be 12 }
   end
@@ -106,13 +106,13 @@ describe 'TestModel', :model do
   opts12 = {ineligibility: true }
   context "initialized with options: #{opts12}"  do
     before(:context) { @model = get_test_model(opts12) }
-    its(:ineligibility_level) { is_expected.to be Genealogy::Constants::PEDIGREE }
+    its(:ineligibility_level) { is_expected.to be PEDIGREE }
   end
 
   opts13 = {ineligibility: false}
   context "initialized with options: #{opts13}"  do
     before(:context) { @model = get_test_model(opts13) }
-    its(:ineligibility_level) { is_expected.to be Genealogy::Constants::OFF }
+    its(:ineligibility_level) { is_expected.to be OFF }
   end
 
   opts14 = {ineligibility: 'foo'}

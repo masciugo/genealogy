@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files app lib`.split("\n")
   s.platform      = Gem::Platform::RUBY
   s.require_paths = ['lib']
-  s.rubyforge_project = '[none]'
   s.date        = Time.now
   s.licenses    = ["MIT"]
 

@@ -3,8 +3,6 @@ module Genealogy
   module AlterMethods
     extend ActiveSupport::Concern
 
-    include Constants
-
     # @!macro [attach] generate
     #   @method add_$1(parent)
     #   Add $1
@@ -76,7 +74,7 @@ module Genealogy
     def self.generate_method_add_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "add_#{relationship}" do |gp|
-        parent = LINEAGE2PARENT[lineage]
+        parent = gclass::LINEAGE2PARENT[lineage]
         raise_if_gap_on(parent)
         check_incompatible_relationship(relationship,gp)
         send(parent).send("add_#{grandparent}",gp)
@@ -95,7 +93,7 @@ module Genealogy
     def self.generate_method_remove_grandparent(lineage,grandparent)
       relationship = "#{lineage}_grand#{grandparent}"
       define_method "remove_#{relationship}" do
-        parent = LINEAGE2PARENT[lineage]
+        parent = gclass::LINEAGE2PARENT[lineage]
         raise_if_gap_on(parent)
         send(parent).send("remove_#{grandparent}")
       end
@@ -115,7 +113,7 @@ module Genealogy
     def self.generate_method_add_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
       define_method "add_#{relationship}" do |gf,gm|
-        parent = LINEAGE2PARENT[lineage]
+        parent = gclass::LINEAGE2PARENT[lineage]
         raise_if_gap_on(parent)
         send(parent).send("add_parents",gf,gm)
       end
@@ -131,7 +129,7 @@ module Genealogy
     def self.generate_method_remove_grandparents_by_lineage(lineage)
       relationship = "#{lineage}_grandparents"
       define_method "remove_#{relationship}" do
-        parent = LINEAGE2PARENT[lineage]
+        parent = gclass::LINEAGE2PARENT[lineage]
         raise_if_gap_on(parent)
         send(parent).send("remove_parents")
       end

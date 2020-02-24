@@ -4,8 +4,6 @@ module Genealogy
   module IneligibleMethods
     extend ActiveSupport::Concern
 
-    include Constants
-
     # @!macro [attach] generate_method_ineligibles_parent_with_docs
     #   @method ineligible_$1s
     #   list of individual who cannot be $1 according to the ineligibility level in use.
@@ -16,8 +14,8 @@ module Genealogy
       define_method "ineligible_#{parent_role}s" do
         unless self.send(parent_role)
           ineligibles = []
-          ineligibles |= descendants | [self] | gclass.send("#{unexpected_sex}s") if gclass.ineligibility_level >= PEDIGREE
-          if gclass.ineligibility_level >= PEDIGREE_AND_DATES  and birth_range
+          ineligibles |= descendants | [self] | gclass.send("#{unexpected_sex}s") if gclass.ineligibility_level >= gclass::PEDIGREE
+          if gclass.ineligibility_level >= gclass::PEDIGREE_AND_DATES  and birth_range
             ineligibles |= (gclass.all - ineligibles).find_all do |indiv|
               !indiv.can_procreate_during?(birth_range)
             end
@@ -43,9 +41,9 @@ module Genealogy
           ineligibles = []
           if parent = send(parent_role)
             ineligibles |= parent.send("ineligible_#{grandparent2parent_role}s")
-          elsif gclass.ineligibility_level >= PEDIGREE
+          elsif gclass.ineligibility_level >= gclass::PEDIGREE
             ineligibles |= descendants | siblings | [self] | gclass.send("#{unexpected_sex}s")
-            if gclass.ineligibility_level >= PEDIGREE_AND_DATES
+            if gclass.ineligibility_level >= gclass::PEDIGREE_AND_DATES
               ineligibles |= (gclass.all - ineligibles).find_all do |indiv|
                 !indiv.can_procreate_during?(send("#{parent_role}_birth_range"))
               end
@@ -67,8 +65,8 @@ module Genealogy
     # @return [Array]
     def ineligible_children
       ineligibles = []
-      ineligibles |= ancestors | children | siblings | [self] | gclass.all_with(SEX2PARENT[ssex]) if gclass.ineligibility_level >= PEDIGREE
-      if gclass.ineligibility_level >= PEDIGREE_AND_DATES and fertility_range
+      ineligibles |= ancestors | children | siblings | [self] | gclass.all_with(gclass::SEX2PARENT[ssex]) if gclass.ineligibility_level >= gclass::PEDIGREE
+      if gclass.ineligibility_level >= gclass::PEDIGREE_AND_DATES and fertility_range
         ineligibles |= (gclass.all - ineligibles).find_all{ |indiv| !can_procreate_during?(indiv.birth_range)}
       end
       ineligibles
@@ -81,12 +79,12 @@ module Genealogy
     # @return [Array]
     def ineligible_siblings
       ineligibles = []
-      if gclass.ineligibility_level >= PEDIGREE
+      if gclass.ineligibility_level >= gclass::PEDIGREE
         ineligibles |= ancestors | descendants | siblings | [self]
         ineligibles |= (father ? gclass.all_with(:father).where("father_id != ?", father) : [])
         ineligibles |= (mother ? gclass.all_with(:mother).where("mother_id != ?", mother) : [])
       end
-      if gclass.ineligibility_level >= PEDIGREE_AND_DATES
+      if gclass.ineligibility_level >= gclass::PEDIGREE_AND_DATES
         [:father,:mother].each do |parent|
           if p = send(parent)
             # if a parent is present ineligible siblings are parent's ineligible children
@@ -118,14 +116,14 @@ module Genealogy
     def self.generate_method_ineligibles_half_siblings_with_docs(lineage,parent_role)
       define_method "ineligible_#{lineage}_half_siblings" do
         ineligibles = []
-        parent = LINEAGE2PARENT[lineage]
+        parent = gclass::LINEAGE2PARENT[lineage]
         p = send(parent)
-        if gclass.ineligibility_level >= PEDIGREE
+        if gclass.ineligibility_level >= gclass::PEDIGREE
           ineligibles |= p.ineligible_children
-          ineligibles |= send("#{OPPOSITELINEAGE[lineage]}_half_siblings") # other lineage half siblings would become full siblings so they cannot be current lineage half sibling
+          ineligibles |= send("#{gclass::OPPOSITELINEAGE[lineage]}_half_siblings") # other lineage half siblings would become full siblings so they cannot be current lineage half sibling
           ineligibles |= gclass.all_with(parent)
         end
-        if gclass.ineligibility_level >= PEDIGREE_AND_DATES
+        if gclass.ineligibility_level >= gclass::PEDIGREE_AND_DATES
           if p
             # if a parent is present ineligible siblings are parent's ineligible children
             ineligibles |= p.ineligible_children

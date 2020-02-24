@@ -2,9 +2,7 @@ module Genealogy
 
   extend ActiveSupport::Concern
 
-  module ClassMethods
-
-    include Genealogy::Constants
+  class_methods do
 
     # gives to ActiveRecord model geneaogy capabilities. Modules UtilMethods QueryMethods IneligibleMethods AlterMethods and SpouseMethods are included
     # @param [Hash] options
@@ -22,15 +20,18 @@ module Genealogy
 
     def has_parents options = {}
 
-      include Genealogy::UtilMethods
-      include Genealogy::QueryMethods
-      include Genealogy::ComplexQueryMethods
-      include Genealogy::IneligibleMethods
-      include Genealogy::AlterMethods
-      include Genealogy::CurrentSpouseMethods
-
+      include Constants
+      include UtilMethods
+      include QueryMethods
+      include ComplexQueryMethods
+      include IneligibleMethods
+      include AlterMethods
+      include CurrentSpouseMethods
 
       check_has_parents_options(options)
+
+      # instance_variable_set(:@role_as_relative, nil)
+      attr_accessor :role_as_relative
 
       # keep track of the original extend class to prevent wrong scopes in query method in case of STI
       class_attribute :gclass, instance_writer: false
@@ -43,22 +44,22 @@ module Genealogy
       class_attribute :ineligibility_level, instance_accessor: false
       self.ineligibility_level = case options[:ineligibility]
       when :pedigree
-        PEDIGREE
+        gclass::PEDIGREE
       when true
-        PEDIGREE
+        gclass::PEDIGREE
       when :pedigree_and_dates
-        PEDIGREE_AND_DATES
+        gclass::PEDIGREE_AND_DATES
       when false
-        OFF
+        gclass::OFF
       when nil
-        PEDIGREE
+        gclass::PEDIGREE
       else
         raise ArgumentError, "ineligibility option must be one among :pedigree, :pedigree_and_dates or false"
       end
 
       ## limit_ages
-      if ineligibility_level >= PEDIGREE_AND_DATES
-        DEFAULTS[:limit_ages].each do |age,v|
+      if ineligibility_level >= gclass::PEDIGREE_AND_DATES
+        gclass::DEFAULTS[:limit_ages].each do |age,v|
           class_attribute age, instance_accessor: false
           self.send("#{age}=", options[:limit_ages].try(:[],age) || v)
         end
@@ -67,12 +68,12 @@ module Genealogy
       [:current_spouse, :perform_validation].each do |opt|
         ca = "#{opt}_enabled"
         class_attribute ca, instance_accessor: false
-        self.send "#{ca}=", options.key?(opt) ? options[opt] : DEFAULTS[opt]
+        self.send "#{ca}=", options.key?(opt) ? options[opt] : gclass::DEFAULTS[opt]
       end
 
 
       # column names class attributes
-      DEFAULTS[:column_names].merge(options[:column_names]).each do |k,v|
+      gclass::DEFAULTS[:column_names].merge(options[:column_names]).each do |k,v|
         class_attribute_name = "#{k}_column"
         class_attribute class_attribute_name, instance_accessor: false
         self.send("#{class_attribute_name}=", v)
@@ -81,7 +82,7 @@ module Genealogy
 
       ## sex
       class_attribute :sex_values, :sex_male_value, :sex_female_value, instance_accessor: false
-      self.sex_values = options[:sex_values] || DEFAULTS[:sex_values]
+      self.sex_values = options[:sex_values] || gclass::DEFAULTS[:sex_values]
       self.sex_male_value = self.sex_values.first
       self.sex_female_value = self.sex_values.last
 
