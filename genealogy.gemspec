@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.date        = Time.now
   s.licenses    = ["MIT"]
 
-  s.add_dependency('activerecord', '> 4.0')
-  s.add_dependency('activesupport', '> 4.0')
+  s.add_dependency('activerecord', '> 5.0')
+  s.add_dependency('activesupport', '> 5.0')
 
   s.add_development_dependency 'sqlite3', '~> 1.4.1'
   s.add_development_dependency 'mysql2'

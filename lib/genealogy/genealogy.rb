@@ -96,7 +96,7 @@ module Genealogy
       belongs_to_options = {class_name: self.name}
       belongs_to_options[:optional] = true if Gem::Specification.find_by_name('activerecord').version >= Gem::Version.new("5")
       tracked_relatives.each do |k|
-        belongs_to k, belongs_to_options.merge(foreign_key: self.send("#{k}_id_column"))
+        belongs_to k, **belongs_to_options.merge(foreign_key: self.send("#{k}_id_column"))
       end
 
       has_many :children_as_father, class_name: self.name, foreign_key: self.father_id_column, dependent: :nullify

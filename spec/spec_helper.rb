@@ -9,6 +9,7 @@ require "database_cleaner"
 DatabaseCleaner.strategy = :truncation
 
 require 'rspec/its'
+require 'byebug'
 
 RSpec.configure do |config|
   config.fail_fast = true
